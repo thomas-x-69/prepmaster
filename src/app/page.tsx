@@ -425,7 +425,6 @@ const Header = () => (
     </div>
   </div>
 );
-
 // Glass Footer Component with Better Contrast
 const Footer = () => (
   <div className="bg-white/20 backdrop-blur-lg border-t border-gray-200/60 rounded-t-3xl mx-10 shadow-lg">
