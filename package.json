@@ -1,0 +1,47 @@
+{
+  "name": "prepmaster",
+  "version": "1.0.0",
+  "description": "AWS Cloud Practitioner certification exam preparation platform",
+  "author": "Thomas Ashraf",
+  "license": "MIT",
+  "homepage": "https://github.com/thomas-x-69/prepmaster",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thomas-x-69/prepmaster.git"
+  },
+  "keywords": [
+    "aws-cloud-practitioner",
+    "aws-certification",
+    "exam-preparation",
+    "cloud-computing",
+    "nextjs",
+    "quiz-platform"
+  ],
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^8.15.11",
+    "@react-three/postprocessing": "^2.15.11",
+    "lucide-react": "^0.263.1",
+    "next": "14.0.3",
+    "postprocessing": "^6.32.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "three": "^0.158.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0"
+  }
+}
