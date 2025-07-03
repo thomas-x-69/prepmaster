@@ -11,7 +11,7 @@
 // TOTAL: 350 questions
 
 // Utility function to shuffle array
-function shuffleArray(array) {
+function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -20,21 +20,63 @@ function shuffleArray(array) {
   return shuffled;
 }
 
-// Complete Question Database - 350 Questions
-export const questionDatabase = {
+// Proper question shuffling that maintains correct answer indices
+function shuffleQuestionOptions(question: Question): Question {
+  if (question.type === "single") {
+    // For single choice, track the correct answer text
+    const correctAnswerText = question.options[question.correct as number];
+    const shuffledOptions = shuffleArray(question.options);
+    const newCorrectIndex = shuffledOptions.indexOf(correctAnswerText);
+
+    return {
+      ...question,
+      options: shuffledOptions,
+      correct: newCorrectIndex,
+    };
+  } else if (question.type === "multiple") {
+    // For multiple choice, track all correct answer texts
+    const correctAnswerTexts = (question.correct as number[]).map(
+      (index) => question.options[index]
+    );
+    const shuffledOptions = shuffleArray(question.options);
+    const newCorrectIndices = correctAnswerTexts.map((text) =>
+      shuffledOptions.indexOf(text)
+    );
+
+    return {
+      ...question,
+      options: shuffledOptions,
+      correct: newCorrectIndices,
+    };
+  }
+
+  return question;
+}
+
+// Question type definition
+interface Question {
+  id: number;
+  question: string;
+  options: string[];
+  correct: number | number[];
+  type: "single" | "multiple";
+  explanation: string;
+}
+
+const rawQuestionDatabase = {
   // ============================================
   // DOMAIN 1: CLOUD CONCEPTS (24% - 84 questions)
   // ============================================
-  fundamentals: shuffleArray([
+  fundamentals: [
     {
       id: 1,
       question: "What is the primary value proposition of the AWS Cloud?",
-      options: shuffleArray([
+      options: [
         "Replace upfront capital infrastructure expenses with low variable costs",
         "Increase time to market for applications",
         "Reduce the need for security measures",
         "Eliminate the need for IT staff",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -43,13 +85,13 @@ export const questionDatabase = {
     {
       id: 2,
       question: "Which characteristics define cloud computing? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "On-demand self-service",
         "Fixed pricing models",
         "Broad network access",
         "Single-tenant architecture",
         "Manual resource provisioning",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -59,12 +101,12 @@ export const questionDatabase = {
       id: 3,
       question:
         "According to AWS, what are the six advantages of cloud computing?",
-      options: shuffleArray([
+      options: [
         "Speed, reliability, security, cost, scale, innovation",
         "Trade capital expense for variable expense, benefit from massive economies of scale, stop guessing capacity, increase speed and agility, stop spending money on data centers, go global in minutes",
         "High availability, fault tolerance, scalability, elasticity, reliability, durability",
         "Compute, storage, networking, databases, analytics, machine learning",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -73,12 +115,12 @@ export const questionDatabase = {
     {
       id: 4,
       question: "What does 'elasticity' mean in cloud computing?",
-      options: shuffleArray([
+      options: [
         "The ability to recover from failures quickly",
         "The ability to automatically scale resources up or down based on demand",
         "The ability to store unlimited amounts of data",
         "The ability to maintain consistent performance",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -88,12 +130,12 @@ export const questionDatabase = {
       id: 5,
       question:
         "Which cloud deployment model provides the most control over the underlying infrastructure?",
-      options: shuffleArray([
+      options: [
         "Public Cloud",
         "Private Cloud",
         "Hybrid Cloud",
         "Community Cloud",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -103,12 +145,12 @@ export const questionDatabase = {
       id: 6,
       question:
         "What are the five pillars of the AWS Well-Architected Framework?",
-      options: shuffleArray([
+      options: [
         "Security, Reliability, Performance Efficiency, Cost Optimization, Operational Excellence",
         "Compute, Storage, Database, Networking, Security",
         "Availability, Scalability, Durability, Consistency, Partition Tolerance",
         "Design, Deploy, Operate, Monitor, Optimize",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -117,12 +159,12 @@ export const questionDatabase = {
     {
       id: 7,
       question: "What is the difference between scalability and elasticity?",
-      options: shuffleArray([
+      options: [
         "There is no difference between them",
         "Scalability is manual resource adjustment, elasticity is automatic",
         "Scalability is for storage, elasticity is for compute",
         "Scalability is cheaper than elasticity",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -132,13 +174,13 @@ export const questionDatabase = {
       id: 8,
       question:
         "Which statements about the AWS Global Infrastructure are true? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "AWS Regions are connected through high-bandwidth, low-latency networking",
         "All AWS services are available in all Regions",
         "Each AWS Region consists of multiple Availability Zones",
         "Data stored in one Region is automatically replicated to other Regions",
         "All Regions have the same number of Availability Zones",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -147,12 +189,12 @@ export const questionDatabase = {
     {
       id: 9,
       question: "What is the AWS Cloud Adoption Framework (AWS CAF)?",
-      options: shuffleArray([
+      options: [
         "A framework for migrating applications to AWS",
         "A comprehensive approach to cloud adoption with six perspectives: Business, People, Governance, Platform, Security, and Operations",
         "A pricing model for AWS services",
         "A security framework for AWS environments",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -162,12 +204,12 @@ export const questionDatabase = {
       id: 10,
       question:
         "Which principle suggests that you should 'fail fast' and iterate quickly?",
-      options: shuffleArray([
+      options: [
         "Design for failure",
         "Experiment more often",
         "Automate everything",
         "Decouple your components",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -177,12 +219,12 @@ export const questionDatabase = {
       id: 11,
       question:
         "What is the primary benefit of using multiple Availability Zones?",
-      options: shuffleArray([
+      options: [
         "Lower costs",
         "Better performance",
         "High availability and fault tolerance",
         "Simplified management",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -192,13 +234,13 @@ export const questionDatabase = {
       id: 12,
       question:
         "Which migration strategies are part of the 6 R's? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Rehost (Lift and Shift)",
         "Rewrite",
         "Refactor (Re-architect)",
         "Retire",
         "Replace",
-      ]),
+      ],
       correct: [0, 2, 3],
       type: "multiple",
       explanation:
@@ -207,12 +249,12 @@ export const questionDatabase = {
     {
       id: 13,
       question: "What does 'infrastructure as code' mean?",
-      options: shuffleArray([
+      options: [
         "Writing application code that runs on infrastructure",
         "Managing and provisioning infrastructure through machine-readable definition files",
         "Using coding languages to optimize infrastructure performance",
         "Automating infrastructure monitoring with code",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -221,13 +263,13 @@ export const questionDatabase = {
     {
       id: 14,
       question: "Which aspects contribute to cloud economics? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Economies of scale",
         "Fixed long-term contracts",
         "Pay-as-you-go pricing",
         "Single-tenant architecture",
         "Manual provisioning",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -236,12 +278,12 @@ export const questionDatabase = {
     {
       id: 15,
       question: "What is the purpose of AWS Edge Locations?",
-      options: shuffleArray([
+      options: [
         "To provide backup for AWS Regions",
         "To cache content closer to users for reduced latency",
         "To serve as additional Availability Zones",
         "To provide disaster recovery capabilities",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -250,12 +292,12 @@ export const questionDatabase = {
     {
       id: 16,
       question: "Which design principle helps ensure fault tolerance?",
-      options: shuffleArray([
+      options: [
         "Scale horizontally",
         "Design for failure",
         "Automate everything",
         "Use serverless architectures",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -265,12 +307,12 @@ export const questionDatabase = {
       id: 17,
       question:
         "What is the difference between horizontal and vertical scaling?",
-      options: shuffleArray([
+      options: [
         "Horizontal scaling adds more instances, vertical scaling increases instance size",
         "Horizontal scaling is for databases, vertical scaling is for applications",
         "Horizontal scaling is automatic, vertical scaling is manual",
         "There is no difference between them",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -280,13 +322,13 @@ export const questionDatabase = {
       id: 18,
       question:
         "Which factors should be considered when choosing an AWS Region? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Latency to end users",
         "Compliance requirements",
         "Service availability",
         "Number of employees",
         "Company logo colors",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -295,12 +337,12 @@ export const questionDatabase = {
     {
       id: 19,
       question: "What is the benefit of loose coupling in system design?",
-      options: shuffleArray([
+      options: [
         "Reduced costs",
         "Better security",
         "Components can evolve independently",
         "Faster deployment",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -309,12 +351,12 @@ export const questionDatabase = {
     {
       id: 20,
       question: "Which principle suggests removing single points of failure?",
-      options: shuffleArray([
+      options: [
         "Implement elasticity",
         "Design for failure",
         "Use managed services",
         "Automate everything",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -323,12 +365,12 @@ export const questionDatabase = {
     {
       id: 21,
       question: "What does 'serverless' mean in cloud computing?",
-      options: shuffleArray([
+      options: [
         "Applications that don't use any servers",
         "You don't need to manage the underlying servers",
         "Servers are physically removed from data centers",
         "Applications run without any infrastructure",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -337,13 +379,13 @@ export const questionDatabase = {
     {
       id: 22,
       question: "Which practices support operational excellence? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Automating operations processes",
         "Manual deployments",
         "Continuous improvement",
         "Single person operations",
         "Avoiding monitoring",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -352,12 +394,12 @@ export const questionDatabase = {
     {
       id: 23,
       question: "What is the purpose of disaster recovery planning?",
-      options: shuffleArray([
+      options: [
         "To prevent all system failures",
         "To minimize downtime and data loss during disasters",
         "To reduce operational costs",
         "To improve application performance",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -366,13 +408,13 @@ export const questionDatabase = {
     {
       id: 24,
       question: "Which deployment models can help reduce risk? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Blue/Green deployments",
         "Big bang deployments",
         "Canary deployments",
         "All-at-once deployments",
         "Waterfall deployments",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -381,12 +423,12 @@ export const questionDatabase = {
     {
       id: 25,
       question: "What is the primary purpose of auto scaling?",
-      options: shuffleArray([
+      options: [
         "To reduce costs only",
         "To improve security",
         "To automatically adjust capacity based on demand",
         "To simplify management",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -396,13 +438,13 @@ export const questionDatabase = {
       id: 26,
       question:
         "Which characteristics define cloud-native applications? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Monolithic architecture",
         "Microservices architecture",
         "Manual scaling",
         "Container-based",
         "Single data center deployment",
-      ]),
+      ],
       correct: [1, 3],
       type: "multiple",
       explanation:
@@ -411,12 +453,12 @@ export const questionDatabase = {
     {
       id: 27,
       question: "What is the purpose of load balancing?",
-      options: shuffleArray([
+      options: [
         "To reduce costs",
         "To distribute incoming traffic across multiple targets",
         "To increase security",
         "To simplify deployment",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -425,13 +467,13 @@ export const questionDatabase = {
     {
       id: 28,
       question: "Which factors contribute to high availability? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Redundancy",
         "Single point of failure",
         "Fault tolerance",
         "Disaster recovery",
         "Manual processes",
-      ]),
+      ],
       correct: [0, 2, 3],
       type: "multiple",
       explanation:
@@ -440,12 +482,12 @@ export const questionDatabase = {
     {
       id: 29,
       question: "What does 'cattle vs pets' refer to in cloud computing?",
-      options: shuffleArray([
+      options: [
         "Different types of applications",
         "Infrastructure management philosophy - treating servers as replaceable (cattle) vs irreplaceable (pets)",
         "Security models",
         "Pricing strategies",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -454,12 +496,12 @@ export const questionDatabase = {
     {
       id: 30,
       question: "Which principle helps with cost optimization?",
-      options: shuffleArray([
+      options: [
         "Over-provisioning resources",
         "Right-sizing resources",
         "Using the most expensive services",
         "Avoiding automation",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -470,12 +512,12 @@ export const questionDatabase = {
       id: 31,
       question:
         "What is the cloud computing deployment model where resources are shared among multiple organizations with common concerns?",
-      options: shuffleArray([
+      options: [
         "Public Cloud",
         "Private Cloud",
         "Hybrid Cloud",
         "Community Cloud",
-      ]),
+      ],
       correct: 3,
       type: "single",
       explanation:
@@ -485,12 +527,12 @@ export const questionDatabase = {
       id: 46,
       question:
         "Which pillar of the AWS Well-Architected Framework focuses on using computing resources efficiently?",
-      options: shuffleArray([
+      options: [
         "Cost Optimization",
         "Performance Efficiency",
         "Operational Excellence",
         "Reliability",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -499,12 +541,12 @@ export const questionDatabase = {
     {
       id: 47,
       question: "What is meant by 'infrastructure as code'?",
-      options: shuffleArray([
+      options: [
         "Writing application code that runs on infrastructure",
         "Managing infrastructure through machine-readable definition files",
         "Using manual processes to provision infrastructure",
         "Storing code in infrastructure components",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -514,13 +556,13 @@ export const questionDatabase = {
       id: 48,
       question:
         "Which design principles support the Well-Architected Framework? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Automate to make architectural experimentation easier",
         "Use tightly coupled components",
         "Allow for evolutionary architectures",
         "Drive architectures using data",
         "Manual scaling only",
-      ]),
+      ],
       correct: [0, 2, 3],
       type: "multiple",
       explanation:
@@ -529,12 +571,12 @@ export const questionDatabase = {
     {
       id: 49,
       question: "What is the primary benefit of using AWS Regions?",
-      options: shuffleArray([
+      options: [
         "Lower costs",
         "Geographic distribution and compliance",
         "Faster processing",
         "Unlimited storage",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -544,13 +586,13 @@ export const questionDatabase = {
       id: 50,
       question:
         "Which factors contribute to the total cost of ownership (TCO)? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Server hardware costs",
         "Data center facilities",
         "IT labor costs",
         "Marketing expenses",
         "Legal fees",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -559,12 +601,12 @@ export const questionDatabase = {
     {
       id: 51,
       question: "What is the purpose of implementing loose coupling?",
-      options: shuffleArray([
+      options: [
         "To reduce costs",
         "To allow components to evolve independently",
         "To improve security",
         "To simplify documentation",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -574,13 +616,13 @@ export const questionDatabase = {
       id: 52,
       question:
         "Which characteristics define a cloud-native application? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Monolithic architecture",
         "Designed for cloud platforms",
         "Manual scaling",
         "Uses cloud services extensively",
         "Single-tenant deployment",
-      ]),
+      ],
       correct: [1, 3],
       type: "multiple",
       explanation:
@@ -589,12 +631,12 @@ export const questionDatabase = {
     {
       id: 53,
       question: "What is the benefit of implementing auto-scaling?",
-      options: shuffleArray([
+      options: [
         "Eliminates the need for monitoring",
         "Automatically adjusts capacity based on demand",
         "Reduces security requirements",
         "Simplifies application architecture",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -604,13 +646,7 @@ export const questionDatabase = {
       id: 54,
       question:
         "Which AWS Cloud Adoption Framework perspectives focus on technical capabilities? (Choose TWO)",
-      options: shuffleArray([
-        "Business",
-        "Platform",
-        "People",
-        "Security",
-        "Governance",
-      ]),
+      options: ["Business", "Platform", "People", "Security", "Governance"],
       correct: [1, 3],
       type: "multiple",
       explanation:
@@ -620,12 +656,12 @@ export const questionDatabase = {
       id: 55,
       question:
         "What is the primary goal of the operational excellence pillar?",
-      options: shuffleArray([
+      options: [
         "Minimizing costs",
         "Running and monitoring systems to deliver business value",
         "Maximizing performance",
         "Reducing complexity",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -635,13 +671,7 @@ export const questionDatabase = {
       id: 56,
       question:
         "Which migration strategies are part of the 6 R's framework? (Choose THREE)",
-      options: shuffleArray([
-        "Rehost",
-        "Rewrite",
-        "Refactor",
-        "Retire",
-        "Replace",
-      ]),
+      options: ["Rehost", "Rewrite", "Refactor", "Retire", "Replace"],
       correct: [0, 2, 3],
       type: "multiple",
       explanation:
@@ -650,12 +680,12 @@ export const questionDatabase = {
     {
       id: 57,
       question: "What is the benefit of implementing disaster recovery?",
-      options: shuffleArray([
+      options: [
         "Eliminates all downtime",
         "Reduces operational costs",
         "Minimizes downtime and data loss during disasters",
         "Improves application performance",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -664,12 +694,12 @@ export const questionDatabase = {
     {
       id: 58,
       question: "Which design principle helps ensure fault tolerance?",
-      options: shuffleArray([
+      options: [
         "Use the largest instances possible",
         "Design for failure",
         "Centralize all components",
         "Avoid redundancy",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -679,13 +709,13 @@ export const questionDatabase = {
       id: 59,
       question:
         "What are the benefits of using microservices architecture? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Independent deployment",
         "Shared databases",
         "Technology diversity",
         "Single point of failure",
         "Tight coupling",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -694,12 +724,12 @@ export const questionDatabase = {
     {
       id: 60,
       question: "What is the purpose of implementing monitoring and logging?",
-      options: shuffleArray([
+      options: [
         "To increase costs",
         "To understand system behavior and troubleshoot issues",
         "To reduce functionality",
         "To complicate operations",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -709,13 +739,13 @@ export const questionDatabase = {
       id: 61,
       question:
         "Which factors should be considered when selecting a cloud region? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Latency to end users",
         "Data sovereignty requirements",
         "Service availability",
         "Local weather patterns",
         "Time zones",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -724,12 +754,12 @@ export const questionDatabase = {
     {
       id: 62,
       question: "What is the cloud design principle of 'thinking parallel'?",
-      options: shuffleArray([
+      options: [
         "Using multiple programming languages",
         "Processing tasks simultaneously rather than sequentially",
         "Having parallel teams",
         "Duplicating all resources",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -738,13 +768,13 @@ export const questionDatabase = {
     {
       id: 63,
       question: "Which practices support continuous improvement? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Regular retrospectives",
         "Avoiding changes",
         "Automation",
         "Manual processes only",
         "Single-person decisions",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -753,12 +783,12 @@ export const questionDatabase = {
     {
       id: 64,
       question: "What is the benefit of using event-driven architecture?",
-      options: shuffleArray([
+      options: [
         "Tighter coupling between components",
         "Loose coupling and improved scalability",
         "Reduced reliability",
         "Manual processing only",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -767,12 +797,12 @@ export const questionDatabase = {
     {
       id: 65,
       question: "Which approach supports the 'cattle vs pets' philosophy?",
-      options: shuffleArray([
+      options: [
         "Treating servers as unique and irreplaceable",
         "Manual server configuration",
         "Treating servers as disposable and replaceable",
         "Avoiding automation",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -781,12 +811,12 @@ export const questionDatabase = {
     {
       id: 66,
       question: "What is the primary benefit of immutable infrastructure?",
-      options: shuffleArray([
+      options: [
         "Lower costs",
         "Easier troubleshooting",
         "Consistency and reproducibility",
         "Faster deployment",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -796,13 +826,13 @@ export const questionDatabase = {
       id: 67,
       question:
         "Which factors contribute to application resilience? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Redundancy",
         "Single points of failure",
         "Graceful degradation",
         "Circuit breakers",
         "Manual recovery only",
-      ]),
+      ],
       correct: [0, 2, 3],
       type: "multiple",
       explanation:
@@ -811,12 +841,12 @@ export const questionDatabase = {
     {
       id: 68,
       question: "What is the purpose of implementing circuit breakers?",
-      options: shuffleArray([
+      options: [
         "To increase power consumption",
         "To prevent cascade failures in distributed systems",
         "To reduce security",
         "To simplify architecture",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -825,12 +855,12 @@ export const questionDatabase = {
     {
       id: 69,
       question: "Which approach supports rapid experimentation?",
-      options: shuffleArray([
+      options: [
         "Long development cycles",
         "Manual testing only",
         "Fast feedback loops and automation",
         "Waterfall methodology",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -840,13 +870,13 @@ export const questionDatabase = {
       id: 70,
       question:
         "What are the characteristics of cloud-native security? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Security as an afterthought",
         "Security built into the development process",
         "Manual security testing only",
         "Automated security testing",
         "Perimeter-only security",
-      ]),
+      ],
       correct: [1, 3],
       type: "multiple",
       explanation:
@@ -855,12 +885,12 @@ export const questionDatabase = {
     {
       id: 71,
       question: "What is the benefit of using Infrastructure as Code (IaC)?",
-      options: shuffleArray([
+      options: [
         "Manual configuration management",
         "Version control and reproducibility of infrastructure",
         "Increased manual effort",
         "Reduced automation",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -869,13 +899,13 @@ export const questionDatabase = {
     {
       id: 72,
       question: "Which practices support the DevOps culture? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Collaboration between teams",
         "Siloed development and operations",
         "Shared responsibility",
         "Blame-focused culture",
         "Manual deployments only",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -884,12 +914,12 @@ export const questionDatabase = {
     {
       id: 73,
       question: "What is the purpose of implementing blue-green deployments?",
-      options: shuffleArray([
+      options: [
         "To reduce costs",
         "To enable zero-downtime deployments",
         "To increase complexity",
         "To avoid testing",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -898,12 +928,12 @@ export const questionDatabase = {
     {
       id: 74,
       question: "Which approach supports continuous delivery?",
-      options: shuffleArray([
+      options: [
         "Manual testing and deployment",
         "Automated testing and deployment pipelines",
         "Quarterly releases only",
         "No version control",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -912,12 +942,12 @@ export const questionDatabase = {
     {
       id: 75,
       question: "What is the benefit of implementing canary deployments?",
-      options: shuffleArray([
+      options: [
         "Deploying to all users simultaneously",
         "Gradually rolling out changes to reduce risk",
         "Avoiding all testing",
         "Manual rollbacks only",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -927,13 +957,13 @@ export const questionDatabase = {
       id: 76,
       question:
         "Which factors contribute to system observability? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Metrics",
         "Logs",
         "Traces",
         "Documentation only",
         "Manual inspection",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -942,12 +972,12 @@ export const questionDatabase = {
     {
       id: 77,
       question: "What is the purpose of implementing chaos engineering?",
-      options: shuffleArray([
+      options: [
         "To cause system failures",
         "To test system resilience through controlled experiments",
         "To increase costs",
         "To reduce reliability",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -956,12 +986,12 @@ export const questionDatabase = {
     {
       id: 78,
       question: "Which principle supports building secure systems?",
-      options: shuffleArray([
+      options: [
         "Security through obscurity",
         "Defense in depth",
         "Single security layer",
         "Trust all components",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -970,12 +1000,12 @@ export const questionDatabase = {
     {
       id: 79,
       question: "What is the benefit of implementing API gateways?",
-      options: shuffleArray([
+      options: [
         "Direct access to backend services",
         "Centralized API management and security",
         "Increased complexity only",
         "Reduced functionality",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -985,13 +1015,13 @@ export const questionDatabase = {
       id: 80,
       question:
         "Which approach supports building resilient distributed systems? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Implementing timeouts",
         "Avoiding retries",
         "Using bulkhead patterns",
         "Single points of failure",
         "No error handling",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1000,12 +1030,12 @@ export const questionDatabase = {
     {
       id: 81,
       question: "What is the purpose of implementing service mesh?",
-      options: shuffleArray([
+      options: [
         "To reduce communication between services",
         "To provide infrastructure layer for service-to-service communication",
         "To increase latency",
         "To eliminate security",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1015,13 +1045,13 @@ export const questionDatabase = {
       id: 82,
       question:
         "Which practices support scalable architecture design? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Horizontal scaling",
         "Stateless design",
         "Caching strategies",
         "Single instance deployment",
         "Manual scaling only",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -1030,12 +1060,12 @@ export const questionDatabase = {
     {
       id: 83,
       question: "What is the benefit of implementing health checks?",
-      options: shuffleArray([
+      options: [
         "To increase resource usage",
         "To monitor service health and enable automatic recovery",
         "To reduce reliability",
         "To complicate deployments",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1044,12 +1074,12 @@ export const questionDatabase = {
     {
       id: 84,
       question: "Which approach supports building maintainable systems?",
-      options: shuffleArray([
+      options: [
         "Complex, tightly coupled architecture",
         "Simple, modular design with clear interfaces",
         "No documentation",
         "Single large codebase",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1058,13 +1088,13 @@ export const questionDatabase = {
     {
       id: 32,
       question: "Which statements about microservices are true? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Each service runs in its own process",
         "All services share the same database",
         "Services communicate via well-defined APIs",
         "Services must be written in the same programming language",
         "All services must be deployed together",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1073,12 +1103,12 @@ export const questionDatabase = {
     {
       id: 33,
       question: "What is the primary benefit of using containers?",
-      options: shuffleArray([
+      options: [
         "Better security",
         "Lower costs",
         "Consistent environment across different stages",
         "Faster networks",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -1088,13 +1118,13 @@ export const questionDatabase = {
       id: 34,
       question:
         "Which aspects are important for performance efficiency? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Using the right resource types",
         "Over-provisioning all resources",
         "Monitoring performance",
         "Avoiding caching",
         "Single-threaded processing only",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1103,12 +1133,12 @@ export const questionDatabase = {
     {
       id: 35,
       question: "What is DevOps primarily focused on?",
-      options: shuffleArray([
+      options: [
         "Reducing costs",
         "Improving collaboration between development and operations teams",
         "Eliminating testing",
         "Using only open-source tools",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1117,13 +1147,13 @@ export const questionDatabase = {
     {
       id: 36,
       question: "Which principles support the reliability pillar? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Test recovery procedures",
         "Ignore failures",
         "Automatically recover from failure",
         "Use single points of failure",
         "Avoid monitoring",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1132,12 +1162,12 @@ export const questionDatabase = {
     {
       id: 37,
       question: "What is the purpose of caching in application architecture?",
-      options: shuffleArray([
+      options: [
         "To increase security",
         "To reduce latency and improve performance",
         "To reduce costs only",
         "To simplify code",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1147,13 +1177,13 @@ export const questionDatabase = {
       id: 38,
       question:
         "Which factors influence the choice between different storage types? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Access patterns",
         "Performance requirements",
         "Cost considerations",
         "Developer preferences",
         "Marketing requirements",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -1162,12 +1192,12 @@ export const questionDatabase = {
     {
       id: 39,
       question: "What is the benefit of API-driven infrastructure?",
-      options: shuffleArray([
+      options: [
         "Better user interfaces",
         "Programmable and automatable infrastructure management",
         "Reduced security",
         "Simplified pricing",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1177,13 +1207,13 @@ export const questionDatabase = {
       id: 40,
       question:
         "Which characteristics define distributed systems? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Components are located on networked computers",
         "All components run on the same machine",
         "Components communicate by message passing",
         "Components share memory directly",
         "Single point of control",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1192,12 +1222,12 @@ export const questionDatabase = {
     {
       id: 41,
       question: "What is the primary purpose of monitoring and observability?",
-      options: shuffleArray([
+      options: [
         "To increase costs",
         "To understand system behavior and performance",
         "To reduce functionality",
         "To simplify architecture",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1207,13 +1237,13 @@ export const questionDatabase = {
       id: 42,
       question:
         "Which practices support continuous integration/continuous deployment (CI/CD)? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Automated testing",
         "Manual deployments only",
         "Automated deployments",
         "Avoiding version control",
         "Manual testing only",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1222,12 +1252,12 @@ export const questionDatabase = {
     {
       id: 43,
       question: "What is the purpose of chaos engineering?",
-      options: shuffleArray([
+      options: [
         "To cause system failures",
         "To test system resilience by introducing controlled failures",
         "To reduce costs",
         "To improve user interfaces",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1236,13 +1266,13 @@ export const questionDatabase = {
     {
       id: 44,
       question: "Which factors contribute to system agility? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Automation",
         "Manual processes",
         "Standardization",
         "Complex procedures",
         "Single-person operations",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1251,32 +1281,32 @@ export const questionDatabase = {
     {
       id: 45,
       question: "What is the primary benefit of event-driven architecture?",
-      options: shuffleArray([
+      options: [
         "Reduced costs only",
         "Loose coupling and scalability",
         "Better user interfaces",
         "Simplified networking",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
         "Event-driven architecture promotes loose coupling between components and enables better scalability by allowing asynchronous communication.",
     },
-  ]),
+  ],
 
   // ============================================
   // DOMAIN 2: SECURITY AND COMPLIANCE (30% - 105 questions)
   // ============================================
-  security: shuffleArray([
+  security: [
     {
       id: 1,
       question: "What is the AWS Shared Responsibility Model?",
-      options: shuffleArray([
+      options: [
         "AWS is responsible for everything",
         "Customer is responsible for everything",
         "AWS is responsible for security 'of' the cloud, customer is responsible for security 'in' the cloud",
         "Security responsibilities are equally shared",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -1286,12 +1316,7 @@ export const questionDatabase = {
       id: 2,
       question:
         "Which AWS service provides centralized identity and access management?",
-      options: shuffleArray([
-        "AWS IAM",
-        "AWS CloudTrail",
-        "AWS Config",
-        "AWS Inspector",
-      ]),
+      options: ["AWS IAM", "AWS CloudTrail", "AWS Config", "AWS Inspector"],
       correct: 0,
       type: "single",
       explanation:
@@ -1300,12 +1325,12 @@ export const questionDatabase = {
     {
       id: 3,
       question: "What is the principle of least privilege?",
-      options: shuffleArray([
+      options: [
         "Give users maximum permissions for convenience",
         "Grant users only the minimum permissions needed to perform their job",
         "Give all users the same permissions",
         "Disable all permissions by default",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1315,13 +1340,13 @@ export const questionDatabase = {
       id: 4,
       question:
         "Which AWS services help with monitoring and auditing? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "AWS CloudTrail",
         "AWS Lambda",
         "AWS CloudWatch",
         "Amazon S3",
         "Amazon RDS",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1330,12 +1355,12 @@ export const questionDatabase = {
     {
       id: 5,
       question: "What is AWS KMS used for?",
-      options: shuffleArray([
+      options: [
         "Key Management Service for encryption keys",
         "Kubernetes Management Service",
         "Knowledge Management System",
         "Kernel Module Support",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -1344,12 +1369,7 @@ export const questionDatabase = {
     {
       id: 6,
       question: "Which AWS service provides DDoS protection?",
-      options: shuffleArray([
-        "AWS WAF",
-        "AWS Shield",
-        "AWS GuardDuty",
-        "AWS Inspector",
-      ]),
+      options: ["AWS WAF", "AWS Shield", "AWS GuardDuty", "AWS Inspector"],
       correct: 1,
       type: "single",
       explanation:
@@ -1358,13 +1378,7 @@ export const questionDatabase = {
     {
       id: 7,
       question: "What are the types of IAM identities? (Choose THREE)",
-      options: shuffleArray([
-        "Users",
-        "Groups",
-        "Roles",
-        "Policies",
-        "Services",
-      ]),
+      options: ["Users", "Groups", "Roles", "Policies", "Services"],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -1374,12 +1388,12 @@ export const questionDatabase = {
       id: 8,
       question:
         "Which service helps detect malicious activity and unauthorized behavior?",
-      options: shuffleArray([
+      options: [
         "AWS CloudWatch",
         "AWS GuardDuty",
         "AWS Config",
         "AWS Systems Manager",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1388,12 +1402,12 @@ export const questionDatabase = {
     {
       id: 9,
       question: "What is Multi-Factor Authentication (MFA)?",
-      options: shuffleArray([
+      options: [
         "Using multiple passwords",
         "Using multiple user accounts",
         "Adding an extra layer of security beyond username and password",
         "Using multiple devices to access AWS",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -1403,13 +1417,13 @@ export const questionDatabase = {
       id: 10,
       question:
         "Which compliance programs does AWS participate in? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "SOC 2",
         "ISO 27001",
         "Local building codes",
         "PCI DSS",
         "Company HR policies",
-      ]),
+      ],
       correct: [0, 1],
       type: "multiple",
       explanation:
@@ -1418,12 +1432,12 @@ export const questionDatabase = {
     {
       id: 11,
       question: "What is AWS CloudTrail used for?",
-      options: shuffleArray([
+      options: [
         "Performance monitoring",
         "Logging API calls and user activity",
         "Load balancing",
         "Content delivery",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1432,13 +1446,13 @@ export const questionDatabase = {
     {
       id: 12,
       question: "Which encryption options are available in AWS? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Encryption in transit",
         "Encryption in processing",
         "Encryption at rest",
         "Encryption in memory only",
         "Encryption in backup only",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1447,12 +1461,12 @@ export const questionDatabase = {
     {
       id: 13,
       question: "What is the purpose of security groups in AWS?",
-      options: shuffleArray([
+      options: [
         "To group users with similar permissions",
         "To act as virtual firewalls for EC2 instances",
         "To organize AWS resources",
         "To manage billing",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1462,12 +1476,7 @@ export const questionDatabase = {
       id: 14,
       question:
         "Which AWS service helps ensure compliance with security standards?",
-      options: shuffleArray([
-        "AWS Config",
-        "AWS Lambda",
-        "Amazon S3",
-        "Amazon EC2",
-      ]),
+      options: ["AWS Config", "AWS Lambda", "Amazon S3", "Amazon EC2"],
       correct: 0,
       type: "single",
       explanation:
@@ -1476,13 +1485,13 @@ export const questionDatabase = {
     {
       id: 15,
       question: "What are the benefits of using IAM roles? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Temporary security credentials",
         "Permanent passwords",
         "Cross-account access",
         "Reduced security",
         "Manual key rotation",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1492,12 +1501,12 @@ export const questionDatabase = {
       id: 16,
       question:
         "Which service provides vulnerability assessments for EC2 instances?",
-      options: shuffleArray([
+      options: [
         "AWS Inspector",
         "AWS CloudWatch",
         "AWS CloudTrail",
         "AWS Config",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -1506,12 +1515,12 @@ export const questionDatabase = {
     {
       id: 17,
       question: "What is AWS WAF designed to protect against?",
-      options: shuffleArray([
+      options: [
         "DDoS attacks only",
         "Web application attacks like SQL injection and cross-site scripting",
         "Physical security breaches",
         "Data corruption",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1521,13 +1530,13 @@ export const questionDatabase = {
       id: 18,
       question:
         "Which actions can help secure an AWS root account? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Enable MFA",
         "Use it for daily operations",
         "Create strong password",
         "Share credentials with team",
         "Delete access keys",
-      ]),
+      ],
       correct: [0, 2, 4],
       type: "multiple",
       explanation:
@@ -1536,12 +1545,12 @@ export const questionDatabase = {
     {
       id: 19,
       question: "What is the purpose of AWS Secrets Manager?",
-      options: shuffleArray([
+      options: [
         "To store application logs",
         "To securely store and manage secrets like passwords and API keys",
         "To manage EC2 instances",
         "To monitor network traffic",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1550,13 +1559,13 @@ export const questionDatabase = {
     {
       id: 20,
       question: "Which AWS services provide data protection? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "AWS Backup",
         "AWS Lambda",
         "Amazon Macie",
         "Amazon EC2",
         "Amazon Route 53",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1566,12 +1575,12 @@ export const questionDatabase = {
       id: 21,
       question:
         "What is the difference between authentication and authorization?",
-      options: shuffleArray([
+      options: [
         "They are the same thing",
         "Authentication verifies identity, authorization determines permissions",
         "Authentication is for users, authorization is for services",
         "Authentication is optional, authorization is required",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1581,13 +1590,13 @@ export const questionDatabase = {
       id: 22,
       question:
         "Which security measures should be implemented for data in transit? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "SSL/TLS encryption",
         "Physical locks",
         "VPN connections",
         "Biometric scanners",
         "Paper shredding",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1596,12 +1605,12 @@ export const questionDatabase = {
     {
       id: 23,
       question: "What is AWS Certificate Manager (ACM) used for?",
-      options: shuffleArray([
+      options: [
         "Managing user certificates",
         "Provisioning and managing SSL/TLS certificates",
         "Managing compliance certificates",
         "Managing training certificates",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1611,13 +1620,13 @@ export const questionDatabase = {
       id: 24,
       question:
         "Which factors should be considered for data classification? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Data sensitivity",
         "File size",
         "Regulatory requirements",
         "File format",
         "Storage location only",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1626,12 +1635,12 @@ export const questionDatabase = {
     {
       id: 25,
       question: "What is the purpose of network access control lists (NACLs)?",
-      options: shuffleArray([
+      options: [
         "To control access to IAM users",
         "To provide subnet-level network filtering",
         "To manage DNS resolution",
         "To monitor application performance",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1641,13 +1650,13 @@ export const questionDatabase = {
       id: 26,
       question:
         "Which AWS services help with security automation? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "AWS Security Hub",
         "Amazon S3",
         "AWS Systems Manager",
         "Amazon RDS",
         "Amazon CloudFront",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1656,12 +1665,12 @@ export const questionDatabase = {
     {
       id: 27,
       question: "What is the purpose of AWS CloudHSM?",
-      options: shuffleArray([
+      options: [
         "Cloud monitoring",
         "Hardware Security Module for dedicated encryption key management",
         "High-speed computing",
         "Content delivery",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1670,13 +1679,13 @@ export const questionDatabase = {
     {
       id: 28,
       question: "Which practices enhance password security? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Using complex passwords",
         "Using the same password everywhere",
         "Regular password rotation",
         "Sharing passwords with colleagues",
         "Using password managers",
-      ]),
+      ],
       correct: [0, 2, 4],
       type: "multiple",
       explanation:
@@ -1685,12 +1694,12 @@ export const questionDatabase = {
     {
       id: 29,
       question: "What is AWS Artifact?",
-      options: shuffleArray([
+      options: [
         "A deployment tool",
         "A repository for AWS compliance reports and agreements",
         "A monitoring service",
         "A backup service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1700,13 +1709,13 @@ export const questionDatabase = {
       id: 30,
       question:
         "Which security controls are customer responsibilities in IaaS? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Operating system patches",
         "Physical security of data centers",
         "Application-level security",
         "Hardware maintenance",
         "Network infrastructure security",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1716,12 +1725,7 @@ export const questionDatabase = {
       id: 31,
       question:
         "Which AWS service helps detect and protect against DDoS attacks?",
-      options: shuffleArray([
-        "AWS WAF",
-        "AWS Shield",
-        "AWS GuardDuty",
-        "Amazon Inspector",
-      ]),
+      options: ["AWS WAF", "AWS Shield", "AWS GuardDuty", "Amazon Inspector"],
       correct: 1,
       type: "single",
       explanation:
@@ -1730,12 +1734,12 @@ export const questionDatabase = {
     {
       id: 32,
       question: "What is the principle of defense in depth?",
-      options: shuffleArray([
+      options: [
         "Using a single strong security control",
         "Implementing multiple layers of security controls",
         "Relying only on perimeter security",
         "Avoiding security controls to reduce complexity",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1745,13 +1749,13 @@ export const questionDatabase = {
       id: 33,
       question:
         "Which AWS services help with data loss prevention? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Amazon Macie",
         "AWS Lambda",
         "AWS Backup",
         "Amazon CloudFront",
         "Amazon Route 53",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1760,12 +1764,12 @@ export const questionDatabase = {
     {
       id: 34,
       question: "What is AWS Config used for in security?",
-      options: shuffleArray([
+      options: [
         "Managing user passwords",
         "Monitoring and recording AWS resource configurations for compliance",
         "Encrypting data at rest",
         "Managing network traffic",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1774,13 +1778,13 @@ export const questionDatabase = {
     {
       id: 35,
       question: "Which authentication methods does AWS support? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Username and password",
         "Multi-factor authentication (MFA)",
         "Single sign-on (SSO)",
         "Biometric scanning",
         "Voice recognition",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -1789,12 +1793,12 @@ export const questionDatabase = {
     {
       id: 36,
       question: "What is the purpose of AWS CloudHSM?",
-      options: shuffleArray([
+      options: [
         "Cloud monitoring",
         "Hardware Security Module for dedicated encryption key management",
         "High-speed computing",
         "Content delivery",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1804,13 +1808,13 @@ export const questionDatabase = {
       id: 37,
       question:
         "Which security controls are AWS responsibilities under the shared responsibility model? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Physical security of data centers",
         "Application-level security",
         "Network infrastructure security",
         "Operating system patches",
         "Identity and access management",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -1819,12 +1823,12 @@ export const questionDatabase = {
     {
       id: 38,
       question: "What is AWS Security Hub?",
-      options: shuffleArray([
+      options: [
         "A physical security facility",
         "A central security management service that aggregates security findings",
         "A networking service",
         "A backup service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1833,13 +1837,13 @@ export const questionDatabase = {
     {
       id: 39,
       question: "Which practices enhance database security? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Encryption at rest",
         "Encryption in transit",
         "Regular security updates",
         "Storing passwords in plain text",
         "Disabling all monitoring",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -1848,12 +1852,12 @@ export const questionDatabase = {
     {
       id: 40,
       question: "What is the purpose of AWS Secrets Manager?",
-      options: shuffleArray([
+      options: [
         "Managing EC2 instances",
         "Securely storing and rotating application secrets",
         "Monitoring network traffic",
         "Managing DNS records",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1863,12 +1867,12 @@ export const questionDatabase = {
       id: 41,
       question:
         "Which AWS service provides threat detection using machine learning?",
-      options: shuffleArray([
+      options: [
         "AWS CloudTrail",
         "Amazon GuardDuty",
         "AWS Config",
         "AWS CloudWatch",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1878,13 +1882,13 @@ export const questionDatabase = {
       id: 42,
       question:
         "What are the benefits of using IAM roles for EC2 instances? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Eliminates need for access keys",
         "Provides temporary credentials",
         "Requires manual key rotation",
         "Reduces security",
         "Increases complexity",
-      ]),
+      ],
       correct: [0, 1],
       type: "multiple",
       explanation:
@@ -1894,12 +1898,7 @@ export const questionDatabase = {
       id: 43,
       question:
         "Which service helps protect web applications from common attacks?",
-      options: shuffleArray([
-        "AWS Shield",
-        "AWS WAF",
-        "AWS CloudTrail",
-        "AWS Config",
-      ]),
+      options: ["AWS Shield", "AWS WAF", "AWS CloudTrail", "AWS Config"],
       correct: 1,
       type: "single",
       explanation:
@@ -1908,12 +1907,12 @@ export const questionDatabase = {
     {
       id: 44,
       question: "What is the purpose of security groups?",
-      options: shuffleArray([
+      options: [
         "To group users by department",
         "To act as virtual firewalls for EC2 instances",
         "To organize AWS services",
         "To manage billing",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1923,13 +1922,13 @@ export const questionDatabase = {
       id: 45,
       question:
         "Which encryption options does AWS provide for S3? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Server-side encryption",
         "Client-side encryption",
         "Network-level encryption only",
         "No encryption options",
         "Manual encryption only",
-      ]),
+      ],
       correct: [0, 1],
       type: "multiple",
       explanation:
@@ -1938,12 +1937,12 @@ export const questionDatabase = {
     {
       id: 46,
       question: "What is AWS Artifact?",
-      options: shuffleArray([
+      options: [
         "A development tool",
         "A repository for AWS compliance reports and agreements",
         "A monitoring service",
         "A backup service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -1952,12 +1951,7 @@ export const questionDatabase = {
     {
       id: 47,
       question: "Which service provides automated security assessments?",
-      options: shuffleArray([
-        "Amazon Inspector",
-        "AWS Lambda",
-        "Amazon S3",
-        "Amazon RDS",
-      ]),
+      options: ["Amazon Inspector", "AWS Lambda", "Amazon S3", "Amazon RDS"],
       correct: 0,
       type: "single",
       explanation:
@@ -1966,13 +1960,7 @@ export const questionDatabase = {
     {
       id: 48,
       question: "What are the components of IAM? (Choose FOUR)",
-      options: shuffleArray([
-        "Users",
-        "Groups",
-        "Roles",
-        "Policies",
-        "Buckets",
-      ]),
+      options: ["Users", "Groups", "Roles", "Policies", "Buckets"],
       correct: [0, 1, 2, 3],
       type: "multiple",
       explanation:
@@ -1982,12 +1970,7 @@ export const questionDatabase = {
       id: 49,
       question:
         "Which network security feature provides subnet-level protection?",
-      options: shuffleArray([
-        "Security Groups",
-        "Network ACLs",
-        "AWS WAF",
-        "AWS Shield",
-      ]),
+      options: ["Security Groups", "Network ACLs", "AWS WAF", "AWS Shield"],
       correct: 1,
       type: "single",
       explanation:
@@ -1996,12 +1979,12 @@ export const questionDatabase = {
     {
       id: 50,
       question: "What is the difference between security groups and NACLs?",
-      options: shuffleArray([
+      options: [
         "Security groups are stateful, NACLs are stateless",
         "Security groups are stateless, NACLs are stateful",
         "They are the same thing",
         "Security groups are for databases only",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -2010,12 +1993,12 @@ export const questionDatabase = {
     {
       id: 51,
       question: "Which AWS service helps with identity federation?",
-      options: shuffleArray([
+      options: [
         "AWS IAM Identity Center",
         "Amazon EC2",
         "Amazon S3",
         "AWS Lambda",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -2024,13 +2007,13 @@ export const questionDatabase = {
     {
       id: 52,
       question: "What are the security benefits of using VPC? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Network isolation",
         "Automatic encryption",
         "Controlled network access",
         "Unlimited bandwidth",
         "Free data transfer",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -2039,12 +2022,12 @@ export const questionDatabase = {
     {
       id: 53,
       question: "Which service provides data discovery and classification?",
-      options: shuffleArray([
+      options: [
         "Amazon Macie",
         "AWS CloudTrail",
         "AWS Config",
         "Amazon Inspector",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -2053,12 +2036,12 @@ export const questionDatabase = {
     {
       id: 54,
       question: "What is the purpose of AWS KMS?",
-      options: shuffleArray([
+      options: [
         "Monitoring services",
         "Creating and managing encryption keys",
         "Managing DNS",
         "Load balancing",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2067,13 +2050,13 @@ export const questionDatabase = {
     {
       id: 55,
       question: "Which compliance frameworks does AWS support? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "GDPR",
         "HIPAA",
         "SOC 2",
         "Local building codes",
         "Company dress codes",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -2082,12 +2065,12 @@ export const questionDatabase = {
     {
       id: 56,
       question: "What is the purpose of AWS Certificate Manager?",
-      options: shuffleArray([
+      options: [
         "Managing user certificates",
         "Provisioning and managing SSL/TLS certificates",
         "Managing compliance certificates",
         "Managing training certificates",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2096,13 +2079,13 @@ export const questionDatabase = {
     {
       id: 57,
       question: "Which practices improve password security? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Using complex passwords",
         "Regular rotation",
         "Using password managers",
         "Sharing passwords",
         "Using simple passwords",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -2111,12 +2094,12 @@ export const questionDatabase = {
     {
       id: 58,
       question: "What is AWS Systems Manager used for in security?",
-      options: shuffleArray([
+      options: [
         "Managing user accounts",
         "Patch management and configuration compliance",
         "Network monitoring",
         "Data backup",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2125,12 +2108,7 @@ export const questionDatabase = {
     {
       id: 59,
       question: "Which service provides security finding prioritization?",
-      options: shuffleArray([
-        "AWS Security Hub",
-        "Amazon EC2",
-        "AWS Lambda",
-        "Amazon S3",
-      ]),
+      options: ["AWS Security Hub", "Amazon EC2", "AWS Lambda", "Amazon S3"],
       correct: 0,
       type: "single",
       explanation:
@@ -2139,13 +2117,13 @@ export const questionDatabase = {
     {
       id: 60,
       question: "What are the benefits of encryption in transit? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Protects data while moving between locations",
         "Prevents eavesdropping",
         "Reduces storage costs",
         "Improves performance",
         "Simplifies architecture",
-      ]),
+      ],
       correct: [0, 1],
       type: "multiple",
       explanation:
@@ -2154,12 +2132,12 @@ export const questionDatabase = {
     {
       id: 61,
       question: "Which AWS service provides vulnerability assessments?",
-      options: shuffleArray([
+      options: [
         "Amazon Inspector",
         "AWS CloudWatch",
         "AWS CloudFormation",
         "Amazon Route 53",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -2168,12 +2146,12 @@ export const questionDatabase = {
     {
       id: 62,
       question: "What is the purpose of cross-account roles?",
-      options: shuffleArray([
+      options: [
         "To increase costs",
         "To allow secure access between different AWS accounts",
         "To reduce security",
         "To complicate management",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2183,13 +2161,13 @@ export const questionDatabase = {
       id: 63,
       question:
         "Which security measures protect against insider threats? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Principle of least privilege",
         "Regular access reviews",
         "Unlimited access",
         "No monitoring",
         "Shared accounts",
-      ]),
+      ],
       correct: [0, 1],
       type: "multiple",
       explanation:
@@ -2198,12 +2176,12 @@ export const questionDatabase = {
     {
       id: 64,
       question: "What is AWS Directory Service used for?",
-      options: shuffleArray([
+      options: [
         "File storage",
         "Managed Microsoft Active Directory",
         "Load balancing",
         "Content delivery",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2212,12 +2190,7 @@ export const questionDatabase = {
     {
       id: 65,
       question: "Which service helps with security automation?",
-      options: shuffleArray([
-        "AWS Lambda",
-        "Amazon S3",
-        "Amazon RDS",
-        "Amazon CloudFront",
-      ]),
+      options: ["AWS Lambda", "Amazon S3", "Amazon RDS", "Amazon CloudFront"],
       correct: 0,
       type: "single",
       explanation:
@@ -2227,13 +2200,13 @@ export const questionDatabase = {
       id: 66,
       question:
         "What are the security benefits of using managed services? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "AWS handles security patches",
         "Increased security overhead",
         "Automatic security updates",
         "Manual security management",
         "Reduced security",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -2242,12 +2215,12 @@ export const questionDatabase = {
     {
       id: 67,
       question: "Which service provides real-time security monitoring?",
-      options: shuffleArray([
+      options: [
         "Amazon GuardDuty",
         "AWS Config",
         "AWS CloudFormation",
         "Amazon RDS",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -2256,12 +2229,12 @@ export const questionDatabase = {
     {
       id: 68,
       question: "What is the purpose of AWS Well-Architected Security Pillar?",
-      options: shuffleArray([
+      options: [
         "To reduce costs",
         "To provide security design principles and best practices",
         "To improve performance",
         "To simplify operations",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2270,13 +2243,13 @@ export const questionDatabase = {
     {
       id: 69,
       question: "Which practices support secure development? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Security testing",
         "Code reviews",
         "Ignoring security",
         "Threat modeling",
         "No documentation",
-      ]),
+      ],
       correct: [0, 1, 3],
       type: "multiple",
       explanation:
@@ -2285,12 +2258,12 @@ export const questionDatabase = {
     {
       id: 70,
       question: "What is the purpose of security baselines?",
-      options: shuffleArray([
+      options: [
         "To increase complexity",
         "To establish minimum security requirements",
         "To reduce functionality",
         "To eliminate monitoring",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2299,12 +2272,12 @@ export const questionDatabase = {
     {
       id: 71,
       question: "Which AWS service provides secure file transfer?",
-      options: shuffleArray([
+      options: [
         "AWS Transfer Family",
         "Amazon EC2",
         "AWS Lambda",
         "Amazon CloudWatch",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -2313,13 +2286,13 @@ export const questionDatabase = {
     {
       id: 72,
       question: "What are the benefits of encryption at rest? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Protects stored data",
         "Complies with regulatory requirements",
         "Improves performance",
         "Reduces costs",
         "Simplifies management",
-      ]),
+      ],
       correct: [0, 1],
       type: "multiple",
       explanation:
@@ -2328,12 +2301,7 @@ export const questionDatabase = {
     {
       id: 73,
       question: "Which service provides security orchestration?",
-      options: shuffleArray([
-        "AWS Security Hub",
-        "Amazon S3",
-        "AWS Lambda",
-        "Amazon RDS",
-      ]),
+      options: ["AWS Security Hub", "Amazon S3", "AWS Lambda", "Amazon RDS"],
       correct: 0,
       type: "single",
       explanation:
@@ -2342,12 +2310,12 @@ export const questionDatabase = {
     {
       id: 74,
       question: "What is the purpose of penetration testing?",
-      options: shuffleArray([
+      options: [
         "To cause system damage",
         "To identify security vulnerabilities through simulated attacks",
         "To improve performance",
         "To reduce costs",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2357,13 +2325,13 @@ export const questionDatabase = {
       id: 75,
       question:
         "Which factors should be considered for data classification? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Data sensitivity level",
         "Regulatory requirements",
         "Business impact",
         "File size",
         "Storage location only",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -2372,12 +2340,12 @@ export const questionDatabase = {
     {
       id: 76,
       question: "What is the purpose of security incident response?",
-      options: shuffleArray([
+      options: [
         "To prevent all incidents",
         "To respond to and recover from security incidents",
         "To increase costs",
         "To reduce monitoring",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2386,12 +2354,7 @@ export const questionDatabase = {
     {
       id: 77,
       question: "Which AWS service provides security recommendations?",
-      options: shuffleArray([
-        "AWS Trusted Advisor",
-        "Amazon EC2",
-        "AWS Lambda",
-        "Amazon S3",
-      ]),
+      options: ["AWS Trusted Advisor", "Amazon EC2", "AWS Lambda", "Amazon S3"],
       correct: 0,
       type: "single",
       explanation:
@@ -2401,13 +2364,13 @@ export const questionDatabase = {
       id: 78,
       question:
         "What are the benefits of using AWS managed security services? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Reduced operational overhead",
         "Expert security management",
         "Increased manual work",
         "Higher costs",
         "Reduced functionality",
-      ]),
+      ],
       correct: [0, 1],
       type: "multiple",
       explanation:
@@ -2416,12 +2379,7 @@ export const questionDatabase = {
     {
       id: 79,
       question: "Which service provides container security scanning?",
-      options: shuffleArray([
-        "Amazon ECR",
-        "Amazon S3",
-        "AWS Lambda",
-        "Amazon RDS",
-      ]),
+      options: ["Amazon ECR", "Amazon S3", "AWS Lambda", "Amazon RDS"],
       correct: 0,
       type: "single",
       explanation:
@@ -2430,12 +2388,12 @@ export const questionDatabase = {
     {
       id: 80,
       question: "What is the purpose of security metrics and monitoring?",
-      options: shuffleArray([
+      options: [
         "To increase costs",
         "To measure security effectiveness and detect incidents",
         "To reduce functionality",
         "To complicate operations",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2444,13 +2402,13 @@ export const questionDatabase = {
     {
       id: 81,
       question: "Which practices support secure API design? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Authentication and authorization",
         "Input validation",
         "No security controls",
         "Unlimited access",
         "No monitoring",
-      ]),
+      ],
       correct: [0, 1],
       type: "multiple",
       explanation:
@@ -2459,12 +2417,12 @@ export const questionDatabase = {
     {
       id: 82,
       question: "What is the purpose of security awareness training?",
-      options: shuffleArray([
+      options: [
         "To increase costs",
         "To educate users about security threats and best practices",
         "To reduce productivity",
         "To eliminate technology controls",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2474,12 +2432,7 @@ export const questionDatabase = {
       id: 83,
       question:
         "Which AWS service provides distributed denial of service protection?",
-      options: shuffleArray([
-        "AWS Shield",
-        "AWS Lambda",
-        "Amazon S3",
-        "Amazon RDS",
-      ]),
+      options: ["AWS Shield", "AWS Lambda", "Amazon S3", "Amazon RDS"],
       correct: 0,
       type: "single",
       explanation:
@@ -2489,13 +2442,13 @@ export const questionDatabase = {
       id: 84,
       question:
         "What are the components of a comprehensive security strategy? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Prevention",
         "Detection",
         "Response",
         "Ignoring threats",
         "Manual processes only",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -2504,12 +2457,12 @@ export const questionDatabase = {
     {
       id: 85,
       question: "Which service provides secure remote access to EC2 instances?",
-      options: shuffleArray([
+      options: [
         "AWS Systems Manager Session Manager",
         "Amazon S3",
         "AWS Lambda",
         "Amazon CloudFront",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -2518,12 +2471,12 @@ export const questionDatabase = {
     {
       id: 86,
       question: "What is the purpose of security group rules?",
-      options: shuffleArray([
+      options: [
         "To organize users",
         "To control network traffic to and from instances",
         "To manage storage",
         "To monitor performance",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2532,12 +2485,7 @@ export const questionDatabase = {
     {
       id: 87,
       question: "Which AWS service helps with compliance reporting?",
-      options: shuffleArray([
-        "AWS Config",
-        "Amazon EC2",
-        "AWS Lambda",
-        "Amazon S3",
-      ]),
+      options: ["AWS Config", "Amazon EC2", "AWS Lambda", "Amazon S3"],
       correct: 0,
       type: "single",
       explanation:
@@ -2547,13 +2495,13 @@ export const questionDatabase = {
       id: 88,
       question:
         "What are the security benefits of using AWS Organizations? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Centralized account management",
         "Service Control Policies",
         "Increased complexity",
         "Reduced security",
         "Manual management",
-      ]),
+      ],
       correct: [0, 1],
       type: "multiple",
       explanation:
@@ -2562,12 +2510,7 @@ export const questionDatabase = {
     {
       id: 89,
       question: "Which service provides threat intelligence feeds?",
-      options: shuffleArray([
-        "Amazon GuardDuty",
-        "Amazon S3",
-        "AWS Lambda",
-        "Amazon RDS",
-      ]),
+      options: ["Amazon GuardDuty", "Amazon S3", "AWS Lambda", "Amazon RDS"],
       correct: 0,
       type: "single",
       explanation:
@@ -2576,12 +2519,12 @@ export const questionDatabase = {
     {
       id: 90,
       question: "What is the purpose of security testing in CI/CD pipelines?",
-      options: shuffleArray([
+      options: [
         "To slow down development",
         "To identify security issues early in the development process",
         "To increase costs",
         "To reduce functionality",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2590,12 +2533,12 @@ export const questionDatabase = {
     {
       id: 91,
       question: "Which AWS service provides malware detection?",
-      options: shuffleArray([
+      options: [
         "Amazon GuardDuty",
         "Amazon S3",
         "AWS Lambda",
         "Amazon CloudFront",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -2605,13 +2548,13 @@ export const questionDatabase = {
       id: 92,
       question:
         "What are the key principles of zero trust security? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Never trust, always verify",
         "Trust all internal traffic",
         "Verify explicitly",
         "No verification needed",
         "Perimeter-only security",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -2621,12 +2564,7 @@ export const questionDatabase = {
       id: 93,
       question:
         "Which service provides security orchestration and automated response?",
-      options: shuffleArray([
-        "AWS Security Hub",
-        "Amazon EC2",
-        "AWS Lambda",
-        "Amazon S3",
-      ]),
+      options: ["AWS Security Hub", "Amazon EC2", "AWS Lambda", "Amazon S3"],
       correct: 0,
       type: "single",
       explanation:
@@ -2635,12 +2573,12 @@ export const questionDatabase = {
     {
       id: 94,
       question: "What is the purpose of security controls testing?",
-      options: shuffleArray([
+      options: [
         "To increase costs",
         "To verify that security controls are working effectively",
         "To reduce security",
         "To complicate operations",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2649,12 +2587,7 @@ export const questionDatabase = {
     {
       id: 95,
       question: "Which AWS service provides identity-based access control?",
-      options: shuffleArray([
-        "AWS IAM",
-        "Amazon S3",
-        "AWS Lambda",
-        "Amazon CloudFront",
-      ]),
+      options: ["AWS IAM", "Amazon S3", "AWS Lambda", "Amazon CloudFront"],
       correct: 0,
       type: "single",
       explanation:
@@ -2664,13 +2597,13 @@ export const questionDatabase = {
       id: 96,
       question:
         "What are the benefits of using infrastructure security scanning? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Identifies misconfigurations",
         "Detects vulnerabilities",
         "Increases costs",
         "Reduces functionality",
         "Eliminates all monitoring",
-      ]),
+      ],
       correct: [0, 1],
       type: "multiple",
       explanation:
@@ -2679,12 +2612,7 @@ export const questionDatabase = {
     {
       id: 97,
       question: "Which service provides endpoint protection?",
-      options: shuffleArray([
-        "Amazon Inspector",
-        "Amazon S3",
-        "AWS Lambda",
-        "Amazon RDS",
-      ]),
+      options: ["Amazon Inspector", "Amazon S3", "AWS Lambda", "Amazon RDS"],
       correct: 0,
       type: "single",
       explanation:
@@ -2693,12 +2621,12 @@ export const questionDatabase = {
     {
       id: 98,
       question: "What is the purpose of security logging?",
-      options: shuffleArray([
+      options: [
         "To increase storage costs",
         "To record security events for analysis and compliance",
         "To reduce system performance",
         "To complicate troubleshooting",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2708,13 +2636,13 @@ export const questionDatabase = {
       id: 99,
       question:
         "Which practices support secure cloud migration? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Security assessment",
         "Data classification",
         "Access controls review",
         "Ignoring security",
         "No planning",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -2723,12 +2651,12 @@ export const questionDatabase = {
     {
       id: 100,
       question: "What is the purpose of AWS CloudTrail in security?",
-      options: shuffleArray([
+      options: [
         "Performance monitoring",
         "API call logging for security auditing",
         "Load balancing",
         "Content delivery",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2737,12 +2665,12 @@ export const questionDatabase = {
     {
       id: 101,
       question: "Which AWS service provides DNS security?",
-      options: shuffleArray([
+      options: [
         "Amazon Route 53 Resolver DNS Firewall",
         "Amazon S3",
         "AWS Lambda",
         "Amazon EC2",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -2752,13 +2680,13 @@ export const questionDatabase = {
       id: 102,
       question:
         "What are the security considerations for serverless applications? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Function permissions",
         "Code vulnerabilities",
         "Physical server access",
         "Hardware maintenance",
         "Data center security",
-      ]),
+      ],
       correct: [0, 1],
       type: "multiple",
       explanation:
@@ -2767,12 +2695,12 @@ export const questionDatabase = {
     {
       id: 103,
       question: "Which service provides network traffic analysis?",
-      options: shuffleArray([
+      options: [
         "Amazon VPC Flow Logs",
         "Amazon S3",
         "AWS Lambda",
         "Amazon RDS",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -2781,12 +2709,12 @@ export const questionDatabase = {
     {
       id: 104,
       question: "What is the purpose of security benchmarks?",
-      options: shuffleArray([
+      options: [
         "To increase complexity",
         "To provide standardized security configuration guidelines",
         "To reduce functionality",
         "To eliminate monitoring",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2796,32 +2724,22 @@ export const questionDatabase = {
       id: 105,
       question:
         "Which AWS service provides application-layer security for load balancers?",
-      options: shuffleArray([
-        "AWS WAF",
-        "Amazon S3",
-        "AWS Lambda",
-        "Amazon RDS",
-      ]),
+      options: ["AWS WAF", "Amazon S3", "AWS Lambda", "Amazon RDS"],
       correct: 0,
       type: "single",
       explanation:
         "AWS WAF provides application-layer security for Application Load Balancers, protecting against common web application attacks.",
     },
-  ]),
+  ],
 
   // ============================================
   // DOMAIN 3: CLOUD TECHNOLOGY AND SERVICES (34% - 119 questions)
   // ============================================
-  services: shuffleArray([
+  services: [
     {
       id: 1,
       question: "Which AWS service is primarily used for object storage?",
-      options: shuffleArray([
-        "Amazon EBS",
-        "Amazon EFS",
-        "Amazon S3",
-        "Amazon RDS",
-      ]),
+      options: ["Amazon EBS", "Amazon EFS", "Amazon S3", "Amazon RDS"],
       correct: 2,
       type: "single",
       explanation:
@@ -2830,12 +2748,12 @@ export const questionDatabase = {
     {
       id: 2,
       question: "What is Amazon EC2?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "A virtual server service",
         "A content delivery network",
         "A monitoring service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2845,13 +2763,13 @@ export const questionDatabase = {
       id: 3,
       question:
         "Which AWS services provide content delivery capabilities? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Amazon CloudFront",
         "Amazon S3",
         "AWS Global Accelerator",
         "Amazon RDS",
         "AWS Lambda",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -2860,12 +2778,12 @@ export const questionDatabase = {
     {
       id: 4,
       question: "Which AWS service is best for hosting a relational database?",
-      options: shuffleArray([
+      options: [
         "Amazon DynamoDB",
         "Amazon RDS",
         "Amazon S3",
         "Amazon ElastiCache",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2874,12 +2792,12 @@ export const questionDatabase = {
     {
       id: 5,
       question: "What is the primary purpose of Amazon VPC?",
-      options: shuffleArray([
+      options: [
         "Virtual Private Computing",
         "Virtual Private Cloud - isolated network environment",
         "Video Processing Center",
         "Virtual Payment Center",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2888,13 +2806,13 @@ export const questionDatabase = {
     {
       id: 6,
       question: "Which messaging services does AWS provide? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Amazon SQS",
         "Amazon RDS",
         "Amazon SNS",
         "Amazon EC2",
         "Amazon S3",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -2903,12 +2821,12 @@ export const questionDatabase = {
     {
       id: 7,
       question: "What is AWS Lambda?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "A serverless compute service",
         "A storage service",
         "A networking service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2917,12 +2835,12 @@ export const questionDatabase = {
     {
       id: 8,
       question: "Which AWS service provides DNS services?",
-      options: shuffleArray([
+      options: [
         "Amazon CloudFront",
         "Amazon Route 53",
         "Amazon VPC",
         "AWS Direct Connect",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2932,13 +2850,13 @@ export const questionDatabase = {
       id: 9,
       question:
         "Which storage classes are available in Amazon S3? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "S3 Standard",
         "S3 Glacier",
         "S3 Express",
         "S3 Intelligent-Tiering",
         "S3 Premium",
-      ]),
+      ],
       correct: [0, 1, 3],
       type: "multiple",
       explanation:
@@ -2947,12 +2865,12 @@ export const questionDatabase = {
     {
       id: 10,
       question: "What is Amazon DynamoDB?",
-      options: shuffleArray([
+      options: [
         "A relational database service",
         "A NoSQL database service",
         "A data warehouse service",
         "A caching service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2962,13 +2880,13 @@ export const questionDatabase = {
       id: 11,
       question:
         "Which compute services support containerized applications? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Amazon ECS",
         "Amazon RDS",
         "AWS Fargate",
         "Amazon S3",
         "Amazon Route 53",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -2977,12 +2895,12 @@ export const questionDatabase = {
     {
       id: 12,
       question: "What is Amazon Aurora?",
-      options: shuffleArray([
+      options: [
         "A NoSQL database",
         "A MySQL and PostgreSQL-compatible relational database",
         "A data warehouse",
         "A caching service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -2992,13 +2910,13 @@ export const questionDatabase = {
       id: 13,
       question:
         "Which AWS services provide data analytics capabilities? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Amazon Redshift",
         "Amazon EC2",
         "Amazon Athena",
         "Amazon VPC",
         "Amazon CloudFront",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -3007,12 +2925,12 @@ export const questionDatabase = {
     {
       id: 14,
       question: "What is AWS Elastic Beanstalk?",
-      options: shuffleArray([
+      options: [
         "A container orchestration service",
         "A platform service for deploying and managing applications",
         "A database service",
         "A monitoring service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3021,13 +2939,13 @@ export const questionDatabase = {
     {
       id: 15,
       question: "Which load balancing options does AWS provide? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Application Load Balancer",
         "Database Load Balancer",
         "Network Load Balancer",
         "Storage Load Balancer",
         "DNS Load Balancer",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -3036,12 +2954,12 @@ export const questionDatabase = {
     {
       id: 16,
       question: "What is Amazon ElastiCache used for?",
-      options: shuffleArray([
+      options: [
         "File storage",
         "In-memory caching",
         "Database backups",
         "Content delivery",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3050,13 +2968,13 @@ export const questionDatabase = {
     {
       id: 17,
       question: "Which machine learning services does AWS offer? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Amazon SageMaker",
         "Amazon EC2",
         "Amazon Rekognition",
         "Amazon S3",
         "Amazon VPC",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -3065,12 +2983,12 @@ export const questionDatabase = {
     {
       id: 18,
       question: "What is AWS CloudFormation?",
-      options: shuffleArray([
+      options: [
         "A monitoring service",
         "An infrastructure as code service",
         "A database service",
         "A networking service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3080,13 +2998,13 @@ export const questionDatabase = {
       id: 19,
       question:
         "Which database migration services does AWS provide? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "AWS Database Migration Service (DMS)",
         "Amazon RDS",
         "AWS Schema Conversion Tool (SCT)",
         "Amazon DynamoDB",
         "Amazon ElastiCache",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -3095,12 +3013,12 @@ export const questionDatabase = {
     {
       id: 20,
       question: "What is Amazon API Gateway?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "A service for creating, publishing, and managing APIs",
         "A storage service",
         "A compute service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3110,12 +3028,12 @@ export const questionDatabase = {
     {
       id: 26,
       question: "What is AWS Batch used for?",
-      options: shuffleArray([
+      options: [
         "Real-time data processing",
         "Running batch computing jobs at scale",
         "Web application hosting",
         "Database management",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3124,13 +3042,13 @@ export const questionDatabase = {
     {
       id: 27,
       question: "Which AWS database services support NoSQL? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Amazon DynamoDB",
         "Amazon RDS",
         "Amazon DocumentDB",
         "Amazon Aurora",
         "Amazon Redshift",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -3139,12 +3057,12 @@ export const questionDatabase = {
     {
       id: 28,
       question: "What is Amazon CloudWatch used for?",
-      options: shuffleArray([
+      options: [
         "Content delivery",
         "Monitoring and observability",
         "Database management",
         "Network routing",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3154,12 +3072,12 @@ export const questionDatabase = {
       id: 29,
       question:
         "Which storage service is best for archival with infrequent access?",
-      options: shuffleArray([
+      options: [
         "Amazon S3 Standard",
         "Amazon S3 Glacier",
         "Amazon EBS",
         "Amazon EFS",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3168,12 +3086,12 @@ export const questionDatabase = {
     {
       id: 30,
       question: "What is AWS Direct Connect?",
-      options: shuffleArray([
+      options: [
         "A VPN service",
         "A dedicated network connection from on-premises to AWS",
         "A database connection service",
         "A content delivery service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3182,12 +3100,12 @@ export const questionDatabase = {
     {
       id: 31,
       question: "Which service provides text-to-speech capabilities?",
-      options: shuffleArray([
+      options: [
         "Amazon Polly",
         "Amazon Rekognition",
         "Amazon Transcribe",
         "Amazon Translate",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3196,12 +3114,12 @@ export const questionDatabase = {
     {
       id: 32,
       question: "What is Amazon Redshift primarily used for?",
-      options: shuffleArray([
+      options: [
         "Object storage",
         "Data warehousing and analytics",
         "Content delivery",
         "Application hosting",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3211,13 +3129,13 @@ export const questionDatabase = {
       id: 33,
       question:
         "Which AWS services support event-driven architectures? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Amazon EventBridge",
         "Amazon RDS",
         "AWS Lambda",
         "Amazon S3",
         "Amazon EBS",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -3226,12 +3144,12 @@ export const questionDatabase = {
     {
       id: 34,
       question: "What is AWS CodeCommit?",
-      options: shuffleArray([
+      options: [
         "A deployment service",
         "A source control service",
         "A testing service",
         "A monitoring service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3240,12 +3158,12 @@ export const questionDatabase = {
     {
       id: 35,
       question: "Which service provides speech-to-text capabilities?",
-      options: shuffleArray([
+      options: [
         "Amazon Polly",
         "Amazon Transcribe",
         "Amazon Translate",
         "Amazon Rekognition",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3254,12 +3172,12 @@ export const questionDatabase = {
     {
       id: 36,
       question: "What is Amazon EMR used for?",
-      options: shuffleArray([
+      options: [
         "Email marketing",
         "Big data processing",
         "Content delivery",
         "Database backup",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3269,12 +3187,7 @@ export const questionDatabase = {
       id: 37,
       question:
         "Which AWS service provides application performance monitoring?",
-      options: shuffleArray([
-        "AWS X-Ray",
-        "Amazon S3",
-        "AWS Lambda",
-        "Amazon RDS",
-      ]),
+      options: ["AWS X-Ray", "Amazon S3", "AWS Lambda", "Amazon RDS"],
       correct: 0,
       type: "single",
       explanation:
@@ -3283,12 +3196,12 @@ export const questionDatabase = {
     {
       id: 38,
       question: "What is Amazon WorkSpaces?",
-      options: shuffleArray([
+      options: [
         "A file storage service",
         "A virtual desktop service",
         "A database service",
         "A networking service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3297,12 +3210,12 @@ export const questionDatabase = {
     {
       id: 39,
       question: "Which service provides language translation?",
-      options: shuffleArray([
+      options: [
         "Amazon Translate",
         "Amazon Polly",
         "Amazon Transcribe",
         "Amazon Comprehend",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3311,12 +3224,12 @@ export const questionDatabase = {
     {
       id: 40,
       question: "What is AWS Glue used for?",
-      options: shuffleArray([
+      options: [
         "Content delivery",
         "ETL (Extract, Transform, Load) operations",
         "Database hosting",
         "Application monitoring",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3325,12 +3238,12 @@ export const questionDatabase = {
     {
       id: 41,
       question: "Which compute service is best for unpredictable workloads?",
-      options: shuffleArray([
+      options: [
         "Reserved Instances",
         "Spot Instances",
         "On-Demand Instances",
         "Dedicated Hosts",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -3339,12 +3252,12 @@ export const questionDatabase = {
     {
       id: 42,
       question: "What is Amazon Connect?",
-      options: shuffleArray([
+      options: [
         "A networking service",
         "A cloud contact center service",
         "A database service",
         "A storage service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3354,13 +3267,13 @@ export const questionDatabase = {
       id: 43,
       question:
         "Which service provides natural language processing? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Amazon Comprehend",
         "Amazon Lex",
         "Amazon EC2",
         "Amazon S3",
         "Amazon RDS",
-      ]),
+      ],
       correct: [0, 1],
       type: "multiple",
       explanation:
@@ -3369,12 +3282,12 @@ export const questionDatabase = {
     {
       id: 44,
       question: "What is AWS App Runner?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "A fully managed container application service",
         "A storage service",
         "A networking service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3383,12 +3296,12 @@ export const questionDatabase = {
     {
       id: 45,
       question: "Which service provides time series data storage?",
-      options: shuffleArray([
+      options: [
         "Amazon Timestream",
         "Amazon RDS",
         "Amazon S3",
         "Amazon DynamoDB",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3397,12 +3310,12 @@ export const questionDatabase = {
     {
       id: 46,
       question: "What is Amazon Lightsail?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "A simplified cloud platform for simple workloads",
         "A monitoring service",
         "A storage service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3411,12 +3324,12 @@ export const questionDatabase = {
     {
       id: 47,
       question: "Which AWS service provides image and video analysis?",
-      options: shuffleArray([
+      options: [
         "Amazon Rekognition",
         "Amazon Polly",
         "Amazon Transcribe",
         "Amazon Translate",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3425,12 +3338,12 @@ export const questionDatabase = {
     {
       id: 48,
       question: "What is AWS Snow Family used for?",
-      options: shuffleArray([
+      options: [
         "Weather monitoring",
         "Data migration and edge computing",
         "Database management",
         "Application hosting",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3439,12 +3352,12 @@ export const questionDatabase = {
     {
       id: 49,
       question: "Which service provides managed blockchain?",
-      options: shuffleArray([
+      options: [
         "Amazon Managed Blockchain",
         "Amazon RDS",
         "Amazon DynamoDB",
         "Amazon S3",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3453,12 +3366,12 @@ export const questionDatabase = {
     {
       id: 50,
       question: "What is Amazon Personalize used for?",
-      options: shuffleArray([
+      options: [
         "Identity management",
         "Machine learning-powered recommendations",
         "Data backup",
         "Network security",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3467,12 +3380,7 @@ export const questionDatabase = {
     {
       id: 51,
       question: "Which service provides managed Apache Kafka?",
-      options: shuffleArray([
-        "Amazon MSK",
-        "Amazon SQS",
-        "Amazon SNS",
-        "Amazon EventBridge",
-      ]),
+      options: ["Amazon MSK", "Amazon SQS", "Amazon SNS", "Amazon EventBridge"],
       correct: 0,
       type: "single",
       explanation:
@@ -3481,12 +3389,12 @@ export const questionDatabase = {
     {
       id: 52,
       question: "What is AWS IoT Core?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "A managed cloud service for IoT devices",
         "A storage service",
         "A networking service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3495,12 +3403,12 @@ export const questionDatabase = {
     {
       id: 53,
       question: "Which service provides managed Redis and Memcached?",
-      options: shuffleArray([
+      options: [
         "Amazon ElastiCache",
         "Amazon RDS",
         "Amazon DynamoDB",
         "Amazon S3",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3509,12 +3417,12 @@ export const questionDatabase = {
     {
       id: 54,
       question: "What is Amazon AppFlow?",
-      options: shuffleArray([
+      options: [
         "A content delivery service",
         "A data integration service",
         "A compute service",
         "A storage service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3523,12 +3431,12 @@ export const questionDatabase = {
     {
       id: 55,
       question: "Which service provides managed Apache Airflow?",
-      options: shuffleArray([
+      options: [
         "Amazon MWAA",
         "AWS Step Functions",
         "AWS Lambda",
         "Amazon EventBridge",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3537,12 +3445,12 @@ export const questionDatabase = {
     {
       id: 56,
       question: "What is AWS Amplify?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "A platform for building and deploying web and mobile applications",
         "A monitoring service",
         "A storage service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3551,12 +3459,12 @@ export const questionDatabase = {
     {
       id: 57,
       question: "Which service provides managed GraphQL APIs?",
-      options: shuffleArray([
+      options: [
         "AWS AppSync",
         "Amazon API Gateway",
         "AWS Lambda",
         "Amazon EC2",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3565,12 +3473,12 @@ export const questionDatabase = {
     {
       id: 58,
       question: "What is Amazon Forecast?",
-      options: shuffleArray([
+      options: [
         "Weather prediction service",
         "Machine learning service for time-series forecasting",
         "Financial planning service",
         "Project management service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3579,12 +3487,12 @@ export const questionDatabase = {
     {
       id: 59,
       question: "Which service provides managed Elasticsearch?",
-      options: shuffleArray([
+      options: [
         "Amazon OpenSearch Service",
         "Amazon RDS",
         "Amazon DynamoDB",
         "Amazon CloudWatch",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3593,12 +3501,12 @@ export const questionDatabase = {
     {
       id: 60,
       question: "What is AWS CodeArtifact?",
-      options: shuffleArray([
+      options: [
         "A deployment service",
         "A package repository service",
         "A testing service",
         "A monitoring service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3607,12 +3515,12 @@ export const questionDatabase = {
     {
       id: 61,
       question: "Which service provides managed PostgreSQL?",
-      options: shuffleArray([
+      options: [
         "Amazon RDS for PostgreSQL",
         "Amazon DynamoDB",
         "Amazon ElastiCache",
         "Amazon Redshift",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3621,12 +3529,12 @@ export const questionDatabase = {
     {
       id: 62,
       question: "What is Amazon Braket?",
-      options: shuffleArray([
+      options: [
         "A storage service",
         "A quantum computing service",
         "A database service",
         "A networking service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3635,12 +3543,12 @@ export const questionDatabase = {
     {
       id: 63,
       question: "Which service provides managed message queuing with FIFO?",
-      options: shuffleArray([
+      options: [
         "Amazon SQS FIFO",
         "Amazon SNS",
         "Amazon EventBridge",
         "Amazon MQ",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3649,12 +3557,12 @@ export const questionDatabase = {
     {
       id: 64,
       question: "What is AWS CodeGuru?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "An application performance and code quality service",
         "A storage service",
         "A networking service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3663,12 +3571,12 @@ export const questionDatabase = {
     {
       id: 65,
       question: "Which service provides managed Apache Cassandra?",
-      options: shuffleArray([
+      options: [
         "Amazon Keyspaces",
         "Amazon DynamoDB",
         "Amazon RDS",
         "Amazon ElastiCache",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3677,12 +3585,12 @@ export const questionDatabase = {
     {
       id: 66,
       question: "What is Amazon Kendra?",
-      options: shuffleArray([
+      options: [
         "A file storage service",
         "An intelligent search service",
         "A database service",
         "A monitoring service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3691,12 +3599,7 @@ export const questionDatabase = {
     {
       id: 67,
       question: "Which service provides managed workflows?",
-      options: shuffleArray([
-        "AWS Step Functions",
-        "AWS Lambda",
-        "Amazon EC2",
-        "Amazon S3",
-      ]),
+      options: ["AWS Step Functions", "AWS Lambda", "Amazon EC2", "Amazon S3"],
       correct: 0,
       type: "single",
       explanation:
@@ -3705,12 +3608,12 @@ export const questionDatabase = {
     {
       id: 68,
       question: "What is Amazon CodeWhisperer?",
-      options: shuffleArray([
+      options: [
         "A monitoring service",
         "An AI coding companion",
         "A database service",
         "A networking service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3719,12 +3622,12 @@ export const questionDatabase = {
     {
       id: 69,
       question: "Which service provides managed Apache Flink?",
-      options: shuffleArray([
+      options: [
         "Amazon Kinesis Data Analytics",
         "Amazon EMR",
         "AWS Glue",
         "Amazon Redshift",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3733,12 +3636,12 @@ export const questionDatabase = {
     {
       id: 70,
       question: "What is AWS Proton?",
-      options: shuffleArray([
+      options: [
         "A monitoring service",
         "An application deployment service for container and serverless applications",
         "A database service",
         "A storage service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3747,12 +3650,12 @@ export const questionDatabase = {
     {
       id: 71,
       question: "Which service provides managed Neo4j graph database?",
-      options: shuffleArray([
+      options: [
         "Amazon Neptune",
         "Amazon DynamoDB",
         "Amazon RDS",
         "Amazon DocumentDB",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3761,12 +3664,12 @@ export const questionDatabase = {
     {
       id: 72,
       question: "What is Amazon Textract?",
-      options: shuffleArray([
+      options: [
         "A translation service",
         "A document text and data extraction service",
         "A speech service",
         "A image service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3775,12 +3678,12 @@ export const questionDatabase = {
     {
       id: 73,
       question: "Which service provides managed MongoDB-compatible database?",
-      options: shuffleArray([
+      options: [
         "Amazon DocumentDB",
         "Amazon DynamoDB",
         "Amazon RDS",
         "Amazon ElastiCache",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3789,12 +3692,12 @@ export const questionDatabase = {
     {
       id: 74,
       question: "What is AWS App2Container?",
-      options: shuffleArray([
+      options: [
         "A database migration tool",
         "An application containerization service",
         "A monitoring service",
         "A storage service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3803,12 +3706,12 @@ export const questionDatabase = {
     {
       id: 75,
       question: "Which service provides managed ledger database?",
-      options: shuffleArray([
+      options: [
         "Amazon QLDB",
         "Amazon DynamoDB",
         "Amazon RDS",
         "Amazon Neptune",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3817,12 +3720,12 @@ export const questionDatabase = {
     {
       id: 76,
       question: "What is Amazon Lookout for Vision?",
-      options: shuffleArray([
+      options: [
         "A video streaming service",
         "A machine learning service for visual inspection",
         "A monitoring service",
         "A storage service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3831,12 +3734,12 @@ export const questionDatabase = {
     {
       id: 77,
       question: "Which service provides managed Apache HBase?",
-      options: shuffleArray([
+      options: [
         "Amazon EMR",
         "Amazon DynamoDB",
         "Amazon RDS",
         "Amazon ElastiCache",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3845,12 +3748,12 @@ export const questionDatabase = {
     {
       id: 78,
       question: "What is AWS DataSync?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "A data transfer service",
         "A monitoring service",
         "A compute service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3859,12 +3762,7 @@ export const questionDatabase = {
     {
       id: 79,
       question: "Which service provides managed Apache Spark?",
-      options: shuffleArray([
-        "Amazon EMR",
-        "AWS Glue",
-        "Amazon Kinesis",
-        "Amazon Redshift",
-      ]),
+      options: ["Amazon EMR", "AWS Glue", "Amazon Kinesis", "Amazon Redshift"],
       correct: 0,
       type: "single",
       explanation:
@@ -3873,12 +3771,12 @@ export const questionDatabase = {
     {
       id: 80,
       question: "What is Amazon Honeycode?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "A no-code application building service",
         "A monitoring service",
         "A storage service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3887,12 +3785,12 @@ export const questionDatabase = {
     {
       id: 81,
       question: "Which service provides managed Prometheus monitoring?",
-      options: shuffleArray([
+      options: [
         "Amazon Managed Service for Prometheus",
         "Amazon CloudWatch",
         "AWS X-Ray",
         "Amazon ElastiCache",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3901,12 +3799,12 @@ export const questionDatabase = {
     {
       id: 82,
       question: "What is AWS Lake Formation?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "A data lake setup and management service",
         "A monitoring service",
         "A compute service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3915,12 +3813,12 @@ export const questionDatabase = {
     {
       id: 83,
       question: "Which service provides managed Grafana?",
-      options: shuffleArray([
+      options: [
         "Amazon Managed Grafana",
         "Amazon CloudWatch",
         "AWS X-Ray",
         "Amazon ElastiCache",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3929,12 +3827,12 @@ export const questionDatabase = {
     {
       id: 84,
       question: "What is Amazon HealthLake?",
-      options: shuffleArray([
+      options: [
         "A fitness tracking service",
         "A healthcare data storage and analytics service",
         "A monitoring service",
         "A general database service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3943,12 +3841,12 @@ export const questionDatabase = {
     {
       id: 85,
       question: "Which service provides managed Apache Superset?",
-      options: shuffleArray([
+      options: [
         "Amazon QuickSight",
         "Amazon EMR",
         "AWS Glue",
         "Amazon Redshift",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -3957,12 +3855,12 @@ export const questionDatabase = {
     {
       id: 86,
       question: "What is AWS FinSpace?",
-      options: shuffleArray([
+      options: [
         "A general storage service",
         "A data management and analytics service for financial services",
         "A monitoring service",
         "A compute service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3971,12 +3869,7 @@ export const questionDatabase = {
     {
       id: 87,
       question: "Which service provides managed Apache Druid?",
-      options: shuffleArray([
-        "Amazon EMR",
-        "Amazon Kinesis",
-        "AWS Glue",
-        "Amazon Redshift",
-      ]),
+      options: ["Amazon EMR", "Amazon Kinesis", "AWS Glue", "Amazon Redshift"],
       correct: 0,
       type: "single",
       explanation:
@@ -3985,12 +3878,12 @@ export const questionDatabase = {
     {
       id: 88,
       question: "What is Amazon Lookout for Metrics?",
-      options: shuffleArray([
+      options: [
         "A storage service",
         "An anomaly detection service for metrics",
         "A compute service",
         "A networking service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -3999,12 +3892,7 @@ export const questionDatabase = {
     {
       id: 89,
       question: "Which service provides managed JupyterLab?",
-      options: shuffleArray([
-        "Amazon SageMaker",
-        "Amazon EMR",
-        "AWS Lambda",
-        "Amazon EC2",
-      ]),
+      options: ["Amazon SageMaker", "Amazon EMR", "AWS Lambda", "Amazon EC2"],
       correct: 0,
       type: "single",
       explanation:
@@ -4013,12 +3901,12 @@ export const questionDatabase = {
     {
       id: 90,
       question: "What is AWS Chalice?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "A framework for deploying serverless Python applications",
         "A monitoring service",
         "A storage service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4027,12 +3915,12 @@ export const questionDatabase = {
     {
       id: 91,
       question: "Which service provides managed Vector database capabilities?",
-      options: shuffleArray([
+      options: [
         "Amazon OpenSearch Service",
         "Amazon DynamoDB",
         "Amazon RDS",
         "Amazon ElastiCache",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -4041,12 +3929,12 @@ export const questionDatabase = {
     {
       id: 92,
       question: "What is Amazon Monitron?",
-      options: shuffleArray([
+      options: [
         "A general monitoring service",
         "An end-to-end machine monitoring solution",
         "A database service",
         "A storage service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4055,12 +3943,7 @@ export const questionDatabase = {
     {
       id: 93,
       question: "Which service provides managed Apache Iceberg?",
-      options: shuffleArray([
-        "AWS Glue",
-        "Amazon EMR",
-        "Amazon Athena",
-        "All of the above",
-      ]),
+      options: ["AWS Glue", "Amazon EMR", "Amazon Athena", "All of the above"],
       correct: 3,
       type: "single",
       explanation:
@@ -4069,12 +3952,12 @@ export const questionDatabase = {
     {
       id: 94,
       question: "What is AWS Ground Station?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "A satellite ground station service",
         "A monitoring service",
         "A compute service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4083,12 +3966,7 @@ export const questionDatabase = {
     {
       id: 95,
       question: "Which service provides managed TensorFlow and PyTorch?",
-      options: shuffleArray([
-        "Amazon SageMaker",
-        "Amazon EMR",
-        "AWS Lambda",
-        "Amazon EC2",
-      ]),
+      options: ["Amazon SageMaker", "Amazon EMR", "AWS Lambda", "Amazon EC2"],
       correct: 0,
       type: "single",
       explanation:
@@ -4097,12 +3975,12 @@ export const questionDatabase = {
     {
       id: 96,
       question: "What is Amazon DevOps Guru?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "An operational insights service using machine learning",
         "A storage service",
         "A networking service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4111,12 +3989,7 @@ export const questionDatabase = {
     {
       id: 97,
       question: "Which service provides managed Kubernetes control plane?",
-      options: shuffleArray([
-        "Amazon EKS",
-        "Amazon ECS",
-        "AWS Fargate",
-        "Amazon EC2",
-      ]),
+      options: ["Amazon EKS", "Amazon ECS", "AWS Fargate", "Amazon EC2"],
       correct: 0,
       type: "single",
       explanation:
@@ -4125,12 +3998,12 @@ export const questionDatabase = {
     {
       id: 98,
       question: "What is AWS Wickr?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "An end-to-end encrypted communication service",
         "A monitoring service",
         "A storage service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4139,12 +4012,7 @@ export const questionDatabase = {
     {
       id: 99,
       question: "Which service provides managed Apache Pinot?",
-      options: shuffleArray([
-        "Amazon EMR",
-        "Amazon Kinesis",
-        "AWS Glue",
-        "Amazon Redshift",
-      ]),
+      options: ["Amazon EMR", "Amazon Kinesis", "AWS Glue", "Amazon Redshift"],
       correct: 0,
       type: "single",
       explanation:
@@ -4153,12 +4021,12 @@ export const questionDatabase = {
     {
       id: 100,
       question: "What is Amazon Omics?",
-      options: shuffleArray([
+      options: [
         "A general database service",
         "A purpose-built service for genomics and life sciences",
         "A monitoring service",
         "A compute service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4167,12 +4035,7 @@ export const questionDatabase = {
     {
       id: 101,
       question: "Which service provides managed Apache Hudi?",
-      options: shuffleArray([
-        "Amazon EMR",
-        "AWS Glue",
-        "Amazon Athena",
-        "All of the above",
-      ]),
+      options: ["Amazon EMR", "AWS Glue", "Amazon Athena", "All of the above"],
       correct: 3,
       type: "single",
       explanation:
@@ -4181,12 +4044,12 @@ export const questionDatabase = {
     {
       id: 102,
       question: "What is AWS SimSpace Weaver?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "A spatial simulation service",
         "A monitoring service",
         "A storage service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4195,12 +4058,7 @@ export const questionDatabase = {
     {
       id: 103,
       question: "Which service provides managed Delta Lake?",
-      options: shuffleArray([
-        "Amazon EMR",
-        "AWS Glue",
-        "Amazon Athena",
-        "All of the above",
-      ]),
+      options: ["Amazon EMR", "AWS Glue", "Amazon Athena", "All of the above"],
       correct: 3,
       type: "single",
       explanation:
@@ -4209,12 +4067,12 @@ export const questionDatabase = {
     {
       id: 104,
       question: "What is Amazon Clean Rooms?",
-      options: shuffleArray([
+      options: [
         "A data cleaning service",
         "A service for secure data collaboration",
         "A monitoring service",
         "A storage service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4223,12 +4081,12 @@ export const questionDatabase = {
     {
       id: 105,
       question: "Which service provides managed OpenTelemetry?",
-      options: shuffleArray([
+      options: [
         "AWS Distro for OpenTelemetry",
         "Amazon CloudWatch",
         "AWS X-Ray",
         "Amazon EMR",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -4237,12 +4095,12 @@ export const questionDatabase = {
     {
       id: 106,
       question: "What is Amazon Bedrock?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "A foundational AI model service",
         "A monitoring service",
         "A storage service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4251,12 +4109,12 @@ export const questionDatabase = {
     {
       id: 107,
       question: "Which service provides managed Feature Store for ML?",
-      options: shuffleArray([
+      options: [
         "Amazon SageMaker Feature Store",
         "Amazon DynamoDB",
         "Amazon RDS",
         "Amazon S3",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -4265,12 +4123,12 @@ export const questionDatabase = {
     {
       id: 108,
       question: "What is AWS Entity Resolution?",
-      options: shuffleArray([
+      options: [
         "A DNS service",
         "A service for matching and linking related records",
         "A monitoring service",
         "A compute service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4279,12 +4137,7 @@ export const questionDatabase = {
     {
       id: 109,
       question: "Which service provides managed Apache Ranger?",
-      options: shuffleArray([
-        "Amazon EMR",
-        "AWS Lake Formation",
-        "Amazon S3",
-        "AWS Glue",
-      ]),
+      options: ["Amazon EMR", "AWS Lake Formation", "Amazon S3", "AWS Glue"],
       correct: 0,
       type: "single",
       explanation:
@@ -4293,12 +4146,12 @@ export const questionDatabase = {
     {
       id: 110,
       question: "What is Amazon DataZone?",
-      options: shuffleArray([
+      options: [
         "A storage service",
         "A data management service for analytics and AI",
         "A compute service",
         "A networking service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4307,12 +4160,7 @@ export const questionDatabase = {
     {
       id: 111,
       question: "Which service provides managed Trino (formerly PrestoSQL)?",
-      options: shuffleArray([
-        "Amazon EMR",
-        "Amazon Athena",
-        "AWS Glue",
-        "Amazon Redshift",
-      ]),
+      options: ["Amazon EMR", "Amazon Athena", "AWS Glue", "Amazon Redshift"],
       correct: 0,
       type: "single",
       explanation:
@@ -4321,12 +4169,12 @@ export const questionDatabase = {
     {
       id: 112,
       question: "What is AWS Supply Chain?",
-      options: shuffleArray([
+      options: [
         "A logistics service",
         "A supply chain visibility and insights application",
         "A monitoring service",
         "A database service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4335,12 +4183,7 @@ export const questionDatabase = {
     {
       id: 113,
       question: "Which service provides managed Jupyter Hub?",
-      options: shuffleArray([
-        "Amazon SageMaker",
-        "Amazon EMR",
-        "AWS Lambda",
-        "Amazon EC2",
-      ]),
+      options: ["Amazon SageMaker", "Amazon EMR", "AWS Lambda", "Amazon EC2"],
       correct: 0,
       type: "single",
       explanation:
@@ -4349,12 +4192,12 @@ export const questionDatabase = {
     {
       id: 114,
       question: "What is Amazon Verified Permissions?",
-      options: shuffleArray([
+      options: [
         "A monitoring service",
         "A fine-grained authorization service",
         "A storage service",
         "A compute service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4363,12 +4206,12 @@ export const questionDatabase = {
     {
       id: 115,
       question: "Which service provides managed Spark Streaming?",
-      options: shuffleArray([
+      options: [
         "Amazon EMR",
         "Amazon Kinesis Data Analytics",
         "AWS Glue Streaming",
         "All of the above",
-      ]),
+      ],
       correct: 3,
       type: "single",
       explanation:
@@ -4377,12 +4220,12 @@ export const questionDatabase = {
     {
       id: 116,
       question: "What is AWS Payment Cryptography?",
-      options: shuffleArray([
+      options: [
         "A general encryption service",
         "A payment processing cryptographic service",
         "A monitoring service",
         "A storage service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4391,12 +4234,7 @@ export const questionDatabase = {
     {
       id: 117,
       question: "Which service provides managed MLflow?",
-      options: shuffleArray([
-        "Amazon SageMaker",
-        "Amazon EMR",
-        "AWS Lambda",
-        "Amazon EC2",
-      ]),
+      options: ["Amazon SageMaker", "Amazon EMR", "AWS Lambda", "Amazon EC2"],
       correct: 0,
       type: "single",
       explanation:
@@ -4405,12 +4243,12 @@ export const questionDatabase = {
     {
       id: 118,
       question: "What is Amazon Inspector V2?",
-      options: shuffleArray([
+      options: [
         "A storage service",
         "An automated vulnerability management service",
         "A compute service",
         "A networking service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4419,12 +4257,12 @@ export const questionDatabase = {
     {
       id: 119,
       question: "Which service provides managed Kubeflow?",
-      options: shuffleArray([
+      options: [
         "Amazon SageMaker",
         "Amazon EKS",
         "Amazon EMR",
         "All of the above",
-      ]),
+      ],
       correct: 3,
       type: "single",
       explanation:
@@ -4433,12 +4271,12 @@ export const questionDatabase = {
     {
       id: 22,
       question: "What is Amazon Kinesis used for?",
-      options: shuffleArray([
+      options: [
         "Static website hosting",
         "Real-time data streaming and analytics",
         "Database management",
         "DNS resolution",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4448,13 +4286,13 @@ export const questionDatabase = {
       id: 23,
       question:
         "Which services help with application deployment automation? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "AWS CodeDeploy",
         "Amazon S3",
         "AWS CodePipeline",
         "Amazon RDS",
         "Amazon CloudFront",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -4463,12 +4301,12 @@ export const questionDatabase = {
     {
       id: 24,
       question: "What is Amazon QuickSight?",
-      options: shuffleArray([
+      options: [
         "A database service",
         "A business intelligence and data visualization service",
         "A security service",
         "A networking service",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4478,35 +4316,35 @@ export const questionDatabase = {
       id: 25,
       question:
         "Which AWS services provide message queuing capabilities? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Amazon SQS",
         "Amazon EC2",
         "Amazon MQ",
         "Amazon S3",
         "Amazon Route 53",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
         "Amazon SQS provides managed message queuing, and Amazon MQ is a managed message broker service for Apache ActiveMQ and RabbitMQ.",
     },
     // Continue adding more service questions...
-  ]),
+  ],
 
   // ============================================
   // DOMAIN 4: BILLING, PRICING, AND SUPPORT (12% - 42 questions)
   // ============================================
-  pricing: shuffleArray([
+  pricing: [
     {
       id: 1,
       question:
         "Which AWS pricing model allows you to pay for compute capacity by the hour or second?",
-      options: shuffleArray([
+      options: [
         "Reserved Instances",
         "Spot Instances",
         "On-Demand Instances",
         "Dedicated Hosts",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -4515,12 +4353,12 @@ export const questionDatabase = {
     {
       id: 2,
       question: "What is the AWS Free Tier?",
-      options: shuffleArray([
+      options: [
         "A paid support plan",
         "Limited free usage of AWS services for new customers",
         "An enterprise discount program",
         "A training certification program",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4530,12 +4368,12 @@ export const questionDatabase = {
       id: 3,
       question:
         "Which pricing model typically offers the greatest discount for EC2 instances?",
-      options: shuffleArray([
+      options: [
         "On-Demand Instances",
         "Reserved Instances",
         "Spot Instances",
         "Dedicated Hosts",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -4544,12 +4382,12 @@ export const questionDatabase = {
     {
       id: 4,
       question: "What is AWS Cost Explorer?",
-      options: shuffleArray([
+      options: [
         "A service to explore new AWS regions",
         "A tool to visualize and manage your AWS costs and usage",
         "A service to explore AWS documentation",
         "A tool to explore AWS service limits",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4559,13 +4397,13 @@ export const questionDatabase = {
       id: 5,
       question:
         "Which AWS support plans include access to AWS Trusted Advisor's full set of checks? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Basic Support",
         "Developer Support",
         "Business Support",
         "Enterprise Support",
         "Free Tier Support",
-      ]),
+      ],
       correct: [2, 3],
       type: "multiple",
       explanation:
@@ -4574,12 +4412,12 @@ export const questionDatabase = {
     {
       id: 6,
       question: "What are Reserved Instances?",
-      options: shuffleArray([
+      options: [
         "Instances reserved for emergency use only",
         "Instances that provide a capacity reservation and significant discount",
         "Instances reserved for AWS internal use",
         "Instances that can only be used during specific hours",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4588,13 +4426,13 @@ export const questionDatabase = {
     {
       id: 7,
       question: "Which factors affect AWS pricing? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Compute usage",
         "Storage usage",
         "Data transfer",
         "Number of employees",
         "Company location",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -4603,12 +4441,12 @@ export const questionDatabase = {
     {
       id: 8,
       question: "What is AWS Budgets used for?",
-      options: shuffleArray([
+      options: [
         "Planning AWS infrastructure",
         "Setting custom cost and usage budgets with alerts",
         "Managing AWS accounts",
         "Monitoring application performance",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4618,12 +4456,12 @@ export const questionDatabase = {
       id: 9,
       question:
         "Which AWS support plan provides 24/7 access to Cloud Support Engineers?",
-      options: shuffleArray([
+      options: [
         "Basic Support",
         "Developer Support",
         "Business Support",
         "Enterprise Support",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -4632,12 +4470,12 @@ export const questionDatabase = {
     {
       id: 10,
       question: "What is AWS Trusted Advisor?",
-      options: shuffleArray([
+      options: [
         "A service that provides real-time guidance to help provision resources following AWS best practices",
         "A human advisor assigned to your account",
         "A machine learning service",
         "A database optimization tool",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -4647,13 +4485,13 @@ export const questionDatabase = {
       id: 11,
       question:
         "Which pricing models does AWS offer for different use cases? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Pay-as-you-go",
         "Save when you reserve",
         "Pay less by using more",
         "Pay more for premium features",
         "Fixed annual pricing",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -4662,12 +4500,12 @@ export const questionDatabase = {
     {
       id: 12,
       question: "What is the AWS Pricing Calculator?",
-      options: shuffleArray([
+      options: [
         "A tool to calculate employee salaries",
         "A tool to estimate monthly AWS costs based on service usage",
         "A tool to calculate network performance",
         "A tool to calculate storage capacity",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4677,13 +4515,13 @@ export const questionDatabase = {
       id: 13,
       question:
         "Which support features are included in Basic Support? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "24/7 access to customer service",
         "Technical support via phone",
         "Access to AWS documentation and forums",
         "Personal Technical Account Manager",
         "Infrastructure Event Management",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -4692,12 +4530,12 @@ export const questionDatabase = {
     {
       id: 14,
       question: "What are Savings Plans?",
-      options: shuffleArray([
+      options: [
         "A flexible pricing model offering lower prices in exchange for usage commitment",
         "A retirement savings program for AWS employees",
         "A backup service pricing model",
         "A discount program for students",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -4706,13 +4544,13 @@ export const questionDatabase = {
     {
       id: 15,
       question: "Which factors can help optimize AWS costs? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Right-sizing instances",
         "Using Reserved Instances for predictable workloads",
         "Over-provisioning resources",
         "Implementing auto-scaling",
         "Avoiding monitoring",
-      ]),
+      ],
       correct: [0, 1, 3],
       type: "multiple",
       explanation:
@@ -4721,12 +4559,12 @@ export const questionDatabase = {
     {
       id: 16,
       question: "What is consolidated billing in AWS Organizations?",
-      options: shuffleArray([
+      options: [
         "A service that combines multiple AWS accounts into a single bill",
         "A service that splits bills among team members",
         "A service that converts currencies",
         "A service that schedules payments",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -4736,12 +4574,12 @@ export const questionDatabase = {
       id: 17,
       question:
         "Which AWS service helps identify unused or underutilized resources?",
-      options: shuffleArray([
+      options: [
         "AWS Cost Explorer",
         "AWS CloudTrail",
         "AWS Config",
         "AWS Trusted Advisor",
-      ]),
+      ],
       correct: 3,
       type: "single",
       explanation:
@@ -4751,12 +4589,12 @@ export const questionDatabase = {
       id: 18,
       question:
         "What is the difference between Developer and Business support plans?",
-      options: shuffleArray([
+      options: [
         "Developer includes phone support, Business does not",
         "Business includes 24/7 support and faster response times than Developer",
         "Developer is more expensive than Business",
         "There is no difference between them",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4766,13 +4604,13 @@ export const questionDatabase = {
       id: 19,
       question:
         "Which billing and cost management tools does AWS provide? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "AWS Cost and Usage Reports",
         "AWS Billing Dashboard",
         "AWS Cost Explorer",
         "AWS Performance Insights",
         "AWS Service Catalog",
-      ]),
+      ],
       correct: [0, 1, 2],
       type: "multiple",
       explanation:
@@ -4781,12 +4619,12 @@ export const questionDatabase = {
     {
       id: 20,
       question: "What is AWS Enterprise Support designed for?",
-      options: shuffleArray([
+      options: [
         "Small businesses with basic needs",
         "Large enterprises with mission-critical workloads",
         "Educational institutions only",
         "Government agencies only",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4796,13 +4634,13 @@ export const questionDatabase = {
       id: 21,
       question:
         "Which cost allocation methods can help track AWS spending? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Resource tagging",
         "Service limits",
         "Cost allocation reports",
         "Security groups",
         "Network ACLs",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -4811,12 +4649,12 @@ export const questionDatabase = {
     {
       id: 22,
       question: "What is the AWS Partner Network (APN)?",
-      options: shuffleArray([
+      options: [
         "A social network for AWS users",
         "A program that helps partners build AWS-based businesses",
         "A network monitoring service",
         "A content delivery network",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4826,13 +4664,13 @@ export const questionDatabase = {
       id: 23,
       question:
         "Which features are included in AWS Enterprise Support? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Dedicated Technical Account Manager (TAM)",
         "Basic monitoring only",
         "Infrastructure Event Management",
         "Limited support hours",
         "Email support only",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -4841,12 +4679,12 @@ export const questionDatabase = {
     {
       id: 25,
       question: "What is AWS Cost and Usage Reports (CUR)?",
-      options: shuffleArray([
+      options: [
         "A real-time monitoring service",
         "Detailed billing data for analysis and cost optimization",
         "A security service",
         "A performance monitoring tool",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4855,12 +4693,12 @@ export const questionDatabase = {
     {
       id: 26,
       question: "Which AWS service helps identify rightsizing opportunities?",
-      options: shuffleArray([
+      options: [
         "AWS Cost Explorer",
         "AWS Trusted Advisor",
         "AWS Compute Optimizer",
         "All of the above",
-      ]),
+      ],
       correct: 3,
       type: "single",
       explanation:
@@ -4869,12 +4707,12 @@ export const questionDatabase = {
     {
       id: 27,
       question: "What is the difference between Basic and Developer support?",
-      options: shuffleArray([
+      options: [
         "Basic includes phone support, Developer does not",
         "Developer includes email support during business hours, Basic does not",
         "Basic is more expensive than Developer",
         "There is no difference",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4883,12 +4721,12 @@ export const questionDatabase = {
     {
       id: 28,
       question: "Which pricing model offers the most flexibility?",
-      options: shuffleArray([
+      options: [
         "Reserved Instances",
         "Spot Instances",
         "On-Demand Instances",
         "Dedicated Hosts",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -4897,13 +4735,13 @@ export const questionDatabase = {
     {
       id: 29,
       question: "What are the benefits of consolidated billing? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Volume discounts",
         "Increased complexity",
         "One bill for multiple accounts",
         "Higher costs",
         "Reduced visibility",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -4912,12 +4750,12 @@ export const questionDatabase = {
     {
       id: 30,
       question: "Which tool helps estimate monthly AWS costs?",
-      options: shuffleArray([
+      options: [
         "AWS Cost Explorer",
         "AWS Pricing Calculator",
         "AWS Budgets",
         "AWS CloudWatch",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4926,12 +4764,12 @@ export const questionDatabase = {
     {
       id: 31,
       question: "What is AWS Enterprise Support designed for?",
-      options: shuffleArray([
+      options: [
         "Small businesses",
         "Mission-critical workloads and large enterprises",
         "Development environments only",
         "Cost reduction only",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4940,12 +4778,12 @@ export const questionDatabase = {
     {
       id: 32,
       question: "Which support plan includes Infrastructure Event Management?",
-      options: shuffleArray([
+      options: [
         "Basic Support",
         "Developer Support",
         "Business Support",
         "Enterprise Support",
-      ]),
+      ],
       correct: 3,
       type: "single",
       explanation:
@@ -4954,12 +4792,12 @@ export const questionDatabase = {
     {
       id: 33,
       question: "What is the purpose of AWS Budgets?",
-      options: shuffleArray([
+      options: [
         "To create financial budgets for companies",
         "To set custom cost and usage budgets with alerts",
         "To manage AWS accounts",
         "To monitor application performance",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4969,13 +4807,13 @@ export const questionDatabase = {
       id: 34,
       question:
         "Which factors influence Reserved Instance pricing? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Instance type",
         "Payment option",
         "Geographic location of users",
         "Time of day",
         "Application type",
-      ]),
+      ],
       correct: [0, 1],
       type: "multiple",
       explanation:
@@ -4984,12 +4822,12 @@ export const questionDatabase = {
     {
       id: 35,
       question: "What is AWS Concierge Support?",
-      options: shuffleArray([
+      options: [
         "Technical support for applications",
         "Billing and account support for Enterprise customers",
         "Infrastructure management",
         "Security consulting",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -4999,13 +4837,13 @@ export const questionDatabase = {
       id: 36,
       question:
         "Which cost optimization strategies are recommended? (Choose THREE)",
-      options: shuffleArray([
+      options: [
         "Right-sizing instances",
         "Using Reserved Instances for predictable workloads",
         "Over-provisioning resources",
         "Implementing auto-scaling",
         "Ignoring monitoring",
-      ]),
+      ],
       correct: [0, 1, 3],
       type: "multiple",
       explanation:
@@ -5014,12 +4852,12 @@ export const questionDatabase = {
     {
       id: 37,
       question: "What is the AWS Technical Account Manager (TAM)?",
-      options: shuffleArray([
+      options: [
         "A billing specialist",
         "A dedicated technical point of contact for Enterprise Support customers",
         "A sales representative",
         "A training instructor",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -5028,12 +4866,12 @@ export const questionDatabase = {
     {
       id: 38,
       question: "Which service provides detailed cost allocation by tags?",
-      options: shuffleArray([
+      options: [
         "AWS Cost and Usage Reports",
         "AWS CloudWatch",
         "AWS CloudTrail",
         "AWS Config",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
@@ -5042,13 +4880,13 @@ export const questionDatabase = {
     {
       id: 39,
       question: "What are Spot Instances best suited for? (Choose TWO)",
-      options: shuffleArray([
+      options: [
         "Fault-tolerant workloads",
         "Mission-critical applications",
         "Batch processing jobs",
         "Real-time applications",
         "Single-instance applications",
-      ]),
+      ],
       correct: [0, 2],
       type: "multiple",
       explanation:
@@ -5057,12 +4895,12 @@ export const questionDatabase = {
     {
       id: 40,
       question: "Which support plan provides 24/7 phone support?",
-      options: shuffleArray([
+      options: [
         "Basic Support",
         "Developer Support",
         "Business Support and above",
         "Only Enterprise Support",
-      ]),
+      ],
       correct: 2,
       type: "single",
       explanation:
@@ -5071,12 +4909,12 @@ export const questionDatabase = {
     {
       id: 41,
       question: "What is the purpose of cost allocation tags?",
-      options: shuffleArray([
+      options: [
         "To improve performance",
         "To categorize resources for cost tracking and billing",
         "To enhance security",
         "To simplify management",
-      ]),
+      ],
       correct: 1,
       type: "single",
       explanation:
@@ -5085,33 +4923,38 @@ export const questionDatabase = {
     {
       id: 42,
       question: "Which feature helps track Reserved Instance utilization?",
-      options: shuffleArray([
+      options: [
         "AWS Cost Explorer RI utilization reports",
         "AWS CloudWatch",
         "AWS CloudTrail",
         "AWS Config",
-      ]),
+      ],
       correct: 0,
       type: "single",
       explanation:
         "AWS Cost Explorer provides Reserved Instance utilization reports that help you track how effectively you're using your Reserved Instance purchases.",
     },
     // Continue with more pricing/billing questions to reach 42 total...
-  ]),
+  ],
 };
+// Function to get shuffled questions by domain
+export function getQuestionsByDomain(
+  domain: keyof typeof rawQuestionDatabase,
+  count?: number
+): Question[] {
+  const domainQuestions = rawQuestionDatabase[domain] || [];
 
-// Function to get randomized questions by domain
+  // Shuffle questions and their options properly
+  const shuffledQuestions = shuffleArray(domainQuestions).map((question) =>
+    shuffleQuestionOptions(question)
+  );
 
-// Function to get randomized questions by domain
-export function getQuestionsByDomain(domain, count = null) {
-  const domainQuestions = questionDatabase[domain] || [];
-  const shuffled = shuffleArray(domainQuestions);
-  return count ? shuffled.slice(0, count) : shuffled;
+  return count ? shuffledQuestions.slice(0, count) : shuffledQuestions;
 }
 
 // Function to get a complete randomized exam set
-export function getCompleteExamSet() {
-  const examQuestions = [];
+export function getCompleteExamSet(): Question[] {
+  const examQuestions: Question[] = [];
 
   // Get questions according to real exam distribution
   examQuestions.push(...getQuestionsByDomain("fundamentals", 16)); // 24% of 65
@@ -5123,20 +4966,40 @@ export function getCompleteExamSet() {
 }
 
 // Function to get practice set with more questions
-export function getPracticeSet(questionCount = 100) {
-  const allQuestions = [
-    ...questionDatabase.fundamentals,
-    ...questionDatabase.security,
-    ...questionDatabase.services,
-    ...questionDatabase.pricing,
+export function getPracticeSet(questionCount = 100): Question[] {
+  const allQuestions: Question[] = [
+    ...getQuestionsByDomain("fundamentals"),
+    ...getQuestionsByDomain("security"),
+    ...getQuestionsByDomain("services"),
+    ...getQuestionsByDomain("pricing"),
   ];
 
   return shuffleArray(allQuestions).slice(0, questionCount);
 }
 
-// Export the complete database
-export default questionDatabase;
+// Export for compatibility with existing app code
+export const questionDatabase = {
+  get fundamentals() {
+    return getQuestionsByDomain("fundamentals");
+  },
+  get security() {
+    return getQuestionsByDomain("security");
+  },
+  get services() {
+    return getQuestionsByDomain("services");
+  },
+  get pricing() {
+    return getQuestionsByDomain("pricing");
+  },
+};
 
+// Export types
+export type { Question };
+
+// Export the raw database for direct access if needed
+export { rawQuestionDatabase };
+
+export default questionDatabase;
 // ============================================
 // USAGE INSTRUCTIONS & DATABASE SUMMARY
 // ============================================
