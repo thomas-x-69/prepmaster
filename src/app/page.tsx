@@ -8,7 +8,6 @@ import { Effect } from "postprocessing";
 import * as THREE from "three";
 import {
   ChevronRight,
-  ChevronLeft,
   Trophy,
   Target,
   Brain,
@@ -19,14 +18,11 @@ import {
   Square,
   Cloud,
   Server,
-  Database,
   Shield,
   Globe,
-  Layers,
   Monitor,
   Star,
   GitBranch,
-  Users,
   Zap,
   DollarSign,
 } from "lucide-react";
@@ -317,12 +313,12 @@ const DitherBackground = ({
   );
 };
 
-// Improved UI Components with Better Design
+// Improved UI Components with Smaller Sizes
 const Card = ({ children, className = "", selected = false, ...props }) => {
   return (
     <div
       className={`
-        relative overflow-hidden transition-all duration-200 rounded-xl cursor-pointer
+        relative overflow-hidden transition-all duration-200 rounded-lg cursor-pointer
         ${
           selected
             ? "bg-white/50 border-2 border-orange-500 shadow-lg shadow-orange-500/20"
@@ -332,8 +328,8 @@ const Card = ({ children, className = "", selected = false, ...props }) => {
       `}
       style={{
         boxShadow: selected
-          ? "0 8px 25px rgba(249, 115, 22, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8)"
-          : "0 4px 15px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)",
+          ? "0 4px 15px rgba(249, 115, 22, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8)"
+          : "0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)",
       }}
       {...props}
     >
@@ -378,7 +374,7 @@ const Button = ({
       onClick={onClick}
       disabled={disabled}
       className={`
-        relative overflow-hidden font-semibold transition-all duration-200 rounded-lg
+        relative overflow-hidden font-medium transition-all duration-200 rounded-md
         ${variantClasses[variant]} ${className}
         ${disabled ? "opacity-50 cursor-not-allowed" : ""}
       `}
@@ -392,9 +388,9 @@ const Button = ({
 const ProgressBar = ({ progress, className = "" }) => {
   return (
     <div className={`relative ${className}`}>
-      <div className="w-full bg-white/40 rounded-full h-3 overflow-hidden backdrop-blur-sm border border-white/50">
+      <div className="w-full bg-white/40 rounded-full h-2 overflow-hidden backdrop-blur-sm border border-white/50">
         <div
-          className="h-3 bg-gradient-to-r from-orange-400 to-orange-600 transition-all duration-700 relative rounded-full"
+          className="h-2 bg-gradient-to-r from-orange-400 to-orange-600 transition-all duration-700 relative rounded-full"
           style={{ width: `${progress}%` }}
         >
           <div className="absolute inset-0 bg-white opacity-30 rounded-full" />
@@ -404,7 +400,7 @@ const ProgressBar = ({ progress, className = "" }) => {
   );
 };
 
-// Floating Glass Header Component
+// Compact Header Component
 const Header = () => {
   const [starData, setStarData] = useState({
     stars: null,
@@ -451,21 +447,23 @@ const Header = () => {
   };
 
   return (
-    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4">
-      <div className="bg-white/20 backdrop-blur-lg border border-gray-200/60 rounded-2xl shadow-lg">
-        <div className="px-4 py-3">
+    <div className="fixed top-3 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-3">
+      <div className="bg-white/20 backdrop-blur-lg border border-gray-200/60 rounded-xl shadow-lg">
+        <div className="px-3 py-2">
           <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center shadow-md">
-                <Cloud className="w-4 h-4 text-white" />
+            <div className="flex items-center space-x-2">
+              <div className="w-6 h-6 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center shadow-md">
+                <Cloud className="w-3 h-3 text-white" />
               </div>
               <div>
-                <h1 className="text-sm font-bold text-gray-900">PrepMaster</h1>
-                <p className="text-xs text-gray-700">AWS Cloud Practitioner</p>
+                <h1 className="text-xs font-bold text-gray-900">PrepMaster</h1>
+                <p className="text-[10px] text-gray-700">
+                  AWS Cloud Practitioner
+                </p>
               </div>
             </div>
-            <div className="flex items-center space-x-1 text-xs text-gray-600">
-              <Star className="w-3 h-3 text-yellow-500" />
+            <div className="flex items-center space-x-1 text-[10px] text-gray-600">
+              <Star className="w-2.5 h-2.5 text-yellow-500" />
               <span>{renderStars()}</span>
             </div>
           </div>
@@ -475,24 +473,24 @@ const Header = () => {
   );
 };
 
-// Floating Glass Footer Component
+// Compact Footer Component
 const Footer = () => (
-  <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4">
-    <div className="bg-white/20 backdrop-blur-lg border border-gray-200/60 rounded-2xl shadow-lg">
-      <div className="px-4 py-3">
+  <div className="fixed bottom-3 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-3">
+    <div className="bg-white/20 backdrop-blur-lg border border-gray-200/60 rounded-xl shadow-lg">
+      <div className="px-3 py-2">
         <div className="text-center">
-          <div className="flex justify-center items-center space-x-4 mb-2">
+          <div className="flex justify-center items-center space-x-3 mb-1">
             <a
               href="https://github.com/thomas-x-69/prepmaster"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center space-x-2 text-gray-800 hover:text-orange-600 transition-colors text-xs"
+              className="flex items-center space-x-1 text-gray-800 hover:text-orange-600 transition-colors text-[10px]"
             >
-              <GitBranch className="w-3 h-3" />
+              <GitBranch className="w-2.5 h-2.5" />
               <span>GitHub Repository</span>
             </a>
           </div>
-          <p className="text-gray-900 text-xs font-medium">
+          <p className="text-gray-900 text-[10px] font-medium">
             Created with ❤️ by{" "}
             <span className="font-bold text-orange-600">Thomas Ashraf</span>
           </p>
@@ -616,14 +614,6 @@ export default function PrepMaster() {
     }
   };
 
-  const previousQuestion = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-      setSelectedAnswer(null);
-      setShowExplanation(false);
-    }
-  };
-
   const restartQuiz = () => {
     setCurrentScreen("start");
     setSelectedCategories([]);
@@ -658,69 +648,69 @@ export default function PrepMaster() {
 
         <Header />
 
-        <div className="container mx-auto px-4 py-6 relative z-10 pt-28 pb-28">
+        <div className="container mx-auto px-3 py-4 relative z-10 pt-28 pb-28">
           {/* Compact Hero Section */}
-          <div className="text-center mb-8">
-            <div className="mb-6">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 text-gray-900">
+          <div className="text-center mb-6">
+            <div className="mb-4">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 text-gray-900">
                 AWS Cloud Practitioner
               </h1>
-              <div className="text-lg md:text-xl text-orange-600 font-semibold mb-3">
+              <div className="text-base md:text-lg text-orange-600 font-semibold mb-2">
                 Certification Exam Preparation
               </div>
-              <p className="text-sm md:text-base text-gray-800 mb-4 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-xs md:text-sm text-gray-800 mb-3 max-w-2xl mx-auto leading-relaxed">
                 Master the fundamentals of AWS Cloud with comprehensive practice
                 questions. Prepare for the AWS Certified Cloud Practitioner
                 certification with confidence.
               </p>
             </div>
 
-            <div className="flex justify-center items-center space-x-4 md:space-x-6 text-gray-800 flex-wrap text-xs md:text-sm">
+            <div className="flex justify-center items-center space-x-3 md:space-x-4 text-gray-800 flex-wrap text-[10px] md:text-xs">
               <div className="flex items-center space-x-1">
-                <Cloud className="w-4 h-4 text-blue-500" />
+                <Cloud className="w-3 h-3 text-blue-500" />
                 <span className="font-medium">Core AWS Services</span>
               </div>
               <div className="flex items-center space-x-1">
-                <Shield className="w-4 h-4 text-green-500" />
+                <Shield className="w-3 h-3 text-green-500" />
                 <span className="font-medium">Security Best Practices</span>
               </div>
               <div className="flex items-center space-x-1">
-                <DollarSign className="w-4 h-4 text-purple-500" />
+                <DollarSign className="w-3 h-3 text-purple-500" />
                 <span className="font-medium">Pricing & Billing</span>
               </div>
             </div>
           </div>
 
           {/* Category Selection */}
-          <Card className="p-4 md:p-6 mb-8">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-3 sm:space-y-0">
-              <div className="flex items-center space-x-3">
-                <Target className="w-6 h-6 text-orange-600" />
-                <h2 className="text-xl md:text-2xl font-bold text-gray-800">
+          <Card className="p-3 md:p-4 mb-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-2 sm:space-y-0">
+              <div className="flex items-center space-x-2">
+                <Target className="w-4 h-4 text-orange-600" />
+                <h2 className="text-base md:text-lg font-bold text-gray-800">
                   Select Question Categories
                 </h2>
               </div>
-              <div className="flex space-x-3">
+              <div className="flex space-x-2">
                 <Button
                   onClick={() =>
                     setSelectedCategories(categories.map((cat) => cat.id))
                   }
                   variant="outline"
-                  className="px-4 py-2 text-xs"
+                  className="px-3 py-1 text-[10px]"
                 >
                   Select All
                 </Button>
                 <Button
                   onClick={() => setSelectedCategories([])}
                   variant="secondary"
-                  className="px-4 py-2 text-xs"
+                  className="px-3 py-1 text-[10px]"
                 >
                   Clear All
                 </Button>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
               {categories.map((category) => {
                 const IconComponent = category.icon;
                 const isSelected = selectedCategories.includes(category.id);
@@ -730,26 +720,26 @@ export default function PrepMaster() {
                     key={category.id}
                     onClick={() => toggleCategory(category.id)}
                     selected={isSelected}
-                    className="p-4"
+                    className="p-3"
                   >
-                    <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-start justify-between mb-2">
                       <div
-                        className={`w-10 h-10 rounded-xl bg-gradient-to-r ${category.color} flex items-center justify-center shadow-md`}
+                        className={`w-8 h-8 rounded-lg bg-gradient-to-r ${category.color} flex items-center justify-center shadow-md`}
                       >
-                        <IconComponent className="w-5 h-5 text-white" />
+                        <IconComponent className="w-4 h-4 text-white" />
                       </div>
                       {isSelected && (
-                        <CheckCircle className="w-5 h-5 text-orange-600" />
+                        <CheckCircle className="w-4 h-4 text-orange-600" />
                       )}
                     </div>
 
-                    <h3 className="text-sm font-bold text-gray-900 mb-2">
+                    <h3 className="text-xs font-bold text-gray-900 mb-1">
                       {category.name}
                     </h3>
-                    <p className="text-gray-800 text-xs mb-3 leading-relaxed">
+                    <p className="text-gray-800 text-[10px] mb-2 leading-relaxed">
                       {category.description}
                     </p>
-                    <div className="text-orange-600 text-xs font-semibold">
+                    <div className="text-orange-600 text-[10px] font-semibold">
                       {category.count} Questions
                     </div>
                   </Card>
@@ -757,8 +747,8 @@ export default function PrepMaster() {
               })}
             </div>
 
-            <div className="mt-6 text-center">
-              <p className="text-gray-800 mb-4 text-sm">
+            <div className="mt-4 text-center">
+              <p className="text-gray-800 mb-3 text-xs">
                 Selected:{" "}
                 <span className="font-bold text-orange-600">
                   {selectedCategories.length} categories
@@ -775,7 +765,7 @@ export default function PrepMaster() {
           </Card>
 
           {/* Compact Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
             {[
               {
                 icon: Brain,
@@ -795,12 +785,12 @@ export default function PrepMaster() {
             ].map((feature, i) => {
               const IconComponent = feature.icon;
               return (
-                <Card key={i} className="p-4 text-center">
-                  <IconComponent className="w-8 h-8 text-orange-600 mx-auto mb-3" />
-                  <h3 className="text-sm font-bold mb-2 text-gray-900">
+                <Card key={i} className="p-3 text-center">
+                  <IconComponent className="w-6 h-6 text-orange-600 mx-auto mb-2" />
+                  <h3 className="text-xs font-bold mb-1 text-gray-900">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-800 text-xs leading-relaxed">
+                  <p className="text-gray-800 text-[10px] leading-relaxed">
                     {feature.desc}
                   </p>
                 </Card>
@@ -813,11 +803,11 @@ export default function PrepMaster() {
             <Button
               onClick={startQuiz}
               disabled={selectedCategories.length === 0}
-              className="px-8 py-3 text-lg font-bold"
+              className="px-6 py-2 text-sm font-bold"
               variant="primary"
             >
               <div className="flex items-center space-x-2">
-                <Play className="w-5 h-5" />
+                <Play className="w-4 h-4" />
                 <span>
                   {selectedCategories.length === 0
                     ? "Select Categories to Start"
@@ -827,7 +817,7 @@ export default function PrepMaster() {
             </Button>
 
             {selectedCategories.length > 0 && (
-              <p className="mt-3 text-gray-800 text-sm">
+              <p className="mt-2 text-gray-800 text-xs">
                 Ready to ace your AWS Cloud Practitioner certification? 🚀
               </p>
             )}
@@ -862,11 +852,11 @@ export default function PrepMaster() {
 
         <Header />
 
-        <div className="container mx-auto px-4 py-6 relative z-10 pt-20 pb-20">
+        <div className="container  mx-auto px-3 py-3 relative z-10 pt-28 pb-28 max-h-screen overflow-y-auto">
           {/* Progress Header */}
-          <Card className="p-6 mb-6">
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex items-center space-x-8">
+          <Card className="p-3 md:p-4 mb-3 md:mb-4 ">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 space-y-3 sm:space-y-0">
+              <div className="flex flex-wrap items-center gap-3 md:gap-6">
                 {[
                   {
                     label: "Question",
@@ -887,10 +877,12 @@ export default function PrepMaster() {
                   },
                 ].map((stat, i) => (
                   <div key={i} className="text-center">
-                    <div className={`text-2xl font-bold ${stat.color}`}>
+                    <div
+                      className={`text-lg md:text-xl font-bold ${stat.color}`}
+                    >
                       {stat.value}
                     </div>
-                    <div className="text-xs text-gray-600 uppercase tracking-wider font-medium">
+                    <div className="text-[10px] text-gray-600 uppercase tracking-wider font-medium">
                       {stat.label}
                     </div>
                   </div>
@@ -900,10 +892,11 @@ export default function PrepMaster() {
               <Button
                 onClick={endQuiz}
                 variant="danger"
-                className="px-4 py-2 text-sm"
+                className="px-3 py-1 text-xs w-full sm:w-auto"
               >
-                <Square className="w-4 h-4 mr-2" />
-                End Exam
+                <div className="flex items-center justify-center space-x-1">
+                  <span>End Exam</span>
+                </div>
               </Button>
             </div>
 
@@ -911,34 +904,34 @@ export default function PrepMaster() {
           </Card>
 
           {/* Question */}
-          <Card className="p-6">
+          <Card className="p-3 md:p-4">
             {/* Category Badge */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-2 sm:space-y-0">
               <div
-                className={`px-6 py-3 rounded-xl bg-gradient-to-r ${currentCategory?.color} text-white font-semibold flex items-center space-x-2 shadow-md`}
+                className={`px-3 md:px-4 py-1 md:py-2 rounded-lg bg-gradient-to-r ${currentCategory?.color} text-white font-medium flex items-center space-x-1 shadow-md`}
               >
                 {currentCategory?.icon && (
-                  <currentCategory.icon className="w-5 h-5" />
+                  <currentCategory.icon className="w-3 md:w-4 h-3 md:h-4 flex-shrink-0" />
                 )}
-                <span className="text-sm">{currentCategory?.name}</span>
+                <span className="text-xs">{currentCategory?.name}</span>
               </div>
-              <div className="text-gray-600 font-medium text-sm">
+              <div className="text-gray-600 font-medium text-xs">
                 AWS Cloud Practitioner
               </div>
             </div>
 
             {/* Question Text */}
-            <div className="mb-8">
-              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-6 leading-relaxed">
+            <div className="mb-4 md:mb-6">
+              <h2 className="text-sm md:text-base lg:text-lg font-semibold text-gray-900 mb-3 md:mb-4 leading-relaxed">
                 {currentQuestion.question}
               </h2>
             </div>
 
             {/* Answer Options */}
-            <div className="space-y-3 mb-8">
+            <div className="space-y-2 mb-4 md:mb-6">
               {currentQuestion.options.map((option, index) => {
                 let optionClass =
-                  "w-full p-6 rounded-xl text-left transition-all duration-200 cursor-pointer border-2 text-base ";
+                  "w-full p-3 md:p-4 rounded-lg text-left transition-all duration-200 cursor-pointer border-2 text-xs md:text-sm ";
 
                 if (selectedAnswer === null) {
                   optionClass +=
@@ -962,19 +955,19 @@ export default function PrepMaster() {
                     disabled={selectedAnswer !== null}
                     className={optionClass}
                   >
-                    <div className="flex items-center space-x-4">
-                      <div className="w-8 h-8 rounded-full bg-orange-500 text-white font-bold flex items-center justify-center text-sm">
+                    <div className="flex items-start space-x-2 md:space-x-3">
+                      <div className="w-5 md:w-6 h-5 md:h-6 rounded-full bg-orange-500 text-white font-bold flex items-center justify-center text-[10px] md:text-xs flex-shrink-0 mt-0.5">
                         {String.fromCharCode(65 + index)}
                       </div>
-                      <span className="flex-1">{option}</span>
+                      <span className="flex-1 leading-relaxed">{option}</span>
                       {selectedAnswer !== null &&
                         index === currentQuestion.correct && (
-                          <CheckCircle className="w-6 h-6 text-green-600" />
+                          <CheckCircle className="w-4 md:w-5 h-4 md:h-5 text-green-600 flex-shrink-0" />
                         )}
                       {selectedAnswer !== null &&
                         index === selectedAnswer &&
                         selectedAnswer !== currentQuestion.correct && (
-                          <XCircle className="w-6 h-6 text-red-600" />
+                          <XCircle className="w-4 md:w-5 h-4 md:h-5 text-red-600 flex-shrink-0" />
                         )}
                     </div>
                   </button>
@@ -984,39 +977,33 @@ export default function PrepMaster() {
 
             {/* Explanation */}
             {showExplanation && (
-              <Card className="p-6 mb-6 bg-blue-50/80">
-                <h4 className="text-blue-700 font-bold mb-3 flex items-center text-base">
-                  <Brain className="w-5 h-5 mr-2" />
+              <Card className="p-3 md:p-4 mb-4 bg-blue-50/80">
+                <h4 className="text-blue-700 font-bold mb-2 flex items-center text-xs md:text-sm">
+                  <Brain className="w-3 md:w-4 h-3 md:h-4 mr-1 flex-shrink-0" />
                   Explanation:
                 </h4>
-                <p className="text-gray-900 leading-relaxed text-base">
+                <p className="text-gray-900 leading-relaxed text-xs md:text-sm">
                   {currentQuestion.explanation}
                 </p>
               </Card>
             )}
 
             {/* Navigation */}
-            <div className="flex justify-between items-center">
-              <Button
-                onClick={previousQuestion}
-                disabled={currentQuestionIndex === 0}
-                variant="secondary"
-                className="px-6 py-3 text-base"
-              >
-                <ChevronLeft className="w-4 h-4 mr-2" />
-                Previous
-              </Button>
-
+            <div className="flex justify-center">
               {selectedAnswer !== null && (
                 <Button
                   onClick={nextQuestion}
                   variant="primary"
-                  className="px-6 py-3 text-base"
+                  className="px-4 md:px-6 py-2 text-sm md:text-base font-bold w-full sm:w-auto"
                 >
-                  {currentQuestionIndex === currentQuestions.length - 1
-                    ? "View Results"
-                    : "Next Question"}
-                  <ChevronRight className="w-4 h-4 ml-2" />
+                  <div className="flex items-center justify-center space-x-1">
+                    <span>
+                      {currentQuestionIndex === currentQuestions.length - 1
+                        ? "View Results"
+                        : "Next Question"}
+                    </span>
+                    <ChevronRight className="w-3 md:w-4 h-3 md:h-4 flex-shrink-0" />
+                  </div>
                 </Button>
               )}
             </div>
@@ -1046,43 +1033,43 @@ export default function PrepMaster() {
 
         <Header />
 
-        <div className="container mx-auto px-4 py-8 relative z-10 pt-20 pb-20">
+        <div className="container mx-auto px-3 py-6 relative z-10 pt-28 pb-28">
           {/* Results Header */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center space-x-3 mb-6">
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center space-x-2 mb-4">
               <div
-                className={`w-16 h-16 rounded-full flex items-center justify-center shadow-xl ${
+                className={`w-12 h-12 rounded-full flex items-center justify-center shadow-xl ${
                   passed
                     ? "bg-gradient-to-r from-green-500 to-green-600"
                     : "bg-gradient-to-r from-orange-500 to-orange-600"
                 }`}
               >
-                <Trophy className="w-8 h-8 text-white" />
+                <Trophy className="w-6 h-6 text-white" />
               </div>
             </div>
-            <h1 className="text-4xl font-bold mb-4 text-gray-900">
+            <h1 className="text-3xl font-bold mb-3 text-gray-900">
               Exam Complete!
             </h1>
-            <p className="text-lg text-gray-800">
+            <p className="text-base text-gray-800">
               AWS Cloud Practitioner Practice Results
             </p>
           </div>
 
           {/* Score Display */}
-          <div className="flex justify-center mb-8">
-            <Card className="relative w-80 h-80 flex items-center justify-center rounded-full">
+          <div className="flex justify-center mb-6">
+            <Card className="relative w-64 h-64 flex items-center justify-center rounded-full">
               <div className="text-center">
-                <div className="text-6xl font-bold text-orange-600 mb-4">
+                <div className="text-5xl font-bold text-orange-600 mb-3">
                   {finalScore}%
                 </div>
                 <div
-                  className={`text-2xl font-semibold mb-3 ${
+                  className={`text-xl font-semibold mb-2 ${
                     passed ? "text-green-600" : "text-orange-600"
                   }`}
                 >
                   {passed ? "EXCELLENT WORK!" : "KEEP PRACTICING!"}
                 </div>
-                <div className="text-gray-700 text-lg">
+                <div className="text-gray-700 text-base">
                   {score} out of {totalQuestions} correct
                 </div>
               </div>
@@ -1090,7 +1077,7 @@ export default function PrepMaster() {
           </div>
 
           {/* Performance Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
             {[
               {
                 label: "Questions Correct",
@@ -1119,14 +1106,14 @@ export default function PrepMaster() {
             ].map((stat, i) => {
               const IconComponent = stat.icon;
               return (
-                <Card key={i} className="p-6 text-center">
+                <Card key={i} className="p-4 text-center">
                   <IconComponent
-                    className={`w-8 h-8 ${stat.color} mx-auto mb-3`}
+                    className={`w-6 h-6 ${stat.color} mx-auto mb-2`}
                   />
-                  <div className={`text-3xl font-bold ${stat.color} mb-2`}>
+                  <div className={`text-2xl font-bold ${stat.color} mb-1`}>
                     {stat.value}
                   </div>
-                  <div className="text-gray-800 font-medium text-sm">
+                  <div className="text-gray-800 font-medium text-xs">
                     {stat.label}
                   </div>
                 </Card>
@@ -1135,15 +1122,15 @@ export default function PrepMaster() {
           </div>
 
           {/* Results Message */}
-          <Card className="p-8 mb-8 text-center">
-            <div className="mb-6">
+          <Card className="p-6 mb-6 text-center">
+            <div className="mb-4">
               {passed ? (
                 <div className="text-green-600">
-                  <CheckCircle className="w-16 h-16 mx-auto mb-4" />
-                  <h3 className="text-3xl font-bold mb-4">
+                  <CheckCircle className="w-12 h-12 mx-auto mb-3" />
+                  <h3 className="text-2xl font-bold mb-3">
                     Outstanding Performance! 🎉
                   </h3>
-                  <p className="text-gray-900 text-lg leading-relaxed max-w-2xl mx-auto">
+                  <p className="text-gray-900 text-sm leading-relaxed max-w-2xl mx-auto">
                     Congratulations! You're demonstrating strong mastery of AWS
                     Cloud Practitioner concepts. Your understanding shows you're
                     well-prepared for the certification exam.
@@ -1151,11 +1138,11 @@ export default function PrepMaster() {
                 </div>
               ) : (
                 <div className="text-orange-600">
-                  <Target className="w-16 h-16 mx-auto mb-4" />
-                  <h3 className="text-3xl font-bold mb-4">
+                  <Target className="w-12 h-12 mx-auto mb-3" />
+                  <h3 className="text-2xl font-bold mb-3">
                     Great Progress! 📚
                   </h3>
-                  <p className="text-gray-900 text-lg leading-relaxed max-w-2xl mx-auto">
+                  <p className="text-gray-900 text-sm leading-relaxed max-w-2xl mx-auto">
                     You're building solid foundations in AWS Cloud concepts!
                     Continue practicing and focus on your growth areas. With
                     consistent effort, certification success is within reach!
@@ -1166,13 +1153,13 @@ export default function PrepMaster() {
           </Card>
 
           {/* Action Buttons */}
-          <div className="flex justify-center space-x-6">
+          <div className="flex justify-center space-x-4">
             <Button
               onClick={restartQuiz}
               variant="primary"
-              className="px-8 py-4 text-lg font-bold"
+              className="px-6 py-3 text-base font-bold"
             >
-              <RotateCcw className="w-5 h-5 mr-2" />
+              <RotateCcw className="w-4 h-4 mr-2" />
               Practice Again
             </Button>
             <Button
@@ -1183,9 +1170,9 @@ export default function PrepMaster() {
                 )
               }
               variant="outline"
-              className="px-8 py-4 text-lg font-bold"
+              className="px-6 py-3 text-base font-bold"
             >
-              <Globe className="w-5 h-5 mr-2" />
+              <Globe className="w-4 h-4 mr-2" />
               AWS Certification
             </Button>
           </div>
