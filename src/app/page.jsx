@@ -448,7 +448,7 @@ const Header = () => {
   };
 
   return (
-    <div className="fixed top-3 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-3">
+    <div className="fixed top-3 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-8 py-4">
       <div className="bg-white/20 backdrop-blur-lg border border-gray-200/60 rounded-xl shadow-lg">
         <div className="px-3 py-2">
           <div className="flex justify-between items-center">
@@ -634,9 +634,9 @@ export default function PrepMaster() {
 
   if (currentScreen === "start") {
     return (
-      <div className="min-h-screen bg-transparent relative">
+      <div className="min-h-screen bg-[#9ed3fe] relative">
         {/* Interactive Background */}
-        <DitherBackground
+        {/* <DitherBackground
           waveSpeed={0.03}
           waveFrequency={2.5}
           waveAmplitude={0.4}
@@ -645,7 +645,7 @@ export default function PrepMaster() {
           pixelSize={3}
           enableMouseInteraction={true}
           mouseRadius={0.6}
-        />
+        /> */}
 
         <Header />
 
@@ -840,8 +840,8 @@ export default function PrepMaster() {
     );
 
     return (
-      <div className="min-h-screen bg-transparent relative">
-        <DitherBackground
+      <div className="min-h-screen bg-[#9ed3fe] relative">
+        {/* <DitherBackground
           waveSpeed={0.02}
           waveFrequency={3}
           waveAmplitude={0.3}
@@ -849,7 +849,7 @@ export default function PrepMaster() {
           colorNum={5}
           pixelSize={2}
           enableMouseInteraction={false}
-        />
+        /> */}
 
         <Header />
 

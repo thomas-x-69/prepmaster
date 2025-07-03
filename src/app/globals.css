@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --background: 248 250 252; /* slate-50 */
-    --foreground: 15 23 42; /* slate-900 */
+    --background: 0, 153, 255; /* slate-50 */
+    --foreground: 0, 153, 255; /* slate-900 */
     --card: 255 255 255; /* white */
     --card-foreground: 15 23 42; /* slate-900 */
     --popover: 255 255 255; /* white */
