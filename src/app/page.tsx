@@ -313,7 +313,7 @@ const DitherBackground = ({
   );
 };
 
-// Improved UI Components with Smaller Sizes
+// Improved UI Components with Bigger Sizes for Landing
 const Card = ({ children, className = "", selected = false, ...props }) => {
   return (
     <div
@@ -648,69 +648,69 @@ export default function PrepMaster() {
 
         <Header />
 
-        <div className="container mx-auto px-3 py-4 relative z-10 pt-28 pb-28">
-          {/* Compact Hero Section */}
-          <div className="text-center mb-6">
-            <div className="mb-4">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 text-gray-900">
+        <div className="container mx-auto px-4 py-6 relative z-10 pt-28 pb-28">
+          {/* BIGGER Hero Section */}
+          <div className="text-center mb-8">
+            <div className="mb-6">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-gray-900">
                 AWS Cloud Practitioner
               </h1>
-              <div className="text-base md:text-lg text-orange-600 font-semibold mb-2">
+              <div className="text-xl md:text-2xl text-orange-600 font-semibold mb-4">
                 Certification Exam Preparation
               </div>
-              <p className="text-xs md:text-sm text-gray-800 mb-3 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-sm md:text-base text-gray-800 mb-5 max-w-3xl mx-auto leading-relaxed">
                 Master the fundamentals of AWS Cloud with comprehensive practice
                 questions. Prepare for the AWS Certified Cloud Practitioner
                 certification with confidence.
               </p>
             </div>
 
-            <div className="flex justify-center items-center space-x-3 md:space-x-4 text-gray-800 flex-wrap text-[10px] md:text-xs">
-              <div className="flex items-center space-x-1">
-                <Cloud className="w-3 h-3 text-blue-500" />
+            <div className="flex justify-center items-center space-x-4 md:space-x-6 text-gray-800 flex-wrap text-sm md:text-base">
+              <div className="flex items-center space-x-2">
+                <Cloud className="w-5 h-5 text-blue-500" />
                 <span className="font-medium">Core AWS Services</span>
               </div>
-              <div className="flex items-center space-x-1">
-                <Shield className="w-3 h-3 text-green-500" />
+              <div className="flex items-center space-x-2">
+                <Shield className="w-5 h-5 text-green-500" />
                 <span className="font-medium">Security Best Practices</span>
               </div>
-              <div className="flex items-center space-x-1">
-                <DollarSign className="w-3 h-3 text-purple-500" />
+              <div className="flex items-center space-x-2">
+                <DollarSign className="w-5 h-5 text-purple-500" />
                 <span className="font-medium">Pricing & Billing</span>
               </div>
             </div>
           </div>
 
-          {/* Category Selection */}
-          <Card className="p-3 md:p-4 mb-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-2 sm:space-y-0">
-              <div className="flex items-center space-x-2">
-                <Target className="w-4 h-4 text-orange-600" />
-                <h2 className="text-base md:text-lg font-bold text-gray-800">
+          {/* BIGGER Category Selection */}
+          <Card className="p-5 md:p-6 mb-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-3 sm:space-y-0">
+              <div className="flex items-center space-x-3">
+                <Target className="w-6 h-6 text-orange-600" />
+                <h2 className="text-xl md:text-2xl font-bold text-gray-800">
                   Select Question Categories
                 </h2>
               </div>
-              <div className="flex space-x-2">
+              <div className="flex space-x-3">
                 <Button
                   onClick={() =>
                     setSelectedCategories(categories.map((cat) => cat.id))
                   }
                   variant="outline"
-                  className="px-3 py-1 text-[10px]"
+                  className="px-4 py-2 text-sm"
                 >
                   Select All
                 </Button>
                 <Button
                   onClick={() => setSelectedCategories([])}
                   variant="secondary"
-                  className="px-3 py-1 text-[10px]"
+                  className="px-4 py-2 text-sm"
                 >
                   Clear All
                 </Button>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {categories.map((category) => {
                 const IconComponent = category.icon;
                 const isSelected = selectedCategories.includes(category.id);
@@ -720,26 +720,26 @@ export default function PrepMaster() {
                     key={category.id}
                     onClick={() => toggleCategory(category.id)}
                     selected={isSelected}
-                    className="p-3"
+                    className="p-5"
                   >
-                    <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-start justify-between mb-3">
                       <div
-                        className={`w-8 h-8 rounded-lg bg-gradient-to-r ${category.color} flex items-center justify-center shadow-md`}
+                        className={`w-10 h-10 rounded-lg bg-gradient-to-r ${category.color} flex items-center justify-center shadow-md`}
                       >
-                        <IconComponent className="w-4 h-4 text-white" />
+                        <IconComponent className="w-6 h-6 text-white" />
                       </div>
                       {isSelected && (
-                        <CheckCircle className="w-4 h-4 text-orange-600" />
+                        <CheckCircle className="w-6 h-6 text-orange-600" />
                       )}
                     </div>
 
-                    <h3 className="text-xs font-bold text-gray-900 mb-1">
+                    <h3 className="text-sm font-bold text-gray-900 mb-2">
                       {category.name}
                     </h3>
-                    <p className="text-gray-800 text-[10px] mb-2 leading-relaxed">
+                    <p className="text-gray-800 text-xs mb-3 leading-relaxed">
                       {category.description}
                     </p>
-                    <div className="text-orange-600 text-[10px] font-semibold">
+                    <div className="text-orange-600 text-xs font-semibold">
                       {category.count} Questions
                     </div>
                   </Card>
@@ -747,8 +747,8 @@ export default function PrepMaster() {
               })}
             </div>
 
-            <div className="mt-4 text-center">
-              <p className="text-gray-800 mb-3 text-xs">
+            <div className="mt-6 text-center">
+              <p className="text-gray-800 mb-4 text-sm">
                 Selected:{" "}
                 <span className="font-bold text-orange-600">
                   {selectedCategories.length} categories
@@ -764,8 +764,8 @@ export default function PrepMaster() {
             </div>
           </Card>
 
-          {/* Compact Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+          {/* BIGGER Features */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             {[
               {
                 icon: Brain,
@@ -785,12 +785,12 @@ export default function PrepMaster() {
             ].map((feature, i) => {
               const IconComponent = feature.icon;
               return (
-                <Card key={i} className="p-3 text-center">
-                  <IconComponent className="w-6 h-6 text-orange-600 mx-auto mb-2" />
-                  <h3 className="text-xs font-bold mb-1 text-gray-900">
+                <Card key={i} className="p-5 text-center">
+                  <IconComponent className="w-8 h-8 text-orange-600 mx-auto mb-3" />
+                  <h3 className="text-sm font-bold mb-2 text-gray-900">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-800 text-[10px] leading-relaxed">
+                  <p className="text-gray-800 text-xs leading-relaxed">
                     {feature.desc}
                   </p>
                 </Card>
@@ -798,16 +798,16 @@ export default function PrepMaster() {
             })}
           </div>
 
-          {/* Start Button */}
+          {/* BIGGER Start Button */}
           <div className="text-center">
             <Button
               onClick={startQuiz}
               disabled={selectedCategories.length === 0}
-              className="px-6 py-2 text-sm font-bold"
+              className="px-8 py-4 text-lg font-bold"
               variant="primary"
             >
-              <div className="flex items-center space-x-2">
-                <Play className="w-4 h-4" />
+              <div className="flex items-center space-x-3">
+                <Play className="w-6 h-6" />
                 <span>
                   {selectedCategories.length === 0
                     ? "Select Categories to Start"
@@ -817,7 +817,7 @@ export default function PrepMaster() {
             </Button>
 
             {selectedCategories.length > 0 && (
-              <p className="mt-2 text-gray-800 text-xs">
+              <p className="mt-3 text-gray-800 text-sm">
                 Ready to ace your AWS Cloud Practitioner certification? 🚀
               </p>
             )}
@@ -889,12 +889,13 @@ export default function PrepMaster() {
                 ))}
               </div>
 
+              {/* BIGGER End Test Button */}
               <Button
                 onClick={endQuiz}
                 variant="danger"
-                className="px-3 py-1 text-xs w-full sm:w-auto"
+                className="px-6 py-3 text-base font-bold w-full sm:w-auto"
               >
-                <div className="flex items-center justify-center space-x-1">
+                <div className="flex items-center justify-center space-x-2">
                   <span>End Exam</span>
                 </div>
               </Button>
