@@ -119,7 +119,6 @@ void main() {
     float effect = 1.0 - smoothstep(0.0, mouseRadius, dist);
     f -= 0.5 * effect;
   }
-  // Changed from black (0.0) to white (1.0) background
   vec3 col = mix(vec3(1.0), waveColor, f);
   gl_FragColor = vec4(col, 1.0);
 }
@@ -318,23 +317,23 @@ const DitherBackground = ({
   );
 };
 
-// Improved UI Components with Better Contrast for White Background
+// Improved UI Components with Better Design
 const Card = ({ children, className = "", selected = false, ...props }) => {
   return (
     <div
       className={`
-        relative overflow-hidden transition-all duration-200 rounded-2xl cursor-pointer
+        relative overflow-hidden transition-all duration-200 rounded-xl cursor-pointer
         ${
           selected
-            ? "bg-white/20 border-2 border-orange-500 shadow-xl shadow-orange-500/20 scale-105"
-            : "bg-white/20 border border-gray-300/60 hover:bg-white/95 hover:scale-102 hover:shadow-lg"
+            ? "bg-white/50 border-2 border-orange-500 shadow-lg shadow-orange-500/20"
+            : "bg-white/20 border border-gray-300/60 hover:bg-white/30"
         }
-        backdrop-blur-md ${className}
+        backdrop-blur-sm ${className}
       `}
       style={{
         boxShadow: selected
-          ? "0 12px 40px rgba(249, 115, 22, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.8)"
-          : "0 8px 25px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8)",
+          ? "0 8px 25px rgba(249, 115, 22, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8)"
+          : "0 4px 15px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)",
       }}
       {...props}
     >
@@ -355,22 +354,22 @@ const Button = ({
     primary: `
       bg-gradient-to-r from-orange-500 to-orange-600
       hover:from-orange-400 hover:to-orange-500
-      text-white shadow-lg hover:shadow-xl hover:scale-105
+      text-white shadow-md
       disabled:from-gray-400 disabled:to-gray-500
     `,
     secondary: `
       bg-gradient-to-r from-blue-500 to-blue-600
       hover:from-blue-400 hover:to-blue-500
-      text-white shadow-lg hover:shadow-xl hover:scale-105
+      text-white shadow-md
     `,
     danger: `
       bg-gradient-to-r from-red-500 to-red-600
       hover:from-red-400 hover:to-red-500
-      text-white shadow-lg hover:shadow-xl hover:scale-105
+      text-white shadow-md
     `,
     outline: `
       border-2 border-orange-500 text-orange-700 bg-white/80
-      hover:bg-orange-500 hover:text-white hover:scale-105
+      hover:bg-orange-500 hover:text-white
     `,
   };
 
@@ -379,9 +378,9 @@ const Button = ({
       onClick={onClick}
       disabled={disabled}
       className={`
-        relative overflow-hidden font-semibold transition-all duration-200 rounded-xl
+        relative overflow-hidden font-semibold transition-all duration-200 rounded-lg
         ${variantClasses[variant]} ${className}
-        ${disabled ? "opacity-50 cursor-not-allowed scale-100" : ""}
+        ${disabled ? "opacity-50 cursor-not-allowed" : ""}
       `}
       {...props}
     >
@@ -393,9 +392,9 @@ const Button = ({
 const ProgressBar = ({ progress, className = "" }) => {
   return (
     <div className={`relative ${className}`}>
-      <div className="w-full bg-white/40 rounded-full h-4 overflow-hidden backdrop-blur-sm border border-white/50">
+      <div className="w-full bg-white/40 rounded-full h-3 overflow-hidden backdrop-blur-sm border border-white/50">
         <div
-          className="h-4 bg-gradient-to-r from-orange-400 to-orange-600 transition-all duration-700 relative rounded-full"
+          className="h-3 bg-gradient-to-r from-orange-400 to-orange-600 transition-all duration-700 relative rounded-full"
           style={{ width: `${progress}%` }}
         >
           <div className="absolute inset-0 bg-white opacity-30 rounded-full" />
@@ -405,57 +404,99 @@ const ProgressBar = ({ progress, className = "" }) => {
   );
 };
 
-// Glass Header Component with Better Contrast
-const Header = () => (
-  <div className="fixed top-0 left-0 right-0 z-50">
-    <div className="bg-white/20 backdrop-blur-lg border-b border-gray-200/60 rounded-b-3xl mx-10 shadow-lg">
-      <div className="container mx-auto px-6 py-4">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center shadow-lg">
-              <Cloud className="w-6 h-6 text-white" />
+// Floating Glass Header Component
+const Header = () => {
+  const [starData, setStarData] = useState({
+    stars: null,
+    loading: true,
+    error: false,
+  });
+
+  useEffect(() => {
+    const fetchStars = async () => {
+      try {
+        console.log("Fetching GitHub stars...");
+        const response = await fetch("/api/github-stars", {
+          cache: "no-store", // Always get fresh data
+        });
+        const data = await response.json();
+
+        if (data.success) {
+          console.log("Stars fetched successfully:", data.stars);
+          setStarData({ stars: data.stars, loading: false, error: false });
+        } else {
+          console.error("API returned error:", data.error);
+          setStarData({ stars: null, loading: false, error: true });
+        }
+      } catch (error) {
+        console.error("Failed to fetch stars:", error);
+        setStarData({ stars: null, loading: false, error: true });
+      }
+    };
+
+    fetchStars();
+  }, []);
+
+  const formatStars = (count) => {
+    if (count >= 1000) {
+      return (count / 1000).toFixed(1) + "k";
+    }
+    return count.toString();
+  };
+
+  const renderStars = () => {
+    if (starData.loading) return "...";
+    if (starData.error || starData.stars === null) return "API problem";
+    return `${formatStars(starData.stars)} stars`;
+  };
+
+  return (
+    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4">
+      <div className="bg-white/20 backdrop-blur-lg border border-gray-200/60 rounded-2xl shadow-lg">
+        <div className="px-4 py-3">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center shadow-md">
+                <Cloud className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <h1 className="text-sm font-bold text-gray-900">PrepMaster</h1>
+                <p className="text-xs text-gray-700">AWS Cloud Practitioner</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">PrepMaster</h1>
-              <p className="text-sm text-gray-700">AWS Cloud Practitioner</p>
+            <div className="flex items-center space-x-1 text-xs text-gray-600">
+              <Star className="w-3 h-3 text-yellow-500" />
+              <span>{renderStars()}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-);
-// Glass Footer Component with Better Contrast
+  );
+};
+
+// Floating Glass Footer Component
 const Footer = () => (
-  <div className="bg-white/20 backdrop-blur-lg border-t border-gray-200/60 rounded-t-3xl mx-10 shadow-lg">
-    <div className="container mx-auto px-6 py-6">
-      <div className="text-center">
-        <div className="flex justify-center items-center space-x-6 mb-4">
-          <a
-            href="https://github.com/thomas-x-69/prepmaster"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center space-x-2 text-gray-800 hover:text-orange-600 transition-colors"
-          >
-            <GitBranch className="w-4 h-4" />
-            <span>GitHub Repository</span>
-          </a>
-          <div className="flex items-center space-x-1 text-gray-700">
-            <Star className="w-4 h-4 text-yellow-500" />
-            <span>127 stars</span>
+  <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4">
+    <div className="bg-white/20 backdrop-blur-lg border border-gray-200/60 rounded-2xl shadow-lg">
+      <div className="px-4 py-3">
+        <div className="text-center">
+          <div className="flex justify-center items-center space-x-4 mb-2">
+            <a
+              href="https://github.com/thomas-x-69/prepmaster"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-2 text-gray-800 hover:text-orange-600 transition-colors text-xs"
+            >
+              <GitBranch className="w-3 h-3" />
+              <span>GitHub Repository</span>
+            </a>
           </div>
-          <div className="flex items-center space-x-1 text-gray-700">
-            <Users className="w-4 h-4 text-blue-500" />
-            <span>23 forks</span>
-          </div>
+          <p className="text-gray-900 text-xs font-medium">
+            Created with ❤️ by{" "}
+            <span className="font-bold text-orange-600">Thomas Ashraf</span>
+          </p>
         </div>
-        <p className="text-gray-900 text-sm font-medium">
-          Created with ❤️ by{" "}
-          <span className="font-bold text-orange-600">Thomas Ashraf</span>
-        </p>
-        <p className="text-gray-700 text-xs mt-1">
-          AWS Cloud Practitioner Certification Preparation Platform
-        </p>
       </div>
     </div>
   </div>
@@ -505,14 +546,6 @@ export default function PrepMaster() {
       icon: DollarSign,
       color: "from-purple-500 to-purple-600",
       description: "AWS pricing models and cost optimization",
-    },
-    {
-      id: "architecture",
-      name: "Architecture & Design",
-      count: questionDatabase.architecture?.length || 0,
-      icon: Layers,
-      color: "from-indigo-500 to-indigo-600",
-      description: "Well-architected framework principles",
     },
   ];
 
@@ -625,69 +658,69 @@ export default function PrepMaster() {
 
         <Header />
 
-        <div className="container mx-auto px-4 py-8 relative z-10 pt-32">
-          {/* Hero Section */}
-          <div className="text-center mb-16">
-            <div className="mb-8">
-              <h1 className="text-7xl font-bold mb-6 text-gray-900">
+        <div className="container mx-auto px-4 py-6 relative z-10 pt-28 pb-28">
+          {/* Compact Hero Section */}
+          <div className="text-center mb-8">
+            <div className="mb-6">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 text-gray-900">
                 AWS Cloud Practitioner
               </h1>
-              <div className="text-3xl text-orange-600 font-semibold mb-6">
+              <div className="text-lg md:text-xl text-orange-600 font-semibold mb-3">
                 Certification Exam Preparation
               </div>
-              <p className="text-xl text-gray-800 mb-8 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-sm md:text-base text-gray-800 mb-4 max-w-2xl mx-auto leading-relaxed">
                 Master the fundamentals of AWS Cloud with comprehensive practice
                 questions. Prepare for the AWS Certified Cloud Practitioner
                 certification with confidence.
               </p>
             </div>
 
-            <div className="flex justify-center items-center space-x-8 text-gray-800 flex-wrap">
-              <div className="flex items-center space-x-2">
-                <Cloud className="w-6 h-6 text-blue-500" />
+            <div className="flex justify-center items-center space-x-4 md:space-x-6 text-gray-800 flex-wrap text-xs md:text-sm">
+              <div className="flex items-center space-x-1">
+                <Cloud className="w-4 h-4 text-blue-500" />
                 <span className="font-medium">Core AWS Services</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Shield className="w-6 h-6 text-green-500" />
+              <div className="flex items-center space-x-1">
+                <Shield className="w-4 h-4 text-green-500" />
                 <span className="font-medium">Security Best Practices</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <DollarSign className="w-6 h-6 text-purple-500" />
+              <div className="flex items-center space-x-1">
+                <DollarSign className="w-4 h-4 text-purple-500" />
                 <span className="font-medium">Pricing & Billing</span>
               </div>
             </div>
           </div>
 
           {/* Category Selection */}
-          <Card className="p-8 mb-12">
-            <div className="flex justify-between items-center mb-8">
-              <div className="flex items-center space-x-4">
-                <Target className="w-8 h-8 text-orange-600" />
-                <h2 className="text-3xl font-bold text-gray-800">
+          <Card className="p-4 md:p-6 mb-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-3 sm:space-y-0">
+              <div className="flex items-center space-x-3">
+                <Target className="w-6 h-6 text-orange-600" />
+                <h2 className="text-xl md:text-2xl font-bold text-gray-800">
                   Select Question Categories
                 </h2>
               </div>
-              <div className="space-x-4">
+              <div className="flex space-x-3">
                 <Button
                   onClick={() =>
                     setSelectedCategories(categories.map((cat) => cat.id))
                   }
                   variant="outline"
-                  className="px-6 py-3 text-sm"
+                  className="px-4 py-2 text-xs"
                 >
                   Select All
                 </Button>
                 <Button
                   onClick={() => setSelectedCategories([])}
                   variant="secondary"
-                  className="px-6 py-3 text-sm"
+                  className="px-4 py-2 text-xs"
                 >
                   Clear All
                 </Button>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {categories.map((category) => {
                 const IconComponent = category.icon;
                 const isSelected = selectedCategories.includes(category.id);
@@ -697,38 +730,38 @@ export default function PrepMaster() {
                     key={category.id}
                     onClick={() => toggleCategory(category.id)}
                     selected={isSelected}
-                    className="p-6"
+                    className="p-4"
                   >
-                    <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-start justify-between mb-3">
                       <div
-                        className={`w-14 h-14 rounded-2xl bg-gradient-to-r ${category.color} flex items-center justify-center shadow-lg`}
+                        className={`w-10 h-10 rounded-xl bg-gradient-to-r ${category.color} flex items-center justify-center shadow-md`}
                       >
-                        <IconComponent className="w-7 h-7 text-white" />
+                        <IconComponent className="w-5 h-5 text-white" />
                       </div>
                       {isSelected && (
-                        <CheckCircle className="w-7 h-7 text-orange-600" />
+                        <CheckCircle className="w-5 h-5 text-orange-600" />
                       )}
                     </div>
 
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">
+                    <h3 className="text-sm font-bold text-gray-900 mb-2">
                       {category.name}
                     </h3>
-                    <p className="text-gray-800 text-sm mb-4 leading-relaxed">
+                    <p className="text-gray-800 text-xs mb-3 leading-relaxed">
                       {category.description}
                     </p>
-                    <div className="text-orange-600 text-sm font-semibold">
-                      {category.count} Questions Available
+                    <div className="text-orange-600 text-xs font-semibold">
+                      {category.count} Questions
                     </div>
                   </Card>
                 );
               })}
             </div>
 
-            <div className="mt-8 text-center">
-              <p className="text-gray-800 mb-6 text-lg">
-                Selected Categories:{" "}
+            <div className="mt-6 text-center">
+              <p className="text-gray-800 mb-4 text-sm">
+                Selected:{" "}
                 <span className="font-bold text-orange-600">
-                  {selectedCategories.length}
+                  {selectedCategories.length} categories
                 </span>{" "}
                 • Total Questions:{" "}
                 <span className="font-bold text-blue-600">
@@ -741,33 +774,33 @@ export default function PrepMaster() {
             </div>
           </Card>
 
-          {/* Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          {/* Compact Features */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             {[
               {
                 icon: Brain,
                 title: "Smart Practice",
-                desc: "Comprehensive questions covering all exam domains with detailed explanations",
+                desc: "Comprehensive questions with detailed explanations",
               },
               {
                 icon: Target,
                 title: "Exam-Ready",
-                desc: "Questions designed to mirror the actual AWS Cloud Practitioner certification exam",
+                desc: "Questions mirroring the actual certification exam",
               },
               {
                 icon: Trophy,
                 title: "Track Progress",
-                desc: "Monitor your performance and identify areas that need more focus",
+                desc: "Monitor performance and identify focus areas",
               },
             ].map((feature, i) => {
               const IconComponent = feature.icon;
               return (
-                <Card key={i} className="p-8 text-center">
-                  <IconComponent className="w-12 h-12 text-orange-600 mx-auto mb-4" />
-                  <h3 className="text-xl font-bold mb-3 text-gray-900">
+                <Card key={i} className="p-4 text-center">
+                  <IconComponent className="w-8 h-8 text-orange-600 mx-auto mb-3" />
+                  <h3 className="text-sm font-bold mb-2 text-gray-900">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-800 leading-relaxed">
+                  <p className="text-gray-800 text-xs leading-relaxed">
                     {feature.desc}
                   </p>
                 </Card>
@@ -776,15 +809,15 @@ export default function PrepMaster() {
           </div>
 
           {/* Start Button */}
-          <div className="text-center mb-16">
+          <div className="text-center">
             <Button
               onClick={startQuiz}
               disabled={selectedCategories.length === 0}
-              className="px-16 py-5 text-2xl font-bold"
+              className="px-8 py-3 text-lg font-bold"
               variant="primary"
             >
-              <div className="flex items-center space-x-4">
-                <Play className="w-8 h-8" />
+              <div className="flex items-center space-x-2">
+                <Play className="w-5 h-5" />
                 <span>
                   {selectedCategories.length === 0
                     ? "Select Categories to Start"
@@ -794,7 +827,7 @@ export default function PrepMaster() {
             </Button>
 
             {selectedCategories.length > 0 && (
-              <p className="mt-6 text-gray-800 text-lg">
+              <p className="mt-3 text-gray-800 text-sm">
                 Ready to ace your AWS Cloud Practitioner certification? 🚀
               </p>
             )}
@@ -829,11 +862,11 @@ export default function PrepMaster() {
 
         <Header />
 
-        <div className="container mx-auto px-4 py-6 relative z-10 pt-32">
+        <div className="container mx-auto px-4 py-6 relative z-10 pt-20 pb-20">
           {/* Progress Header */}
-          <Card className="p-8 mb-8">
-            <div className="flex justify-between items-center mb-6">
-              <div className="flex items-center space-x-12">
+          <Card className="p-6 mb-6">
+            <div className="flex justify-between items-center mb-4">
+              <div className="flex items-center space-x-8">
                 {[
                   {
                     label: "Question",
@@ -854,10 +887,10 @@ export default function PrepMaster() {
                   },
                 ].map((stat, i) => (
                   <div key={i} className="text-center">
-                    <div className={`text-3xl font-bold ${stat.color}`}>
+                    <div className={`text-2xl font-bold ${stat.color}`}>
                       {stat.value}
                     </div>
-                    <div className="text-sm text-gray-600 uppercase tracking-wider font-medium">
+                    <div className="text-xs text-gray-600 uppercase tracking-wider font-medium">
                       {stat.label}
                     </div>
                   </div>
@@ -867,7 +900,7 @@ export default function PrepMaster() {
               <Button
                 onClick={endQuiz}
                 variant="danger"
-                className="px-6 py-3 text-sm"
+                className="px-4 py-2 text-sm"
               >
                 <Square className="w-4 h-4 mr-2" />
                 End Exam
@@ -878,38 +911,38 @@ export default function PrepMaster() {
           </Card>
 
           {/* Question */}
-          <Card className="p-10">
+          <Card className="p-6">
             {/* Category Badge */}
-            <div className="flex justify-between items-center mb-8">
+            <div className="flex justify-between items-center mb-6">
               <div
-                className={`px-8 py-4 rounded-2xl bg-gradient-to-r ${currentCategory?.color} text-white font-semibold flex items-center space-x-3 shadow-lg`}
+                className={`px-6 py-3 rounded-xl bg-gradient-to-r ${currentCategory?.color} text-white font-semibold flex items-center space-x-2 shadow-md`}
               >
                 {currentCategory?.icon && (
-                  <currentCategory.icon className="w-6 h-6" />
+                  <currentCategory.icon className="w-5 h-5" />
                 )}
-                <span className="text-lg">{currentCategory?.name}</span>
+                <span className="text-sm">{currentCategory?.name}</span>
               </div>
-              <div className="text-gray-600 font-medium">
+              <div className="text-gray-600 font-medium text-sm">
                 AWS Cloud Practitioner
               </div>
             </div>
 
             {/* Question Text */}
-            <div className="mb-10">
-              <h2 className="text-3xl font-semibold text-gray-900 mb-8 leading-relaxed">
+            <div className="mb-8">
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-6 leading-relaxed">
                 {currentQuestion.question}
               </h2>
             </div>
 
             {/* Answer Options */}
-            <div className="space-y-5 mb-10">
+            <div className="space-y-3 mb-8">
               {currentQuestion.options.map((option, index) => {
                 let optionClass =
-                  "w-full p-8 rounded-2xl text-left transition-all duration-200 cursor-pointer border-2 text-lg ";
+                  "w-full p-6 rounded-xl text-left transition-all duration-200 cursor-pointer border-2 text-base ";
 
                 if (selectedAnswer === null) {
                   optionClass +=
-                    "border-gray-300 bg-white/70 hover:border-orange-400 hover:bg-white/90 hover:scale-102 text-gray-900";
+                    "border-gray-300 bg-white/70 hover:border-orange-400 hover:bg-white/90 text-gray-900";
                 } else if (index === currentQuestion.correct) {
                   optionClass += "border-green-400 bg-green-50 text-green-800";
                 } else if (
@@ -929,19 +962,19 @@ export default function PrepMaster() {
                     disabled={selectedAnswer !== null}
                     className={optionClass}
                   >
-                    <div className="flex items-center space-x-6">
-                      <div className="w-10 h-10 rounded-full bg-orange-500 text-white font-bold flex items-center justify-center">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-8 h-8 rounded-full bg-orange-500 text-white font-bold flex items-center justify-center text-sm">
                         {String.fromCharCode(65 + index)}
                       </div>
                       <span className="flex-1">{option}</span>
                       {selectedAnswer !== null &&
                         index === currentQuestion.correct && (
-                          <CheckCircle className="w-8 h-8 text-green-600" />
+                          <CheckCircle className="w-6 h-6 text-green-600" />
                         )}
                       {selectedAnswer !== null &&
                         index === selectedAnswer &&
                         selectedAnswer !== currentQuestion.correct && (
-                          <XCircle className="w-8 h-8 text-red-600" />
+                          <XCircle className="w-6 h-6 text-red-600" />
                         )}
                     </div>
                   </button>
@@ -951,12 +984,12 @@ export default function PrepMaster() {
 
             {/* Explanation */}
             {showExplanation && (
-              <Card className="p-8 mb-8 bg-blue-50/80">
-                <h4 className="text-blue-700 font-bold mb-4 flex items-center text-lg">
-                  <Brain className="w-6 h-6 mr-3" />
+              <Card className="p-6 mb-6 bg-blue-50/80">
+                <h4 className="text-blue-700 font-bold mb-3 flex items-center text-base">
+                  <Brain className="w-5 h-5 mr-2" />
                   Explanation:
                 </h4>
-                <p className="text-gray-900 leading-relaxed text-lg">
+                <p className="text-gray-900 leading-relaxed text-base">
                   {currentQuestion.explanation}
                 </p>
               </Card>
@@ -968,9 +1001,9 @@ export default function PrepMaster() {
                 onClick={previousQuestion}
                 disabled={currentQuestionIndex === 0}
                 variant="secondary"
-                className="px-8 py-4 text-lg"
+                className="px-6 py-3 text-base"
               >
-                <ChevronLeft className="w-5 h-5 mr-2" />
+                <ChevronLeft className="w-4 h-4 mr-2" />
                 Previous
               </Button>
 
@@ -978,12 +1011,12 @@ export default function PrepMaster() {
                 <Button
                   onClick={nextQuestion}
                   variant="primary"
-                  className="px-8 py-4 text-lg"
+                  className="px-6 py-3 text-base"
                 >
                   {currentQuestionIndex === currentQuestions.length - 1
                     ? "View Results"
                     : "Next Question"}
-                  <ChevronRight className="w-5 h-5 ml-2" />
+                  <ChevronRight className="w-4 h-4 ml-2" />
                 </Button>
               )}
             </div>
@@ -1013,43 +1046,43 @@ export default function PrepMaster() {
 
         <Header />
 
-        <div className="container mx-auto px-4 py-8 relative z-10 pt-32">
+        <div className="container mx-auto px-4 py-8 relative z-10 pt-20 pb-20">
           {/* Results Header */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center space-x-4 mb-8">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center space-x-3 mb-6">
               <div
-                className={`w-24 h-24 rounded-full flex items-center justify-center shadow-2xl ${
+                className={`w-16 h-16 rounded-full flex items-center justify-center shadow-xl ${
                   passed
                     ? "bg-gradient-to-r from-green-500 to-green-600"
                     : "bg-gradient-to-r from-orange-500 to-orange-600"
                 }`}
               >
-                <Trophy className="w-12 h-12 text-white" />
+                <Trophy className="w-8 h-8 text-white" />
               </div>
             </div>
-            <h1 className="text-6xl font-bold mb-6 text-gray-900">
+            <h1 className="text-4xl font-bold mb-4 text-gray-900">
               Exam Complete!
             </h1>
-            <p className="text-2xl text-gray-800">
+            <p className="text-lg text-gray-800">
               AWS Cloud Practitioner Practice Results
             </p>
           </div>
 
           {/* Score Display */}
-          <div className="flex justify-center mb-12">
-            <Card className="relative w-96 h-96 flex items-center justify-center rounded-full">
+          <div className="flex justify-center mb-8">
+            <Card className="relative w-80 h-80 flex items-center justify-center rounded-full">
               <div className="text-center">
-                <div className="text-8xl font-bold text-orange-600 mb-6">
+                <div className="text-6xl font-bold text-orange-600 mb-4">
                   {finalScore}%
                 </div>
                 <div
-                  className={`text-3xl font-semibold mb-4 ${
+                  className={`text-2xl font-semibold mb-3 ${
                     passed ? "text-green-600" : "text-orange-600"
                   }`}
                 >
                   {passed ? "EXCELLENT WORK!" : "KEEP PRACTICING!"}
                 </div>
-                <div className="text-gray-700 text-xl">
+                <div className="text-gray-700 text-lg">
                   {score} out of {totalQuestions} correct
                 </div>
               </div>
@@ -1057,7 +1090,7 @@ export default function PrepMaster() {
           </div>
 
           {/* Performance Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             {[
               {
                 label: "Questions Correct",
@@ -1086,46 +1119,46 @@ export default function PrepMaster() {
             ].map((stat, i) => {
               const IconComponent = stat.icon;
               return (
-                <Card key={i} className="p-8 text-center">
+                <Card key={i} className="p-6 text-center">
                   <IconComponent
-                    className={`w-10 h-10 ${stat.color} mx-auto mb-4`}
+                    className={`w-8 h-8 ${stat.color} mx-auto mb-3`}
                   />
-                  <div className={`text-4xl font-bold ${stat.color} mb-3`}>
+                  <div className={`text-3xl font-bold ${stat.color} mb-2`}>
                     {stat.value}
                   </div>
-                  <div className="text-gray-800 font-medium">{stat.label}</div>
+                  <div className="text-gray-800 font-medium text-sm">
+                    {stat.label}
+                  </div>
                 </Card>
               );
             })}
           </div>
 
           {/* Results Message */}
-          <Card className="p-10 mb-12 text-center">
-            <div className="mb-8">
+          <Card className="p-8 mb-8 text-center">
+            <div className="mb-6">
               {passed ? (
                 <div className="text-green-600">
-                  <CheckCircle className="w-20 h-20 mx-auto mb-6" />
-                  <h3 className="text-4xl font-bold mb-6">
+                  <CheckCircle className="w-16 h-16 mx-auto mb-4" />
+                  <h3 className="text-3xl font-bold mb-4">
                     Outstanding Performance! 🎉
                   </h3>
-                  <p className="text-gray-900 text-xl leading-relaxed max-w-3xl mx-auto">
-                    Congratulations! You&apos;re demonstrating strong mastery of
-                    AWS Cloud Practitioner concepts. Your understanding of cloud
-                    fundamentals, AWS services, and best practices shows
-                    you&apos;re well-prepared for the certification exam.
+                  <p className="text-gray-900 text-lg leading-relaxed max-w-2xl mx-auto">
+                    Congratulations! You're demonstrating strong mastery of AWS
+                    Cloud Practitioner concepts. Your understanding shows you're
+                    well-prepared for the certification exam.
                   </p>
                 </div>
               ) : (
                 <div className="text-orange-600">
-                  <Target className="w-20 h-20 mx-auto mb-6" />
-                  <h3 className="text-4xl font-bold mb-6">
+                  <Target className="w-16 h-16 mx-auto mb-4" />
+                  <h3 className="text-3xl font-bold mb-4">
                     Great Progress! 📚
                   </h3>
-                  <p className="text-gray-900 text-xl leading-relaxed max-w-3xl mx-auto">
-                    You&apos;re building solid foundations in AWS Cloud
-                    concepts! Continue practicing, review the explanations
-                    carefully, and focus on your growth areas. With consistent
-                    effort, certification success is within reach!
+                  <p className="text-gray-900 text-lg leading-relaxed max-w-2xl mx-auto">
+                    You're building solid foundations in AWS Cloud concepts!
+                    Continue practicing and focus on your growth areas. With
+                    consistent effort, certification success is within reach!
                   </p>
                 </div>
               )}
@@ -1133,13 +1166,13 @@ export default function PrepMaster() {
           </Card>
 
           {/* Action Buttons */}
-          <div className="flex justify-center space-x-8 mb-16">
+          <div className="flex justify-center space-x-6">
             <Button
               onClick={restartQuiz}
               variant="primary"
-              className="px-12 py-5 text-xl font-bold"
+              className="px-8 py-4 text-lg font-bold"
             >
-              <RotateCcw className="w-6 h-6 mr-3" />
+              <RotateCcw className="w-5 h-5 mr-2" />
               Practice Again
             </Button>
             <Button
@@ -1150,9 +1183,9 @@ export default function PrepMaster() {
                 )
               }
               variant="outline"
-              className="px-12 py-5 text-xl font-bold"
+              className="px-8 py-4 text-lg font-bold"
             >
-              <Globe className="w-6 h-6 mr-3" />
+              <Globe className="w-5 h-5 mr-2" />
               AWS Certification
             </Button>
           </div>

@@ -5041,5 +5041,5 @@ const practiceSet = getPracticeSet(100);
 // Get all questions from a domain
 const allFundamentals = getQuestionsByDomain('fundamentals');
 
-🚀 READY TO ACE YOUR AWS CLOUD PRACTITIONER CERTIFICATION!
+🚀 READY TO ACE YO  UR AWS CLOUD PRACTITIONER CERTIFICATION!
 */
