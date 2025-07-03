@@ -1,4 +1,3 @@
-// src/app/api/github-stars/route.ts
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -31,16 +30,28 @@ export async function GET() {
       stars: data.stargazers_count,
       success: true,
     });
-  } catch (error) {
-    console.error("Error fetching GitHub stars:", error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error fetching GitHub stars:", error);
 
-    return NextResponse.json(
-      {
-        stars: null,
-        success: false,
-        error: error.message,
-      },
-      { status: 500 }
-    );
+      return NextResponse.json(
+        {
+          stars: null,
+          success: false,
+          error: error.message,
+        },
+        { status: 500 }
+      );
+    } else {
+      console.error("Unknown error type:", error);
+      return NextResponse.json(
+        {
+          stars: null,
+          success: false,
+          error: "Unknown error occurred",
+        },
+        { status: 500 }
+      );
+    }
   }
 }

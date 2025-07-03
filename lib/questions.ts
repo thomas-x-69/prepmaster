@@ -22,7 +22,7 @@ function shuffleArray<T>(array: T[]): T[] {
 
 // Proper question shuffling that maintains correct answer indices
 function shuffleQuestionOptions(question: Question): Question {
-  if (question.type === "single") {
+  if (question.type === ("single" as const)) {
     // For single choice, track the correct answer text
     const correctAnswerText = question.options[question.correct as number];
     const shuffledOptions = shuffleArray(question.options);
@@ -78,7 +78,7 @@ const rawQuestionDatabase = {
         "Eliminate the need for IT staff",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS allows you to trade capital expense for variable expense. Instead of investing heavily in data centers and servers before knowing how you'll use them, you can pay only for computing resources you consume.",
     },
@@ -93,7 +93,7 @@ const rawQuestionDatabase = {
         "Manual resource provisioning",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Cloud computing is characterized by on-demand self-service (users can provision resources automatically) and broad network access (services available over the network from various devices).",
     },
@@ -108,7 +108,7 @@ const rawQuestionDatabase = {
         "Compute, storage, networking, databases, analytics, machine learning",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS identifies 6 key advantages: trading CapEx for OpEx, benefiting from economies of scale, stopping capacity guessing, increasing agility, eliminating data center costs, and global reach in minutes.",
     },
@@ -122,7 +122,7 @@ const rawQuestionDatabase = {
         "The ability to maintain consistent performance",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Elasticity refers to the ability to automatically scale computing resources up or down based on actual demand, ensuring optimal performance and cost efficiency.",
     },
@@ -137,7 +137,7 @@ const rawQuestionDatabase = {
         "Community Cloud",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Private Cloud deployment gives you the most control over the underlying infrastructure as it's dedicated exclusively to your organization.",
     },
@@ -152,7 +152,7 @@ const rawQuestionDatabase = {
         "Design, Deploy, Operate, Monitor, Optimize",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "The AWS Well-Architected Framework is built on five pillars: Operational Excellence, Security, Reliability, Performance Efficiency, and Cost Optimization.",
     },
@@ -166,7 +166,7 @@ const rawQuestionDatabase = {
         "Scalability is cheaper than elasticity",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Scalability refers to the ability to increase capacity (manually or automatically), while elasticity specifically refers to the automatic scaling up or down based on demand.",
     },
@@ -182,7 +182,7 @@ const rawQuestionDatabase = {
         "All Regions have the same number of Availability Zones",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS Regions are connected through the AWS global network infrastructure, and each Region contains multiple isolated Availability Zones for fault tolerance.",
     },
@@ -196,7 +196,7 @@ const rawQuestionDatabase = {
         "A security framework for AWS environments",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS CAF provides guidance to help organizations develop efficient and effective plans for their cloud adoption journey through six key perspectives.",
     },
@@ -211,7 +211,7 @@ const rawQuestionDatabase = {
         "Decouple your components",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "The 'experiment more often' principle encourages rapid experimentation and iteration, allowing you to fail fast, learn quickly, and improve your solutions.",
     },
@@ -226,7 +226,7 @@ const rawQuestionDatabase = {
         "Simplified management",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Multiple Availability Zones provide high availability and fault tolerance by ensuring your applications can continue running even if one AZ experiences issues.",
     },
@@ -242,7 +242,7 @@ const rawQuestionDatabase = {
         "Replace",
       ],
       correct: [0, 2, 3],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "The 6 R's include: Rehost, Replatform, Refactor/Re-architect, Repurchase, Retain, and Retire. These are common migration strategies for moving to the cloud.",
     },
@@ -256,7 +256,7 @@ const rawQuestionDatabase = {
         "Automating infrastructure monitoring with code",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Infrastructure as code means managing and provisioning computing infrastructure through machine-readable definition files, rather than through physical hardware configuration.",
     },
@@ -271,7 +271,7 @@ const rawQuestionDatabase = {
         "Manual provisioning",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Cloud economics benefit from economies of scale (AWS's bulk purchasing power) and pay-as-you-go pricing (paying only for what you use).",
     },
@@ -285,7 +285,7 @@ const rawQuestionDatabase = {
         "To provide disaster recovery capabilities",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Edge Locations cache content closer to end users to reduce latency and improve performance for services like CloudFront CDN.",
     },
@@ -299,7 +299,7 @@ const rawQuestionDatabase = {
         "Use serverless architectures",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Designing for failure means building systems that can handle component failures gracefully, ensuring overall system fault tolerance.",
     },
@@ -314,7 +314,7 @@ const rawQuestionDatabase = {
         "There is no difference between them",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Horizontal scaling (scaling out) adds more instances to handle load, while vertical scaling (scaling up) increases the size/capacity of existing instances.",
     },
@@ -330,7 +330,7 @@ const rawQuestionDatabase = {
         "Company logo colors",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Key factors for Region selection include latency to users, data sovereignty/compliance requirements, and availability of required AWS services.",
     },
@@ -344,7 +344,7 @@ const rawQuestionDatabase = {
         "Faster deployment",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Loose coupling allows system components to change and evolve independently without affecting other components, improving maintainability and resilience.",
     },
@@ -358,7 +358,7 @@ const rawQuestionDatabase = {
         "Automate everything",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Designing for failure includes eliminating single points of failure by implementing redundancy and fault tolerance throughout your architecture.",
     },
@@ -372,7 +372,7 @@ const rawQuestionDatabase = {
         "Applications run without any infrastructure",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Serverless means you don't need to provision, scale, or manage servers. The cloud provider handles all server management while you focus on your code.",
     },
@@ -387,7 +387,7 @@ const rawQuestionDatabase = {
         "Avoiding monitoring",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Operational excellence involves automating operations processes and continuously improving operations based on experience and feedback.",
     },
@@ -401,7 +401,7 @@ const rawQuestionDatabase = {
         "To improve application performance",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Disaster recovery planning aims to minimize downtime and data loss when disasters occur, ensuring business continuity.",
     },
@@ -416,7 +416,7 @@ const rawQuestionDatabase = {
         "Waterfall deployments",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Blue/Green and Canary deployments reduce risk by allowing you to test changes gradually and roll back quickly if issues occur.",
     },
@@ -430,7 +430,7 @@ const rawQuestionDatabase = {
         "To simplify management",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Auto scaling automatically adjusts capacity (adds or removes resources) based on demand, ensuring optimal performance and cost efficiency.",
     },
@@ -446,7 +446,7 @@ const rawQuestionDatabase = {
         "Single data center deployment",
       ],
       correct: [1, 3],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Cloud-native applications typically use microservices architecture and are container-based to take full advantage of cloud platforms.",
     },
@@ -460,7 +460,7 @@ const rawQuestionDatabase = {
         "To simplify deployment",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Load balancing distributes incoming application traffic across multiple targets (servers, containers, etc.) to ensure high availability and performance.",
     },
@@ -475,7 +475,7 @@ const rawQuestionDatabase = {
         "Manual processes",
       ],
       correct: [0, 2, 3],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "High availability is achieved through redundancy (multiple components), fault tolerance (graceful failure handling), and disaster recovery capabilities.",
     },
@@ -489,7 +489,7 @@ const rawQuestionDatabase = {
         "Pricing strategies",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "The 'cattle vs pets' concept refers to treating servers as replaceable and disposable (cattle) rather than unique and irreplaceable (pets), enabling better scalability and resilience.",
     },
@@ -503,7 +503,7 @@ const rawQuestionDatabase = {
         "Avoiding automation",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Right-sizing resources means matching instance types and sizes to your actual performance and capacity requirements, which helps optimize costs.",
     },
@@ -519,7 +519,7 @@ const rawQuestionDatabase = {
         "Community Cloud",
       ],
       correct: 3,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Community Cloud is shared among several organizations with common requirements, such as compliance, security, or policy considerations.",
     },
@@ -534,7 +534,7 @@ const rawQuestionDatabase = {
         "Reliability",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Performance Efficiency focuses on using computing resources efficiently to meet system requirements and maintain efficiency as demand changes.",
     },
@@ -548,7 +548,7 @@ const rawQuestionDatabase = {
         "Storing code in infrastructure components",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Infrastructure as code means managing and provisioning infrastructure through machine-readable definition files rather than manual processes.",
     },
@@ -564,7 +564,7 @@ const rawQuestionDatabase = {
         "Manual scaling only",
       ],
       correct: [0, 2, 3],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Well-Architected principles include automation for easier experimentation, evolutionary architectures that can adapt, and data-driven architectural decisions.",
     },
@@ -578,7 +578,7 @@ const rawQuestionDatabase = {
         "Unlimited storage",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Regions provide geographic distribution for reduced latency, data sovereignty for compliance, and disaster recovery capabilities.",
     },
@@ -594,7 +594,7 @@ const rawQuestionDatabase = {
         "Legal fees",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "TCO includes server hardware, data center facilities (space, power, cooling), and IT labor costs for maintenance and operations.",
     },
@@ -608,7 +608,7 @@ const rawQuestionDatabase = {
         "To simplify documentation",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Loose coupling allows system components to change and evolve independently without affecting other components, improving maintainability.",
     },
@@ -624,7 +624,7 @@ const rawQuestionDatabase = {
         "Single-tenant deployment",
       ],
       correct: [1, 3],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Cloud-native applications are designed specifically for cloud platforms and extensively use cloud services for scalability and resilience.",
     },
@@ -638,7 +638,7 @@ const rawQuestionDatabase = {
         "Simplifies application architecture",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Auto-scaling automatically adjusts compute capacity up or down based on demand, optimizing both performance and cost.",
     },
@@ -648,7 +648,7 @@ const rawQuestionDatabase = {
         "Which AWS Cloud Adoption Framework perspectives focus on technical capabilities? (Choose TWO)",
       options: ["Business", "Platform", "People", "Security", "Governance"],
       correct: [1, 3],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Platform and Security perspectives focus on technical capabilities including architecture, implementation, and security controls.",
     },
@@ -663,7 +663,7 @@ const rawQuestionDatabase = {
         "Reducing complexity",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Operational excellence focuses on running and monitoring systems to deliver business value and continuously improve processes.",
     },
@@ -673,7 +673,7 @@ const rawQuestionDatabase = {
         "Which migration strategies are part of the 6 R's framework? (Choose THREE)",
       options: ["Rehost", "Rewrite", "Refactor", "Retire", "Replace"],
       correct: [0, 2, 3],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "The 6 R's include Rehost (lift-and-shift), Refactor (re-architect), and Retire (eliminate unnecessary systems).",
     },
@@ -687,7 +687,7 @@ const rawQuestionDatabase = {
         "Improves application performance",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Disaster recovery planning minimizes downtime and data loss when disasters occur, ensuring business continuity.",
     },
@@ -701,7 +701,7 @@ const rawQuestionDatabase = {
         "Avoid redundancy",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Designing for failure means building systems that can handle component failures gracefully, ensuring overall fault tolerance.",
     },
@@ -717,7 +717,7 @@ const rawQuestionDatabase = {
         "Tight coupling",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Microservices enable independent deployment of services and allow teams to choose different technologies for different services.",
     },
@@ -731,7 +731,7 @@ const rawQuestionDatabase = {
         "To complicate operations",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Monitoring and logging help understand system behavior, identify issues, and enable quick troubleshooting and resolution.",
     },
@@ -747,7 +747,7 @@ const rawQuestionDatabase = {
         "Time zones",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Region selection should consider latency to users, data sovereignty/compliance requirements, and availability of required services.",
     },
@@ -761,7 +761,7 @@ const rawQuestionDatabase = {
         "Duplicating all resources",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Thinking parallel means designing systems to process tasks simultaneously rather than sequentially, improving performance and efficiency.",
     },
@@ -776,7 +776,7 @@ const rawQuestionDatabase = {
         "Single-person decisions",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Continuous improvement is supported by regular retrospectives to learn from experience and automation to reduce manual errors.",
     },
@@ -790,7 +790,7 @@ const rawQuestionDatabase = {
         "Manual processing only",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Event-driven architecture promotes loose coupling between components and enables better scalability through asynchronous communication.",
     },
@@ -804,7 +804,7 @@ const rawQuestionDatabase = {
         "Avoiding automation",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "The 'cattle vs pets' philosophy treats servers as disposable and replaceable (cattle) rather than unique and irreplaceable (pets).",
     },
@@ -818,7 +818,7 @@ const rawQuestionDatabase = {
         "Faster deployment",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Immutable infrastructure provides consistency and reproducibility by replacing rather than modifying infrastructure components.",
     },
@@ -834,7 +834,7 @@ const rawQuestionDatabase = {
         "Manual recovery only",
       ],
       correct: [0, 2, 3],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Application resilience is achieved through redundancy, graceful degradation when components fail, and circuit breakers to prevent cascade failures.",
     },
@@ -848,7 +848,7 @@ const rawQuestionDatabase = {
         "To simplify architecture",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Circuit breakers prevent cascade failures by temporarily stopping calls to failing services, allowing them time to recover.",
     },
@@ -862,7 +862,7 @@ const rawQuestionDatabase = {
         "Waterfall methodology",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Rapid experimentation is supported by fast feedback loops and automation that enable quick iteration and learning.",
     },
@@ -878,7 +878,7 @@ const rawQuestionDatabase = {
         "Perimeter-only security",
       ],
       correct: [1, 3],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Cloud-native security integrates security into the development process (shift-left) and uses automated security testing throughout the pipeline.",
     },
@@ -892,7 +892,7 @@ const rawQuestionDatabase = {
         "Reduced automation",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "IaC enables version control and reproducibility of infrastructure deployments, reducing manual errors and improving consistency.",
     },
@@ -907,7 +907,7 @@ const rawQuestionDatabase = {
         "Manual deployments only",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "DevOps culture emphasizes collaboration between development and operations teams and shared responsibility for application lifecycle.",
     },
@@ -921,7 +921,7 @@ const rawQuestionDatabase = {
         "To avoid testing",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Blue-green deployments enable zero-downtime deployments by maintaining two identical production environments and switching traffic between them.",
     },
@@ -935,7 +935,7 @@ const rawQuestionDatabase = {
         "No version control",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Continuous delivery relies on automated testing and deployment pipelines to enable frequent, reliable software releases.",
     },
@@ -949,7 +949,7 @@ const rawQuestionDatabase = {
         "Manual rollbacks only",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Canary deployments gradually roll out changes to a small subset of users first, reducing risk and enabling quick rollback if issues occur.",
     },
@@ -965,7 +965,7 @@ const rawQuestionDatabase = {
         "Manual inspection",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "System observability is achieved through the three pillars: metrics (quantitative data), logs (event records), and traces (request flow).",
     },
@@ -979,7 +979,7 @@ const rawQuestionDatabase = {
         "To reduce reliability",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Chaos engineering tests system resilience by introducing controlled failures to identify weaknesses and improve system robustness.",
     },
@@ -993,7 +993,7 @@ const rawQuestionDatabase = {
         "Trust all components",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Defense in depth implements multiple layers of security controls to protect systems, ensuring that if one layer fails, others provide protection.",
     },
@@ -1007,7 +1007,7 @@ const rawQuestionDatabase = {
         "Reduced functionality",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "API gateways provide centralized API management, security, rate limiting, and monitoring for backend services.",
     },
@@ -1023,7 +1023,7 @@ const rawQuestionDatabase = {
         "No error handling",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Resilient distributed systems use timeouts to prevent hanging requests and bulkhead patterns to isolate failures and prevent them from spreading.",
     },
@@ -1037,7 +1037,7 @@ const rawQuestionDatabase = {
         "To eliminate security",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Service mesh provides an infrastructure layer that handles service-to-service communication, including security, observability, and traffic management.",
     },
@@ -1053,7 +1053,7 @@ const rawQuestionDatabase = {
         "Manual scaling only",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Scalable architecture uses horizontal scaling (adding instances), stateless design (no server-side state), and caching to handle increased load.",
     },
@@ -1067,7 +1067,7 @@ const rawQuestionDatabase = {
         "To complicate deployments",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Health checks monitor service health and enable automatic recovery by allowing load balancers and orchestrators to route traffic away from unhealthy instances.",
     },
@@ -1081,7 +1081,7 @@ const rawQuestionDatabase = {
         "Single large codebase",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Maintainable systems use simple, modular design with clear interfaces between components, making them easier to understand, test, and modify.",
     },
@@ -1096,7 +1096,7 @@ const rawQuestionDatabase = {
         "All services must be deployed together",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Microservices architecture involves independent services that run in separate processes and communicate through well-defined APIs.",
     },
@@ -1110,7 +1110,7 @@ const rawQuestionDatabase = {
         "Faster networks",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Containers provide consistent environments across development, testing, and production, reducing 'it works on my machine' problems.",
     },
@@ -1126,7 +1126,7 @@ const rawQuestionDatabase = {
         "Single-threaded processing only",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Performance efficiency involves selecting the right resource types for your workload and continuously monitoring performance to identify optimization opportunities.",
     },
@@ -1140,7 +1140,7 @@ const rawQuestionDatabase = {
         "Using only open-source tools",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "DevOps focuses on improving collaboration and communication between development and operations teams to deliver applications and services faster and more reliably.",
     },
@@ -1155,7 +1155,7 @@ const rawQuestionDatabase = {
         "Avoid monitoring",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Reliability is supported by testing recovery procedures regularly and implementing automatic recovery from failure.",
     },
@@ -1169,7 +1169,7 @@ const rawQuestionDatabase = {
         "To simplify code",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Caching stores frequently accessed data in high-speed storage to reduce latency and improve application performance.",
     },
@@ -1185,7 +1185,7 @@ const rawQuestionDatabase = {
         "Marketing requirements",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Storage type selection depends on how data is accessed, performance requirements, and cost considerations.",
     },
@@ -1199,7 +1199,7 @@ const rawQuestionDatabase = {
         "Simplified pricing",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "API-driven infrastructure allows programmatic control and automation of infrastructure resources, enabling Infrastructure as Code and DevOps practices.",
     },
@@ -1215,7 +1215,7 @@ const rawQuestionDatabase = {
         "Single point of control",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Distributed systems have components located on different networked computers that communicate through message passing.",
     },
@@ -1229,7 +1229,7 @@ const rawQuestionDatabase = {
         "To simplify architecture",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Monitoring and observability help you understand how your systems are performing and behaving, enabling you to identify and resolve issues quickly.",
     },
@@ -1245,7 +1245,7 @@ const rawQuestionDatabase = {
         "Manual testing only",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "CI/CD relies on automated testing to ensure code quality and automated deployments to deliver changes quickly and reliably.",
     },
@@ -1259,7 +1259,7 @@ const rawQuestionDatabase = {
         "To improve user interfaces",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Chaos engineering involves deliberately introducing controlled failures to test and improve system resilience and fault tolerance.",
     },
@@ -1274,7 +1274,7 @@ const rawQuestionDatabase = {
         "Single-person operations",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "System agility is enhanced through automation (reducing manual work) and standardization (consistent, repeatable processes).",
     },
@@ -1288,7 +1288,7 @@ const rawQuestionDatabase = {
         "Simplified networking",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Event-driven architecture promotes loose coupling between components and enables better scalability by allowing asynchronous communication.",
     },
@@ -1308,7 +1308,7 @@ const rawQuestionDatabase = {
         "Security responsibilities are equally shared",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "In the Shared Responsibility Model, AWS secures the underlying infrastructure (security 'of' the cloud), while customers secure their applications, data, and configurations (security 'in' the cloud).",
     },
@@ -1318,7 +1318,7 @@ const rawQuestionDatabase = {
         "Which AWS service provides centralized identity and access management?",
       options: ["AWS IAM", "AWS CloudTrail", "AWS Config", "AWS Inspector"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS IAM (Identity and Access Management) enables you to manage access to AWS services and resources securely through users, groups, roles, and policies.",
     },
@@ -1332,7 +1332,7 @@ const rawQuestionDatabase = {
         "Disable all permissions by default",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "The principle of least privilege means granting users only the minimum permissions necessary to perform their required tasks, reducing security risks.",
     },
@@ -1348,7 +1348,7 @@ const rawQuestionDatabase = {
         "Amazon RDS",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS CloudTrail logs API calls for auditing, and AWS CloudWatch monitors resources and applications for operational insights.",
     },
@@ -1362,7 +1362,7 @@ const rawQuestionDatabase = {
         "Kernel Module Support",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS KMS (Key Management Service) is a managed service that creates and controls encryption keys used to encrypt your data.",
     },
@@ -1371,7 +1371,7 @@ const rawQuestionDatabase = {
       question: "Which AWS service provides DDoS protection?",
       options: ["AWS WAF", "AWS Shield", "AWS GuardDuty", "AWS Inspector"],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Shield is a managed DDoS protection service that safeguards applications running on AWS against distributed denial of service attacks.",
     },
@@ -1380,7 +1380,7 @@ const rawQuestionDatabase = {
       question: "What are the types of IAM identities? (Choose THREE)",
       options: ["Users", "Groups", "Roles", "Policies", "Services"],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "IAM identities include Users (individual accounts), Groups (collections of users), and Roles (temporary access for services or federated users).",
     },
@@ -1395,7 +1395,7 @@ const rawQuestionDatabase = {
         "AWS Systems Manager",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS GuardDuty is a threat detection service that uses machine learning to identify malicious activity and unauthorized behavior.",
     },
@@ -1409,7 +1409,7 @@ const rawQuestionDatabase = {
         "Using multiple devices to access AWS",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "MFA adds an extra layer of security by requiring a second form of authentication (like a token or mobile app) in addition to your password.",
     },
@@ -1425,7 +1425,7 @@ const rawQuestionDatabase = {
         "Company HR policies",
       ],
       correct: [0, 1],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS participates in many compliance programs including SOC 2 (security controls) and ISO 27001 (information security management).",
     },
@@ -1439,7 +1439,7 @@ const rawQuestionDatabase = {
         "Content delivery",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS CloudTrail logs API calls and user activity across your AWS infrastructure for security analysis, compliance auditing, and operational troubleshooting.",
     },
@@ -1454,7 +1454,7 @@ const rawQuestionDatabase = {
         "Encryption in backup only",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS provides encryption in transit (data moving between locations) and encryption at rest (stored data) to protect your information.",
     },
@@ -1468,7 +1468,7 @@ const rawQuestionDatabase = {
         "To manage billing",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Security groups act as virtual firewalls that control inbound and outbound traffic for EC2 instances at the instance level.",
     },
@@ -1478,7 +1478,7 @@ const rawQuestionDatabase = {
         "Which AWS service helps ensure compliance with security standards?",
       options: ["AWS Config", "AWS Lambda", "Amazon S3", "Amazon EC2"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Config monitors and records AWS resource configurations and can evaluate them against security and compliance rules.",
     },
@@ -1493,7 +1493,7 @@ const rawQuestionDatabase = {
         "Manual key rotation",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "IAM roles provide temporary security credentials and enable secure cross-account access without sharing long-term credentials.",
     },
@@ -1508,7 +1508,7 @@ const rawQuestionDatabase = {
         "AWS Config",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Inspector is a security assessment service that helps improve security and compliance by identifying vulnerabilities and deviations from best practices.",
     },
@@ -1522,7 +1522,7 @@ const rawQuestionDatabase = {
         "Data corruption",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS WAF (Web Application Firewall) protects web applications from common web exploits like SQL injection and cross-site scripting (XSS).",
     },
@@ -1538,7 +1538,7 @@ const rawQuestionDatabase = {
         "Delete access keys",
       ],
       correct: [0, 2, 4],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Secure the root account by enabling MFA, using a strong password, and deleting access keys. Use IAM users for daily operations instead.",
     },
@@ -1552,7 +1552,7 @@ const rawQuestionDatabase = {
         "To monitor network traffic",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Secrets Manager helps protect secrets needed to access applications, services, and IT resources by storing and managing them securely.",
     },
@@ -1567,7 +1567,7 @@ const rawQuestionDatabase = {
         "Amazon Route 53",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS Backup provides centralized backup services, and Amazon Macie uses machine learning to discover and protect sensitive data.",
     },
@@ -1582,7 +1582,7 @@ const rawQuestionDatabase = {
         "Authentication is optional, authorization is required",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Authentication verifies 'who you are' (identity verification), while authorization determines 'what you can do' (permission checking).",
     },
@@ -1598,7 +1598,7 @@ const rawQuestionDatabase = {
         "Paper shredding",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Data in transit should be protected using SSL/TLS encryption for web traffic and VPN connections for secure network communication.",
     },
@@ -1612,7 +1612,7 @@ const rawQuestionDatabase = {
         "Managing training certificates",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Certificate Manager provisions, manages, and deploys SSL/TLS certificates for use with AWS services and internal connected resources.",
     },
@@ -1628,7 +1628,7 @@ const rawQuestionDatabase = {
         "Storage location only",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Data classification should consider sensitivity level (public, internal, confidential, restricted) and regulatory requirements (GDPR, HIPAA, etc.).",
     },
@@ -1642,7 +1642,7 @@ const rawQuestionDatabase = {
         "To monitor application performance",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Network ACLs provide subnet-level network filtering, acting as firewalls that control traffic in and out of subnets.",
     },
@@ -1658,7 +1658,7 @@ const rawQuestionDatabase = {
         "Amazon CloudFront",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS Security Hub centralizes security findings, and AWS Systems Manager automates security tasks and patch management.",
     },
@@ -1672,7 +1672,7 @@ const rawQuestionDatabase = {
         "Content delivery",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS CloudHSM provides dedicated Hardware Security Modules in the cloud for secure key generation, storage, and management with full customer control.",
     },
@@ -1687,7 +1687,7 @@ const rawQuestionDatabase = {
         "Using password managers",
       ],
       correct: [0, 2, 4],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Password security is enhanced by using complex passwords, rotating them regularly, and using password managers to generate and store unique passwords.",
     },
@@ -1701,7 +1701,7 @@ const rawQuestionDatabase = {
         "A backup service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Artifact provides on-demand access to AWS security and compliance reports and select online agreements.",
     },
@@ -1717,7 +1717,7 @@ const rawQuestionDatabase = {
         "Network infrastructure security",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "In IaaS, customers are responsible for operating system patches and application-level security, while AWS handles physical and network infrastructure security.",
     },
@@ -1727,7 +1727,7 @@ const rawQuestionDatabase = {
         "Which AWS service helps detect and protect against DDoS attacks?",
       options: ["AWS WAF", "AWS Shield", "AWS GuardDuty", "Amazon Inspector"],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Shield is a managed DDoS protection service that safeguards applications running on AWS. AWS Shield Standard is automatically included, while Shield Advanced provides enhanced protection.",
     },
@@ -1741,7 +1741,7 @@ const rawQuestionDatabase = {
         "Avoiding security controls to reduce complexity",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Defense in depth implements multiple layers of security controls so that if one layer fails, other layers continue to provide protection.",
     },
@@ -1757,7 +1757,7 @@ const rawQuestionDatabase = {
         "Amazon Route 53",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Amazon Macie helps prevent data loss by discovering and protecting sensitive data, while AWS Backup helps prevent data loss through automated backup services.",
     },
@@ -1771,7 +1771,7 @@ const rawQuestionDatabase = {
         "Managing network traffic",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Config monitors and records AWS resource configurations and can evaluate them against security and compliance rules to detect configuration drift.",
     },
@@ -1786,7 +1786,7 @@ const rawQuestionDatabase = {
         "Voice recognition",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS supports username/password authentication, MFA for additional security, and SSO for centralized identity management across multiple accounts.",
     },
@@ -1800,7 +1800,7 @@ const rawQuestionDatabase = {
         "Content delivery",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS CloudHSM provides dedicated Hardware Security Modules in the cloud for secure generation, storage, and management of cryptographic keys.",
     },
@@ -1816,7 +1816,7 @@ const rawQuestionDatabase = {
         "Identity and access management",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS is responsible for physical security of data centers and the underlying network infrastructure security.",
     },
@@ -1830,7 +1830,7 @@ const rawQuestionDatabase = {
         "A backup service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Security Hub is a cloud security posture management service that centrally manages security findings from multiple AWS security services and third-party tools.",
     },
@@ -1845,7 +1845,7 @@ const rawQuestionDatabase = {
         "Disabling all monitoring",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Database security is enhanced by encrypting data at rest and in transit, and applying regular security updates to database software.",
     },
@@ -1859,7 +1859,7 @@ const rawQuestionDatabase = {
         "Managing DNS records",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Secrets Manager helps protect access to applications, services, and IT resources by securely storing and automatically rotating secrets like passwords and API keys.",
     },
@@ -1874,7 +1874,7 @@ const rawQuestionDatabase = {
         "AWS CloudWatch",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon GuardDuty uses machine learning, anomaly detection, and integrated threat intelligence to identify threats like malicious activity and unauthorized behavior.",
     },
@@ -1890,7 +1890,7 @@ const rawQuestionDatabase = {
         "Increases complexity",
       ],
       correct: [0, 1],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "IAM roles eliminate the need to store access keys on EC2 instances and provide temporary, automatically rotating credentials.",
     },
@@ -1900,7 +1900,7 @@ const rawQuestionDatabase = {
         "Which service helps protect web applications from common attacks?",
       options: ["AWS Shield", "AWS WAF", "AWS CloudTrail", "AWS Config"],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS WAF (Web Application Firewall) protects web applications from common web exploits like SQL injection and cross-site scripting (XSS).",
     },
@@ -1914,7 +1914,7 @@ const rawQuestionDatabase = {
         "To manage billing",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Security groups act as virtual firewalls that control inbound and outbound traffic for EC2 instances at the instance level.",
     },
@@ -1930,7 +1930,7 @@ const rawQuestionDatabase = {
         "Manual encryption only",
       ],
       correct: [0, 1],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS S3 provides both server-side encryption (managed by AWS) and supports client-side encryption (managed by the customer).",
     },
@@ -1944,7 +1944,7 @@ const rawQuestionDatabase = {
         "A backup service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Artifact provides on-demand access to AWS security and compliance reports and select online agreements.",
     },
@@ -1953,7 +1953,7 @@ const rawQuestionDatabase = {
       question: "Which service provides automated security assessments?",
       options: ["Amazon Inspector", "AWS Lambda", "Amazon S3", "Amazon RDS"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Inspector automatically assesses applications for exposure, vulnerabilities, and deviations from best practices.",
     },
@@ -1962,7 +1962,7 @@ const rawQuestionDatabase = {
       question: "What are the components of IAM? (Choose FOUR)",
       options: ["Users", "Groups", "Roles", "Policies", "Buckets"],
       correct: [0, 1, 2, 3],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "IAM consists of Users (individual identities), Groups (collections of users), Roles (temporary access), and Policies (permissions documents).",
     },
@@ -1972,7 +1972,7 @@ const rawQuestionDatabase = {
         "Which network security feature provides subnet-level protection?",
       options: ["Security Groups", "Network ACLs", "AWS WAF", "AWS Shield"],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Network ACLs (Access Control Lists) provide subnet-level security by controlling traffic in and out of subnets.",
     },
@@ -1986,7 +1986,7 @@ const rawQuestionDatabase = {
         "Security groups are for databases only",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Security groups are stateful (return traffic is automatically allowed), while NACLs are stateless (return traffic must be explicitly allowed).",
     },
@@ -2000,7 +2000,7 @@ const rawQuestionDatabase = {
         "AWS Lambda",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS IAM Identity Center (formerly AWS SSO) provides single sign-on access to multiple AWS accounts and business applications.",
     },
@@ -2015,7 +2015,7 @@ const rawQuestionDatabase = {
         "Free data transfer",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "VPC provides network isolation from other AWS customers and allows controlled network access through security groups and NACLs.",
     },
@@ -2029,7 +2029,7 @@ const rawQuestionDatabase = {
         "Amazon Inspector",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Macie uses machine learning to automatically discover, classify, and protect sensitive data like personally identifiable information (PII).",
     },
@@ -2043,7 +2043,7 @@ const rawQuestionDatabase = {
         "Load balancing",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS KMS (Key Management Service) creates and manages encryption keys and provides centralized control over cryptographic operations.",
     },
@@ -2058,7 +2058,7 @@ const rawQuestionDatabase = {
         "Company dress codes",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS supports many compliance frameworks including GDPR (data protection), HIPAA (healthcare), and SOC 2 (security controls).",
     },
@@ -2072,7 +2072,7 @@ const rawQuestionDatabase = {
         "Managing training certificates",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Certificate Manager provisions, manages, and deploys SSL/TLS certificates for use with AWS services and internal connected resources.",
     },
@@ -2087,7 +2087,7 @@ const rawQuestionDatabase = {
         "Using simple passwords",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Password security is improved by using complex passwords, rotating them regularly, and using password managers to generate and store unique passwords.",
     },
@@ -2101,7 +2101,7 @@ const rawQuestionDatabase = {
         "Data backup",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Systems Manager helps with security through patch management, configuration compliance, and secure remote access to instances.",
     },
@@ -2110,7 +2110,7 @@ const rawQuestionDatabase = {
       question: "Which service provides security finding prioritization?",
       options: ["AWS Security Hub", "Amazon EC2", "AWS Lambda", "Amazon S3"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Security Hub aggregates security findings from multiple sources and helps prioritize them based on severity and context.",
     },
@@ -2125,7 +2125,7 @@ const rawQuestionDatabase = {
         "Simplifies architecture",
       ],
       correct: [0, 1],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Encryption in transit protects data while it moves between locations and prevents eavesdropping or man-in-the-middle attacks.",
     },
@@ -2139,7 +2139,7 @@ const rawQuestionDatabase = {
         "Amazon Route 53",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Inspector provides automated security assessments to help improve security and compliance of applications deployed on AWS.",
     },
@@ -2153,7 +2153,7 @@ const rawQuestionDatabase = {
         "To complicate management",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Cross-account roles allow secure access between different AWS accounts without sharing long-term credentials.",
     },
@@ -2169,7 +2169,7 @@ const rawQuestionDatabase = {
         "Shared accounts",
       ],
       correct: [0, 1],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Protection against insider threats includes implementing least privilege access and conducting regular access reviews to ensure appropriate permissions.",
     },
@@ -2183,7 +2183,7 @@ const rawQuestionDatabase = {
         "Content delivery",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Directory Service provides managed Microsoft Active Directory and other directory services for identity management.",
     },
@@ -2192,7 +2192,7 @@ const rawQuestionDatabase = {
       question: "Which service helps with security automation?",
       options: ["AWS Lambda", "Amazon S3", "Amazon RDS", "Amazon CloudFront"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Lambda can be used for security automation, such as automatically responding to security events and implementing security controls.",
     },
@@ -2208,7 +2208,7 @@ const rawQuestionDatabase = {
         "Reduced security",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Managed services provide security benefits by having AWS handle security patches and automatic security updates.",
     },
@@ -2222,7 +2222,7 @@ const rawQuestionDatabase = {
         "Amazon RDS",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon GuardDuty provides continuous, real-time security monitoring and threat detection using machine learning and threat intelligence.",
     },
@@ -2236,7 +2236,7 @@ const rawQuestionDatabase = {
         "To simplify operations",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "The AWS Well-Architected Security Pillar provides design principles and best practices for building secure systems in the cloud.",
     },
@@ -2251,7 +2251,7 @@ const rawQuestionDatabase = {
         "No documentation",
       ],
       correct: [0, 1, 3],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Secure development practices include security testing, code reviews to identify vulnerabilities, and threat modeling to identify potential attacks.",
     },
@@ -2265,7 +2265,7 @@ const rawQuestionDatabase = {
         "To eliminate monitoring",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Security baselines establish minimum security requirements and configurations that systems must meet to maintain acceptable security posture.",
     },
@@ -2279,7 +2279,7 @@ const rawQuestionDatabase = {
         "Amazon CloudWatch",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Transfer Family provides secure file transfer capabilities supporting SFTP, FTPS, and FTP protocols.",
     },
@@ -2294,7 +2294,7 @@ const rawQuestionDatabase = {
         "Simplifies management",
       ],
       correct: [0, 1],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Encryption at rest protects stored data from unauthorized access and helps comply with regulatory requirements for data protection.",
     },
@@ -2303,7 +2303,7 @@ const rawQuestionDatabase = {
       question: "Which service provides security orchestration?",
       options: ["AWS Security Hub", "Amazon S3", "AWS Lambda", "Amazon RDS"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Security Hub provides security orchestration by centralizing security findings and enabling automated responses to security events.",
     },
@@ -2317,7 +2317,7 @@ const rawQuestionDatabase = {
         "To reduce costs",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Penetration testing identifies security vulnerabilities by simulating real-world attacks in a controlled manner.",
     },
@@ -2333,7 +2333,7 @@ const rawQuestionDatabase = {
         "Storage location only",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Data classification considers sensitivity level (public, internal, confidential), regulatory requirements, and business impact of data exposure.",
     },
@@ -2347,7 +2347,7 @@ const rawQuestionDatabase = {
         "To reduce monitoring",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Security incident response provides structured approach to respond to, contain, and recover from security incidents while minimizing impact.",
     },
@@ -2356,7 +2356,7 @@ const rawQuestionDatabase = {
       question: "Which AWS service provides security recommendations?",
       options: ["AWS Trusted Advisor", "Amazon EC2", "AWS Lambda", "Amazon S3"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Trusted Advisor provides security recommendations including security group configurations, IAM use, and root account usage.",
     },
@@ -2372,7 +2372,7 @@ const rawQuestionDatabase = {
         "Reduced functionality",
       ],
       correct: [0, 1],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS managed security services reduce operational overhead and provide expert security management with built-in best practices.",
     },
@@ -2381,7 +2381,7 @@ const rawQuestionDatabase = {
       question: "Which service provides container security scanning?",
       options: ["Amazon ECR", "Amazon S3", "AWS Lambda", "Amazon RDS"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon ECR (Elastic Container Registry) provides vulnerability scanning for container images to identify security issues.",
     },
@@ -2395,7 +2395,7 @@ const rawQuestionDatabase = {
         "To complicate operations",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Security metrics and monitoring measure security program effectiveness and enable early detection of security incidents.",
     },
@@ -2410,7 +2410,7 @@ const rawQuestionDatabase = {
         "No monitoring",
       ],
       correct: [0, 1],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Secure API design includes proper authentication and authorization mechanisms and input validation to prevent injection attacks.",
     },
@@ -2424,7 +2424,7 @@ const rawQuestionDatabase = {
         "To eliminate technology controls",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Security awareness training educates users about security threats, attack methods, and best practices to reduce human-related security risks.",
     },
@@ -2434,7 +2434,7 @@ const rawQuestionDatabase = {
         "Which AWS service provides distributed denial of service protection?",
       options: ["AWS Shield", "AWS Lambda", "Amazon S3", "Amazon RDS"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Shield provides DDoS protection, with Shield Standard included automatically and Shield Advanced providing enhanced protection for critical applications.",
     },
@@ -2450,7 +2450,7 @@ const rawQuestionDatabase = {
         "Manual processes only",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "A comprehensive security strategy includes prevention (stopping attacks), detection (identifying threats), and response (handling incidents).",
     },
@@ -2464,7 +2464,7 @@ const rawQuestionDatabase = {
         "Amazon CloudFront",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Systems Manager Session Manager provides secure, browser-based shell access to EC2 instances without requiring SSH keys or bastion hosts.",
     },
@@ -2478,7 +2478,7 @@ const rawQuestionDatabase = {
         "To monitor performance",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Security group rules control inbound and outbound network traffic to EC2 instances by specifying allowed protocols, ports, and source/destination addresses.",
     },
@@ -2487,7 +2487,7 @@ const rawQuestionDatabase = {
       question: "Which AWS service helps with compliance reporting?",
       options: ["AWS Config", "Amazon EC2", "AWS Lambda", "Amazon S3"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Config helps with compliance reporting by tracking resource configurations and evaluating them against compliance rules.",
     },
@@ -2503,7 +2503,7 @@ const rawQuestionDatabase = {
         "Manual management",
       ],
       correct: [0, 1],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS Organizations provides centralized account management and Service Control Policies (SCPs) for centralized security governance.",
     },
@@ -2512,7 +2512,7 @@ const rawQuestionDatabase = {
       question: "Which service provides threat intelligence feeds?",
       options: ["Amazon GuardDuty", "Amazon S3", "AWS Lambda", "Amazon RDS"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon GuardDuty uses threat intelligence feeds from AWS Security, CrowdStrike, and Proofpoint to detect malicious activity.",
     },
@@ -2526,7 +2526,7 @@ const rawQuestionDatabase = {
         "To reduce functionality",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Security testing in CI/CD pipelines identifies security issues early in the development process when they are cheaper and easier to fix.",
     },
@@ -2540,7 +2540,7 @@ const rawQuestionDatabase = {
         "Amazon CloudFront",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon GuardDuty provides malware detection by analyzing DNS queries, network traffic, and data access patterns to identify malicious activity.",
     },
@@ -2556,7 +2556,7 @@ const rawQuestionDatabase = {
         "Perimeter-only security",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Zero trust security principles include 'never trust, always verify' and 'verify explicitly' - assuming no implicit trust based on network location.",
     },
@@ -2566,7 +2566,7 @@ const rawQuestionDatabase = {
         "Which service provides security orchestration and automated response?",
       options: ["AWS Security Hub", "Amazon EC2", "AWS Lambda", "Amazon S3"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Security Hub provides security orchestration and can trigger automated responses to security findings through integration with other AWS services.",
     },
@@ -2580,7 +2580,7 @@ const rawQuestionDatabase = {
         "To complicate operations",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Security controls testing verifies that implemented security controls are working effectively and providing the intended protection.",
     },
@@ -2589,7 +2589,7 @@ const rawQuestionDatabase = {
       question: "Which AWS service provides identity-based access control?",
       options: ["AWS IAM", "Amazon S3", "AWS Lambda", "Amazon CloudFront"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS IAM provides identity-based access control by allowing you to create and manage users, groups, and roles with specific permissions.",
     },
@@ -2605,7 +2605,7 @@ const rawQuestionDatabase = {
         "Eliminates all monitoring",
       ],
       correct: [0, 1],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Infrastructure security scanning identifies misconfigurations and detects vulnerabilities in systems and applications before they can be exploited.",
     },
@@ -2614,7 +2614,7 @@ const rawQuestionDatabase = {
       question: "Which service provides endpoint protection?",
       options: ["Amazon Inspector", "Amazon S3", "AWS Lambda", "Amazon RDS"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Inspector provides endpoint protection by assessing EC2 instances and container images for software vulnerabilities and unintended network exposure.",
     },
@@ -2628,7 +2628,7 @@ const rawQuestionDatabase = {
         "To complicate troubleshooting",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Security logging records security events to enable analysis, incident investigation, forensics, and compliance reporting.",
     },
@@ -2644,7 +2644,7 @@ const rawQuestionDatabase = {
         "No planning",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Secure cloud migration includes conducting security assessments, classifying data appropriately, and reviewing access controls.",
     },
@@ -2658,7 +2658,7 @@ const rawQuestionDatabase = {
         "Content delivery",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS CloudTrail provides security auditing capabilities by logging API calls, enabling security analysis, compliance auditing, and operational troubleshooting.",
     },
@@ -2672,7 +2672,7 @@ const rawQuestionDatabase = {
         "Amazon EC2",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Route 53 Resolver DNS Firewall provides DNS security by filtering and blocking DNS queries to malicious domains.",
     },
@@ -2688,7 +2688,7 @@ const rawQuestionDatabase = {
         "Data center security",
       ],
       correct: [0, 1],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Serverless security focuses on function permissions (least privilege) and code vulnerabilities since AWS manages the underlying infrastructure.",
     },
@@ -2702,7 +2702,7 @@ const rawQuestionDatabase = {
         "Amazon RDS",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon VPC Flow Logs capture network traffic information for security analysis, network monitoring, and troubleshooting.",
     },
@@ -2716,7 +2716,7 @@ const rawQuestionDatabase = {
         "To eliminate monitoring",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Security benchmarks provide standardized security configuration guidelines and best practices for securing systems and applications.",
     },
@@ -2726,7 +2726,7 @@ const rawQuestionDatabase = {
         "Which AWS service provides application-layer security for load balancers?",
       options: ["AWS WAF", "Amazon S3", "AWS Lambda", "Amazon RDS"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS WAF provides application-layer security for Application Load Balancers, protecting against common web application attacks.",
     },
@@ -2741,7 +2741,7 @@ const rawQuestionDatabase = {
       question: "Which AWS service is primarily used for object storage?",
       options: ["Amazon EBS", "Amazon EFS", "Amazon S3", "Amazon RDS"],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon S3 (Simple Storage Service) is AWS's object storage service that offers industry-leading scalability, data availability, security, and performance.",
     },
@@ -2755,7 +2755,7 @@ const rawQuestionDatabase = {
         "A monitoring service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon EC2 (Elastic Compute Cloud) provides scalable virtual servers in the cloud, allowing you to launch instances with various operating systems and configurations.",
     },
@@ -2771,7 +2771,7 @@ const rawQuestionDatabase = {
         "AWS Lambda",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Amazon CloudFront is a CDN service, and AWS Global Accelerator improves global application performance using AWS's global network infrastructure.",
     },
@@ -2785,7 +2785,7 @@ const rawQuestionDatabase = {
         "Amazon ElastiCache",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon RDS (Relational Database Service) is specifically designed for hosting relational databases like MySQL, PostgreSQL, Oracle, and SQL Server.",
     },
@@ -2799,7 +2799,7 @@ const rawQuestionDatabase = {
         "Virtual Payment Center",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon VPC (Virtual Private Cloud) allows you to provision a logically isolated section of the AWS Cloud where you can launch AWS resources in a virtual network.",
     },
@@ -2814,7 +2814,7 @@ const rawQuestionDatabase = {
         "Amazon S3",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Amazon SQS (Simple Queue Service) provides message queuing, and Amazon SNS (Simple Notification Service) provides pub/sub messaging.",
     },
@@ -2828,7 +2828,7 @@ const rawQuestionDatabase = {
         "A networking service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Lambda is a serverless compute service that lets you run code without provisioning or managing servers. You pay only for the compute time you consume.",
     },
@@ -2842,7 +2842,7 @@ const rawQuestionDatabase = {
         "AWS Direct Connect",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Route 53 is a highly available and scalable cloud Domain Name System (DNS) web service designed to route end users to Internet applications.",
     },
@@ -2858,7 +2858,7 @@ const rawQuestionDatabase = {
         "S3 Premium",
       ],
       correct: [0, 1, 3],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Amazon S3 offers multiple storage classes including S3 Standard (frequent access), S3 Glacier (archival), and S3 Intelligent-Tiering (automatic optimization).",
     },
@@ -2872,7 +2872,7 @@ const rawQuestionDatabase = {
         "A caching service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability.",
     },
@@ -2888,7 +2888,7 @@ const rawQuestionDatabase = {
         "Amazon Route 53",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Amazon ECS (Elastic Container Service) and AWS Fargate both support containerized applications, with Fargate providing serverless container compute.",
     },
@@ -2902,7 +2902,7 @@ const rawQuestionDatabase = {
         "A caching service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Aurora is a MySQL and PostgreSQL-compatible relational database built for the cloud that combines the performance and availability of traditional enterprise databases with the simplicity and cost-effectiveness of open source databases.",
     },
@@ -2918,7 +2918,7 @@ const rawQuestionDatabase = {
         "Amazon CloudFront",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Amazon Redshift is a data warehouse service, and Amazon Athena is an interactive query service that makes it easy to analyze data in S3 using standard SQL.",
     },
@@ -2932,7 +2932,7 @@ const rawQuestionDatabase = {
         "A monitoring service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Elastic Beanstalk is a platform service that makes it easy to deploy and manage applications in the AWS Cloud without worrying about the infrastructure.",
     },
@@ -2947,7 +2947,7 @@ const rawQuestionDatabase = {
         "DNS Load Balancer",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS provides Application Load Balancer (Layer 7) for HTTP/HTTPS traffic and Network Load Balancer (Layer 4) for TCP/UDP traffic.",
     },
@@ -2961,7 +2961,7 @@ const rawQuestionDatabase = {
         "Content delivery",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon ElastiCache is a web service that makes it easy to deploy, operate, and scale an in-memory cache in the cloud to improve application performance.",
     },
@@ -2976,7 +2976,7 @@ const rawQuestionDatabase = {
         "Amazon VPC",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Amazon SageMaker is a fully managed machine learning platform, and Amazon Rekognition provides image and video analysis capabilities.",
     },
@@ -2990,7 +2990,7 @@ const rawQuestionDatabase = {
         "A networking service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS CloudFormation provides a common language for describing and provisioning all infrastructure resources in your cloud environment using templates.",
     },
@@ -3006,7 +3006,7 @@ const rawQuestionDatabase = {
         "Amazon ElastiCache",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS DMS helps migrate databases to AWS, and AWS SCT converts database schemas from one engine to another.",
     },
@@ -3020,7 +3020,7 @@ const rawQuestionDatabase = {
         "A compute service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon API Gateway is a fully managed service that makes it easy for developers to create, publish, maintain, monitor, and secure APIs at any scale.",
     },
@@ -3035,7 +3035,7 @@ const rawQuestionDatabase = {
         "Database management",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Batch enables developers, scientists, and engineers to easily and efficiently run hundreds of thousands of batch computing jobs on AWS.",
     },
@@ -3050,7 +3050,7 @@ const rawQuestionDatabase = {
         "Amazon Redshift",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Amazon DynamoDB is a key-value and document database, and Amazon DocumentDB is a document database service compatible with MongoDB.",
     },
@@ -3064,7 +3064,7 @@ const rawQuestionDatabase = {
         "Network routing",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon CloudWatch is a monitoring and observability service that provides data and actionable insights for AWS, hybrid, and on-premises applications.",
     },
@@ -3079,7 +3079,7 @@ const rawQuestionDatabase = {
         "Amazon EFS",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon S3 Glacier is designed for long-term archival and backup with infrequent access, offering very low-cost storage.",
     },
@@ -3093,7 +3093,7 @@ const rawQuestionDatabase = {
         "A content delivery service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Direct Connect establishes a dedicated network connection from your premises to AWS, providing more consistent network experience than internet-based connections.",
     },
@@ -3107,7 +3107,7 @@ const rawQuestionDatabase = {
         "Amazon Translate",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Polly is a text-to-speech service that uses advanced deep learning technologies to synthesize speech that sounds like a human voice.",
     },
@@ -3121,7 +3121,7 @@ const rawQuestionDatabase = {
         "Application hosting",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Redshift is a fully managed data warehouse service designed for high-performance analysis using SQL and existing business intelligence tools.",
     },
@@ -3137,7 +3137,7 @@ const rawQuestionDatabase = {
         "Amazon EBS",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Amazon EventBridge is a serverless event bus service, and AWS Lambda can be triggered by events, both supporting event-driven architectures.",
     },
@@ -3151,7 +3151,7 @@ const rawQuestionDatabase = {
         "A monitoring service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS CodeCommit is a fully managed source control service that hosts secure Git-based repositories, making it easy for teams to collaborate on code.",
     },
@@ -3165,7 +3165,7 @@ const rawQuestionDatabase = {
         "Amazon Rekognition",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Transcribe is a speech-to-text service that uses machine learning to convert speech to text quickly and accurately.",
     },
@@ -3179,7 +3179,7 @@ const rawQuestionDatabase = {
         "Database backup",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon EMR (Elastic MapReduce) is a managed cluster platform that simplifies running big data frameworks like Apache Hadoop and Apache Spark.",
     },
@@ -3189,7 +3189,7 @@ const rawQuestionDatabase = {
         "Which AWS service provides application performance monitoring?",
       options: ["AWS X-Ray", "Amazon S3", "AWS Lambda", "Amazon RDS"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS X-Ray helps developers analyze and debug production applications, providing insights into application performance and service interactions.",
     },
@@ -3203,7 +3203,7 @@ const rawQuestionDatabase = {
         "A networking service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon WorkSpaces is a managed, secure Desktop-as-a-Service (DaaS) solution that enables users to access their desktop from anywhere.",
     },
@@ -3217,7 +3217,7 @@ const rawQuestionDatabase = {
         "Amazon Comprehend",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Translate is a neural machine translation service that delivers fast, high-quality, and affordable language translation.",
     },
@@ -3231,7 +3231,7 @@ const rawQuestionDatabase = {
         "Application monitoring",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Glue is a fully managed extract, transform, and load (ETL) service that makes it easy to prepare and load data for analytics.",
     },
@@ -3245,7 +3245,7 @@ const rawQuestionDatabase = {
         "Dedicated Hosts",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "On-Demand Instances are best for unpredictable workloads as they offer flexibility without upfront costs or long-term commitments.",
     },
@@ -3259,7 +3259,7 @@ const rawQuestionDatabase = {
         "A storage service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Connect is a cloud-based contact center service that makes it easy to set up and manage a customer contact center.",
     },
@@ -3275,7 +3275,7 @@ const rawQuestionDatabase = {
         "Amazon RDS",
       ],
       correct: [0, 1],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Amazon Comprehend provides natural language processing for text analytics, and Amazon Lex builds conversational interfaces using NLP.",
     },
@@ -3289,7 +3289,7 @@ const rawQuestionDatabase = {
         "A networking service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS App Runner is a fully managed service that makes it easy to deploy containerized web applications and APIs at scale.",
     },
@@ -3303,7 +3303,7 @@ const rawQuestionDatabase = {
         "Amazon DynamoDB",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Timestream is a fast, scalable, and serverless time series database service for IoT and operational applications.",
     },
@@ -3317,7 +3317,7 @@ const rawQuestionDatabase = {
         "A storage service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Lightsail offers easy-to-use virtual private server instances, databases, and more for simple workloads at a low, predictable price.",
     },
@@ -3331,7 +3331,7 @@ const rawQuestionDatabase = {
         "Amazon Translate",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Rekognition provides image and video analysis using machine learning to identify objects, people, text, scenes, and activities.",
     },
@@ -3345,7 +3345,7 @@ const rawQuestionDatabase = {
         "Application hosting",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Snow Family provides physical devices for data migration to AWS and edge computing in locations with limited connectivity.",
     },
@@ -3359,7 +3359,7 @@ const rawQuestionDatabase = {
         "Amazon S3",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Managed Blockchain is a fully managed service that makes it easy to create and manage scalable blockchain networks.",
     },
@@ -3373,7 +3373,7 @@ const rawQuestionDatabase = {
         "Network security",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Personalize is a machine learning service that makes it easy for developers to create individualized recommendations for customers.",
     },
@@ -3382,7 +3382,7 @@ const rawQuestionDatabase = {
       question: "Which service provides managed Apache Kafka?",
       options: ["Amazon MSK", "Amazon SQS", "Amazon SNS", "Amazon EventBridge"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Managed Streaming for Apache Kafka (MSK) is a fully managed service for Apache Kafka that makes it easy to build and run applications.",
     },
@@ -3396,7 +3396,7 @@ const rawQuestionDatabase = {
         "A networking service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS IoT Core is a managed cloud service that lets connected devices easily and securely interact with cloud applications and other devices.",
     },
@@ -3410,7 +3410,7 @@ const rawQuestionDatabase = {
         "Amazon S3",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon ElastiCache is a web service that makes it easy to deploy, operate, and scale an in-memory cache using Redis or Memcached.",
     },
@@ -3424,7 +3424,7 @@ const rawQuestionDatabase = {
         "A storage service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon AppFlow is a fully managed integration service that enables you to securely transfer data between AWS services and SaaS applications.",
     },
@@ -3438,7 +3438,7 @@ const rawQuestionDatabase = {
         "Amazon EventBridge",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Managed Workflows for Apache Airflow (MWAA) is a managed orchestration service for Apache Airflow.",
     },
@@ -3452,7 +3452,7 @@ const rawQuestionDatabase = {
         "A storage service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Amplify is a set of tools and services that enables front-end web and mobile developers to build scalable full-stack applications.",
     },
@@ -3466,7 +3466,7 @@ const rawQuestionDatabase = {
         "Amazon EC2",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS AppSync is a managed service that uses GraphQL to make it easy for applications to get exactly the data they need.",
     },
@@ -3480,7 +3480,7 @@ const rawQuestionDatabase = {
         "Project management service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Forecast is a fully managed service that uses machine learning to deliver highly accurate forecasts.",
     },
@@ -3494,7 +3494,7 @@ const rawQuestionDatabase = {
         "Amazon CloudWatch",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon OpenSearch Service (formerly Amazon Elasticsearch Service) makes it easy to deploy, secure, and run OpenSearch cost-effectively at scale.",
     },
@@ -3508,7 +3508,7 @@ const rawQuestionDatabase = {
         "A monitoring service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS CodeArtifact is a fully managed artifact repository service that makes it easy for organizations to securely store and share software packages.",
     },
@@ -3522,7 +3522,7 @@ const rawQuestionDatabase = {
         "Amazon Redshift",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon RDS for PostgreSQL is a managed relational database service that makes it easy to set up, operate, and scale PostgreSQL deployments.",
     },
@@ -3536,7 +3536,7 @@ const rawQuestionDatabase = {
         "A networking service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Braket is a fully managed quantum computing service that helps researchers and developers get started with quantum computing.",
     },
@@ -3550,7 +3550,7 @@ const rawQuestionDatabase = {
         "Amazon MQ",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon SQS FIFO queues provide exactly-once processing and first-in-first-out delivery to ensure messages are processed in order.",
     },
@@ -3564,7 +3564,7 @@ const rawQuestionDatabase = {
         "A networking service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS CodeGuru is a developer tool that provides intelligent recommendations to improve application performance, efficiency, and code quality.",
     },
@@ -3578,7 +3578,7 @@ const rawQuestionDatabase = {
         "Amazon ElastiCache",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Keyspaces (for Apache Cassandra) is a scalable, highly available, and managed Apache Cassandra-compatible database service.",
     },
@@ -3592,7 +3592,7 @@ const rawQuestionDatabase = {
         "A monitoring service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Kendra is an intelligent search service powered by machine learning that enables users to search unstructured data using natural language.",
     },
@@ -3601,7 +3601,7 @@ const rawQuestionDatabase = {
       question: "Which service provides managed workflows?",
       options: ["AWS Step Functions", "AWS Lambda", "Amazon EC2", "Amazon S3"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Step Functions is a serverless orchestration service that lets you combine AWS Lambda functions and other AWS services to build business-critical applications.",
     },
@@ -3615,7 +3615,7 @@ const rawQuestionDatabase = {
         "A networking service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon CodeWhisperer is an AI coding companion that generates whole line and full function code suggestions in your IDE to help you code faster.",
     },
@@ -3629,7 +3629,7 @@ const rawQuestionDatabase = {
         "Amazon Redshift",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Kinesis Data Analytics for Apache Flink makes it easy to transform and analyze streaming data in real time with Apache Flink.",
     },
@@ -3643,7 +3643,7 @@ const rawQuestionDatabase = {
         "A storage service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Proton is an application deployment service for container and serverless applications that helps platform teams provide self-service deployment capabilities.",
     },
@@ -3657,7 +3657,7 @@ const rawQuestionDatabase = {
         "Amazon DocumentDB",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Neptune is a fast, reliable, fully managed graph database service that supports both property graph and RDF graph models.",
     },
@@ -3671,7 +3671,7 @@ const rawQuestionDatabase = {
         "A image service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Textract is a machine learning service that automatically extracts text, handwriting, and data from scanned documents.",
     },
@@ -3685,7 +3685,7 @@ const rawQuestionDatabase = {
         "Amazon ElastiCache",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon DocumentDB is a fast, scalable, highly available, and fully managed document database service that supports MongoDB workloads.",
     },
@@ -3699,7 +3699,7 @@ const rawQuestionDatabase = {
         "A storage service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS App2Container is a command-line tool for modernizing .NET and Java applications into containerized applications.",
     },
@@ -3713,7 +3713,7 @@ const rawQuestionDatabase = {
         "Amazon Neptune",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon QLDB (Quantum Ledger Database) is a fully managed ledger database that provides a transparent, immutable, and cryptographically verifiable transaction log.",
     },
@@ -3727,7 +3727,7 @@ const rawQuestionDatabase = {
         "A storage service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Lookout for Vision is a machine learning service that spots defects and anomalies in visual representations using computer vision.",
     },
@@ -3741,7 +3741,7 @@ const rawQuestionDatabase = {
         "Amazon ElastiCache",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon EMR provides managed Apache HBase as part of its big data platform, offering a distributed, scalable, NoSQL database.",
     },
@@ -3755,7 +3755,7 @@ const rawQuestionDatabase = {
         "A compute service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS DataSync is an online data transfer service that simplifies, automates, and accelerates moving data between on-premises and AWS storage services.",
     },
@@ -3764,7 +3764,7 @@ const rawQuestionDatabase = {
       question: "Which service provides managed Apache Spark?",
       options: ["Amazon EMR", "AWS Glue", "Amazon Kinesis", "Amazon Redshift"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon EMR is the leading cloud big data platform for processing vast amounts of data using open source tools such as Apache Spark.",
     },
@@ -3778,7 +3778,7 @@ const rawQuestionDatabase = {
         "A storage service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Honeycode is a fully managed service that allows you to quickly build mobile and web apps for teams without programming.",
     },
@@ -3792,7 +3792,7 @@ const rawQuestionDatabase = {
         "Amazon ElastiCache",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Managed Service for Prometheus is a serverless, Prometheus-compatible monitoring service for container metrics.",
     },
@@ -3806,7 +3806,7 @@ const rawQuestionDatabase = {
         "A compute service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Lake Formation is a service that makes it easy to set up a secure data lake in days by simplifying data ingestion, cleaning, cataloging, and security.",
     },
@@ -3820,7 +3820,7 @@ const rawQuestionDatabase = {
         "Amazon ElastiCache",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Managed Grafana is a fully managed service for open source Grafana developed in collaboration with Grafana Labs.",
     },
@@ -3834,7 +3834,7 @@ const rawQuestionDatabase = {
         "A general database service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon HealthLake is a HIPAA-eligible service offering healthcare organizations a complete view of health data and patients.",
     },
@@ -3848,7 +3848,7 @@ const rawQuestionDatabase = {
         "Amazon Redshift",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "While AWS doesn't offer managed Apache Superset directly, Amazon QuickSight provides similar business intelligence and data visualization capabilities.",
     },
@@ -3862,7 +3862,7 @@ const rawQuestionDatabase = {
         "A compute service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS FinSpace is a data management and analytics service purpose-built for the financial services industry.",
     },
@@ -3871,7 +3871,7 @@ const rawQuestionDatabase = {
       question: "Which service provides managed Apache Druid?",
       options: ["Amazon EMR", "Amazon Kinesis", "AWS Glue", "Amazon Redshift"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon EMR supports Apache Druid as part of its big data ecosystem for real-time analytics on large datasets.",
     },
@@ -3885,7 +3885,7 @@ const rawQuestionDatabase = {
         "A networking service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Lookout for Metrics uses machine learning to detect anomalies in your business and operational data.",
     },
@@ -3894,7 +3894,7 @@ const rawQuestionDatabase = {
       question: "Which service provides managed JupyterLab?",
       options: ["Amazon SageMaker", "Amazon EMR", "AWS Lambda", "Amazon EC2"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon SageMaker provides managed Jupyter notebooks and JupyterLab environments for machine learning development.",
     },
@@ -3908,7 +3908,7 @@ const rawQuestionDatabase = {
         "A storage service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Chalice is a microframework for creating serverless Python applications that deploy to AWS Lambda.",
     },
@@ -3922,7 +3922,7 @@ const rawQuestionDatabase = {
         "Amazon ElastiCache",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon OpenSearch Service provides vector database capabilities for AI/ML applications through k-NN search functionality.",
     },
@@ -3936,7 +3936,7 @@ const rawQuestionDatabase = {
         "A storage service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Monitron is an end-to-end machine monitoring solution that uses machine learning to predict equipment failures.",
     },
@@ -3945,7 +3945,7 @@ const rawQuestionDatabase = {
       question: "Which service provides managed Apache Iceberg?",
       options: ["AWS Glue", "Amazon EMR", "Amazon Athena", "All of the above"],
       correct: 3,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Glue, Amazon EMR, and Amazon Athena all provide support for Apache Iceberg table format for data lakes.",
     },
@@ -3959,7 +3959,7 @@ const rawQuestionDatabase = {
         "A compute service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Ground Station is a fully managed service that lets you control satellite communications, process data, and scale operations.",
     },
@@ -3968,7 +3968,7 @@ const rawQuestionDatabase = {
       question: "Which service provides managed TensorFlow and PyTorch?",
       options: ["Amazon SageMaker", "Amazon EMR", "AWS Lambda", "Amazon EC2"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon SageMaker provides fully managed infrastructure for TensorFlow, PyTorch, and other machine learning frameworks.",
     },
@@ -3982,7 +3982,7 @@ const rawQuestionDatabase = {
         "A networking service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon DevOps Guru is a machine learning service that automatically detects operational issues and provides actionable recommendations.",
     },
@@ -3991,7 +3991,7 @@ const rawQuestionDatabase = {
       question: "Which service provides managed Kubernetes control plane?",
       options: ["Amazon EKS", "Amazon ECS", "AWS Fargate", "Amazon EC2"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon EKS (Elastic Kubernetes Service) is a managed service that makes it easy to run Kubernetes on AWS without needing to manage the Kubernetes control plane.",
     },
@@ -4005,7 +4005,7 @@ const rawQuestionDatabase = {
         "A storage service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Wickr is an end-to-end encrypted communication service that provides secure messaging, voice, and video calling.",
     },
@@ -4014,7 +4014,7 @@ const rawQuestionDatabase = {
       question: "Which service provides managed Apache Pinot?",
       options: ["Amazon EMR", "Amazon Kinesis", "AWS Glue", "Amazon Redshift"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon EMR can run Apache Pinot as part of its big data platform for real-time analytics on large datasets.",
     },
@@ -4028,7 +4028,7 @@ const rawQuestionDatabase = {
         "A compute service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Omics is a purpose-built service for storing, querying, and analyzing genomic, transcriptomic, and other omics data.",
     },
@@ -4037,7 +4037,7 @@ const rawQuestionDatabase = {
       question: "Which service provides managed Apache Hudi?",
       options: ["Amazon EMR", "AWS Glue", "Amazon Athena", "All of the above"],
       correct: 3,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Apache Hudi is supported by Amazon EMR, AWS Glue, and Amazon Athena for managing large analytical datasets on data lakes.",
     },
@@ -4051,7 +4051,7 @@ const rawQuestionDatabase = {
         "A storage service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS SimSpace Weaver is a managed service for running large-scale spatial simulations in the AWS Cloud.",
     },
@@ -4060,7 +4060,7 @@ const rawQuestionDatabase = {
       question: "Which service provides managed Delta Lake?",
       options: ["Amazon EMR", "AWS Glue", "Amazon Athena", "All of the above"],
       correct: 3,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Delta Lake is supported by Amazon EMR, AWS Glue, and Amazon Athena for reliable data lakes with ACID transactions.",
     },
@@ -4074,7 +4074,7 @@ const rawQuestionDatabase = {
         "A storage service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Clean Rooms helps companies and their partners more easily and securely analyze and collaborate on their collective datasets.",
     },
@@ -4088,7 +4088,7 @@ const rawQuestionDatabase = {
         "Amazon EMR",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Distro for OpenTelemetry is a secure, production-ready, AWS-supported distribution of the OpenTelemetry project.",
     },
@@ -4102,7 +4102,7 @@ const rawQuestionDatabase = {
         "A storage service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Bedrock is a fully managed service that offers a choice of high-performing foundation models from leading AI companies.",
     },
@@ -4116,7 +4116,7 @@ const rawQuestionDatabase = {
         "Amazon S3",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon SageMaker Feature Store is a fully managed repository for machine learning features that makes it easy to store and retrieve features.",
     },
@@ -4130,7 +4130,7 @@ const rawQuestionDatabase = {
         "A compute service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Entity Resolution helps you match, link, and enhance related records stored across multiple applications, channels, and data stores.",
     },
@@ -4139,7 +4139,7 @@ const rawQuestionDatabase = {
       question: "Which service provides managed Apache Ranger?",
       options: ["Amazon EMR", "AWS Lake Formation", "Amazon S3", "AWS Glue"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon EMR provides support for Apache Ranger for comprehensive security and governance framework for Hadoop ecosystems.",
     },
@@ -4153,7 +4153,7 @@ const rawQuestionDatabase = {
         "A networking service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon DataZone is a data management service that makes it faster and easier for customers to catalog, discover, share, and govern data.",
     },
@@ -4162,7 +4162,7 @@ const rawQuestionDatabase = {
       question: "Which service provides managed Trino (formerly PrestoSQL)?",
       options: ["Amazon EMR", "Amazon Athena", "AWS Glue", "Amazon Redshift"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon EMR supports Trino (formerly PrestoSQL) for interactive queries across multiple data sources.",
     },
@@ -4176,7 +4176,7 @@ const rawQuestionDatabase = {
         "A database service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Supply Chain is a cloud-based application that enables supply chain visibility and insights to help mitigate risks and lower costs.",
     },
@@ -4185,7 +4185,7 @@ const rawQuestionDatabase = {
       question: "Which service provides managed Jupyter Hub?",
       options: ["Amazon SageMaker", "Amazon EMR", "AWS Lambda", "Amazon EC2"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon SageMaker provides managed Jupyter Hub environments for collaborative machine learning development.",
     },
@@ -4199,7 +4199,7 @@ const rawQuestionDatabase = {
         "A compute service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Verified Permissions is a scalable permissions management and fine-grained authorization service for custom applications.",
     },
@@ -4213,7 +4213,7 @@ const rawQuestionDatabase = {
         "All of the above",
       ],
       correct: 3,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Spark Streaming is supported by Amazon EMR, Kinesis Data Analytics, and AWS Glue Streaming for real-time data processing.",
     },
@@ -4227,7 +4227,7 @@ const rawQuestionDatabase = {
         "A storage service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Payment Cryptography is a managed service for payment processing cryptographic operations using hardware security modules.",
     },
@@ -4236,7 +4236,7 @@ const rawQuestionDatabase = {
       question: "Which service provides managed MLflow?",
       options: ["Amazon SageMaker", "Amazon EMR", "AWS Lambda", "Amazon EC2"],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon SageMaker provides integration with MLflow for machine learning lifecycle management including experimentation and model tracking.",
     },
@@ -4250,7 +4250,7 @@ const rawQuestionDatabase = {
         "A networking service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Inspector V2 is an automated vulnerability management service that continually scans EC2 instances and container images for vulnerabilities.",
     },
@@ -4264,7 +4264,7 @@ const rawQuestionDatabase = {
         "All of the above",
       ],
       correct: 3,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Kubeflow can be deployed on Amazon SageMaker, Amazon EKS, and Amazon EMR for machine learning workflows on Kubernetes.",
     },
@@ -4278,7 +4278,7 @@ const rawQuestionDatabase = {
         "DNS resolution",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon Kinesis makes it easy to collect, process, and analyze real-time, streaming data so you can get timely insights and react quickly to new information.",
     },
@@ -4294,7 +4294,7 @@ const rawQuestionDatabase = {
         "Amazon CloudFront",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS CodeDeploy automates application deployments, and AWS CodePipeline provides continuous integration and continuous delivery (CI/CD) services.",
     },
@@ -4308,7 +4308,7 @@ const rawQuestionDatabase = {
         "A networking service",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Amazon QuickSight is a scalable, serverless, embeddable, machine learning-powered business intelligence (BI) service built for the cloud.",
     },
@@ -4324,7 +4324,7 @@ const rawQuestionDatabase = {
         "Amazon Route 53",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Amazon SQS provides managed message queuing, and Amazon MQ is a managed message broker service for Apache ActiveMQ and RabbitMQ.",
     },
@@ -4346,7 +4346,7 @@ const rawQuestionDatabase = {
         "Dedicated Hosts",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "On-Demand Instances let you pay for compute capacity by the hour or second (minimum of 60 seconds) with no long-term commitments or upfront payments.",
     },
@@ -4360,7 +4360,7 @@ const rawQuestionDatabase = {
         "A training certification program",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "The AWS Free Tier provides limited free usage of many AWS services for 12 months after creating your AWS account, plus some services that are always free.",
     },
@@ -4375,7 +4375,7 @@ const rawQuestionDatabase = {
         "Dedicated Hosts",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Spot Instances can provide up to 90% discount compared to On-Demand prices by using spare EC2 capacity, making them the most cost-effective option for flexible workloads.",
     },
@@ -4389,7 +4389,7 @@ const rawQuestionDatabase = {
         "A tool to explore AWS service limits",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Cost Explorer enables you to view and analyze your costs and usage over time, helping you understand spending patterns and identify optimization opportunities.",
     },
@@ -4405,7 +4405,7 @@ const rawQuestionDatabase = {
         "Free Tier Support",
       ],
       correct: [2, 3],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Business Support and Enterprise Support plans include access to the full set of AWS Trusted Advisor checks for cost optimization, security, fault tolerance, and performance.",
     },
@@ -4419,7 +4419,7 @@ const rawQuestionDatabase = {
         "Instances that can only be used during specific hours",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Reserved Instances provide significant discounts (up to 75%) compared to On-Demand pricing and can provide a capacity reservation when used in a specific Availability Zone.",
     },
@@ -4434,7 +4434,7 @@ const rawQuestionDatabase = {
         "Company location",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS pricing is primarily based on compute usage (instance hours), storage usage (GB stored), and data transfer (GB transferred in/out).",
     },
@@ -4448,7 +4448,7 @@ const rawQuestionDatabase = {
         "Monitoring application performance",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Budgets allows you to set custom cost and usage budgets that alert you when your costs or usage exceed (or are forecasted to exceed) your budgeted amount.",
     },
@@ -4463,7 +4463,7 @@ const rawQuestionDatabase = {
         "Enterprise Support",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Business Support and Enterprise Support plans provide 24/7 access to Cloud Support Engineers via phone, chat, and email.",
     },
@@ -4477,7 +4477,7 @@ const rawQuestionDatabase = {
         "A database optimization tool",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Trusted Advisor provides real-time guidance to help you provision your resources following AWS best practices in cost optimization, performance, security, and fault tolerance.",
     },
@@ -4493,7 +4493,7 @@ const rawQuestionDatabase = {
         "Fixed annual pricing",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS offers pay-as-you-go (On-Demand), save when you reserve (Reserved Instances), and pay less by using more (volume discounts) pricing models.",
     },
@@ -4507,7 +4507,7 @@ const rawQuestionDatabase = {
         "A tool to calculate storage capacity",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "The AWS Pricing Calculator helps you estimate the monthly cost of AWS services based on your expected usage patterns and configurations.",
     },
@@ -4523,7 +4523,7 @@ const rawQuestionDatabase = {
         "Infrastructure Event Management",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Basic Support includes 24/7 access to customer service for account and billing questions and access to AWS documentation, forums, and health checks.",
     },
@@ -4537,7 +4537,7 @@ const rawQuestionDatabase = {
         "A discount program for students",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Savings Plans offer a flexible pricing model that provides significant savings over On-Demand pricing in exchange for a commitment to a consistent usage amount.",
     },
@@ -4552,7 +4552,7 @@ const rawQuestionDatabase = {
         "Avoiding monitoring",
       ],
       correct: [0, 1, 3],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Cost optimization strategies include right-sizing instances to match workload requirements, using Reserved Instances for steady workloads, and implementing auto-scaling to match demand.",
     },
@@ -4566,7 +4566,7 @@ const rawQuestionDatabase = {
         "A service that schedules payments",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Consolidated billing allows you to combine payment for multiple AWS accounts into a single bill, potentially qualifying for volume discounts and simplifying cost management.",
     },
@@ -4581,7 +4581,7 @@ const rawQuestionDatabase = {
         "AWS Trusted Advisor",
       ],
       correct: 3,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Trusted Advisor identifies unused or underutilized resources and provides recommendations to help optimize costs and improve resource utilization.",
     },
@@ -4596,7 +4596,7 @@ const rawQuestionDatabase = {
         "There is no difference between them",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Business Support includes 24/7 phone, email, and chat support with faster response times, while Developer Support only provides business hours email support with slower response times.",
     },
@@ -4612,7 +4612,7 @@ const rawQuestionDatabase = {
         "AWS Service Catalog",
       ],
       correct: [0, 1, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS provides Cost and Usage Reports (detailed billing data), Billing Dashboard (overview), and Cost Explorer (cost analysis and forecasting) for cost management.",
     },
@@ -4626,7 +4626,7 @@ const rawQuestionDatabase = {
         "Government agencies only",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Enterprise Support is designed for large enterprises running mission-critical workloads, providing the highest level of support including a dedicated Technical Account Manager.",
     },
@@ -4642,7 +4642,7 @@ const rawQuestionDatabase = {
         "Network ACLs",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Resource tagging allows you to categorize resources for cost tracking, and cost allocation reports help you understand spending by department, project, or environment.",
     },
@@ -4656,7 +4656,7 @@ const rawQuestionDatabase = {
         "A content delivery network",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "The AWS Partner Network (APN) is a global program that helps partners build successful AWS-based businesses through training, support, and go-to-market resources.",
     },
@@ -4672,7 +4672,7 @@ const rawQuestionDatabase = {
         "Email support only",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "AWS Enterprise Support includes a dedicated Technical Account Manager (TAM) for personalized service and Infrastructure Event Management for event planning and support.",
     },
@@ -4686,7 +4686,7 @@ const rawQuestionDatabase = {
         "A performance monitoring tool",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Cost and Usage Reports provide comprehensive billing data that can be analyzed to understand spending patterns, track costs by service, and identify optimization opportunities.",
     },
@@ -4700,7 +4700,7 @@ const rawQuestionDatabase = {
         "All of the above",
       ],
       correct: 3,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Cost Explorer, Trusted Advisor, and Compute Optimizer all provide rightsizing recommendations to help optimize instance types and sizes for cost efficiency.",
     },
@@ -4714,7 +4714,7 @@ const rawQuestionDatabase = {
         "There is no difference",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Developer Support includes email support during business hours and access to Cloud Support Associates, while Basic Support only provides documentation and forums.",
     },
@@ -4728,7 +4728,7 @@ const rawQuestionDatabase = {
         "Dedicated Hosts",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "On-Demand Instances offer the most flexibility with no upfront costs, no long-term commitments, and the ability to increase or decrease capacity as needed.",
     },
@@ -4743,7 +4743,7 @@ const rawQuestionDatabase = {
         "Reduced visibility",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Consolidated billing provides volume discounts by combining usage across accounts and simplifies management with one bill for multiple accounts.",
     },
@@ -4757,7 +4757,7 @@ const rawQuestionDatabase = {
         "AWS CloudWatch",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Pricing Calculator helps estimate monthly costs based on your expected usage of AWS services before you start using them.",
     },
@@ -4771,7 +4771,7 @@ const rawQuestionDatabase = {
         "Cost reduction only",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Enterprise Support is designed for organizations running mission-critical workloads, providing the highest level of support including a dedicated TAM.",
     },
@@ -4785,7 +4785,7 @@ const rawQuestionDatabase = {
         "Enterprise Support",
       ],
       correct: 3,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Enterprise Support includes Infrastructure Event Management (IEM) for architecture and scaling guidance during planned events.",
     },
@@ -4799,7 +4799,7 @@ const rawQuestionDatabase = {
         "To monitor application performance",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Budgets allows you to set custom cost and usage budgets that alert you when your costs or usage exceed your budgeted amounts.",
     },
@@ -4815,7 +4815,7 @@ const rawQuestionDatabase = {
         "Application type",
       ],
       correct: [0, 1],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Reserved Instance pricing is influenced by the instance type you reserve and the payment option you choose (All Upfront, Partial Upfront, or No Upfront).",
     },
@@ -4829,7 +4829,7 @@ const rawQuestionDatabase = {
         "Security consulting",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Concierge Support provides billing and account support specifically for Enterprise Support customers, helping with billing inquiries and account optimization.",
     },
@@ -4845,7 +4845,7 @@ const rawQuestionDatabase = {
         "Ignoring monitoring",
       ],
       correct: [0, 1, 3],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Cost optimization includes right-sizing instances to match workload requirements, using Reserved Instances for steady workloads, and implementing auto-scaling.",
     },
@@ -4859,7 +4859,7 @@ const rawQuestionDatabase = {
         "A training instructor",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "The Technical Account Manager (TAM) is a dedicated technical point of contact for Enterprise Support customers who provides advocacy and guidance.",
     },
@@ -4873,7 +4873,7 @@ const rawQuestionDatabase = {
         "AWS Config",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Cost and Usage Reports can break down costs by resource tags, enabling detailed cost allocation and chargeback to departments or projects.",
     },
@@ -4888,7 +4888,7 @@ const rawQuestionDatabase = {
         "Single-instance applications",
       ],
       correct: [0, 2],
-      type: "multiple",
+      type: "multiple" as const,
       explanation:
         "Spot Instances are best for fault-tolerant workloads and batch processing jobs that can tolerate interruptions in exchange for significant cost savings.",
     },
@@ -4902,7 +4902,7 @@ const rawQuestionDatabase = {
         "Only Enterprise Support",
       ],
       correct: 2,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Business Support and Enterprise Support plans provide 24/7 phone support, while Basic and Developer only provide business hours support or no phone support.",
     },
@@ -4916,7 +4916,7 @@ const rawQuestionDatabase = {
         "To simplify management",
       ],
       correct: 1,
-      type: "single",
+      type: "single" as const,
       explanation:
         "Cost allocation tags help categorize AWS resources for detailed cost tracking, enabling you to track spending by department, project, or environment.",
     },
@@ -4930,7 +4930,7 @@ const rawQuestionDatabase = {
         "AWS Config",
       ],
       correct: 0,
-      type: "single",
+      type: "single" as const,
       explanation:
         "AWS Cost Explorer provides Reserved Instance utilization reports that help you track how effectively you're using your Reserved Instance purchases.",
     },
