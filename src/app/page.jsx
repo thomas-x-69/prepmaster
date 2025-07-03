@@ -27,6 +27,7 @@ import {
   DollarSign,
 } from "lucide-react";
 import { questionDatabase } from "../../lib/questions";
+import "./globals.css";
 
 // Original Three.js Dithered Waves with White Background
 const waveVertexShader = `
