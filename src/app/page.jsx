@@ -448,23 +448,21 @@ const Header = () => {
   };
 
   return (
-    <div className="fixed top-3 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-8 py-4">
+    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4">
       <div className="bg-white/20 backdrop-blur-lg border border-gray-200/60 rounded-xl shadow-lg">
-        <div className="px-3 py-2">
+        <div className="px-4 py-3">
           <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center shadow-md">
-                <Cloud className="w-3 h-3 text-white" />
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center shadow-md">
+                <Cloud className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h1 className="text-xs font-bold text-gray-900">PrepMaster</h1>
-                <p className="text-[10px] text-gray-700">
-                  AWS Cloud Practitioner
-                </p>
+                <h1 className="text-sm font-bold text-gray-900">PrepMaster</h1>
+                <p className="text-xs text-gray-700">AWS Cloud Practitioner</p>
               </div>
             </div>
-            <div className="flex items-center space-x-1 text-[10px] text-gray-600">
-              <Star className="w-2.5 h-2.5 text-yellow-500" />
+            <div className="flex items-center space-x-2 text-xs text-gray-600">
+              <Star className="w-3 h-3 text-yellow-500" />
               <span>{renderStars()}</span>
             </div>
           </div>
@@ -476,22 +474,22 @@ const Header = () => {
 
 // Compact Footer Component
 const Footer = () => (
-  <div className="fixed bottom-3 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-3">
+  <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4">
     <div className="bg-white/20 backdrop-blur-lg border border-gray-200/60 rounded-xl shadow-lg">
-      <div className="px-3 py-2">
+      <div className="px-4 py-3">
         <div className="text-center">
-          <div className="flex justify-center items-center space-x-3 mb-1">
+          <div className="flex justify-center items-center space-x-3 mb-2">
             <a
               href="https://github.com/thomas-x-69/prepmaster"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center space-x-1 text-gray-800 hover:text-orange-600 transition-colors text-[10px]"
+              className="flex items-center space-x-1 text-gray-800 hover:text-orange-600 transition-colors text-xs"
             >
-              <GitBranch className="w-2.5 h-2.5" />
+              <GitBranch className="w-3 h-3" />
               <span>GitHub Repository</span>
             </a>
           </div>
-          <p className="text-gray-900 text-[10px] font-medium">
+          <p className="text-gray-900 text-xs font-medium">
             Created with ❤️ by{" "}
             <span className="font-bold text-orange-600">Thomas Ashraf</span>
           </p>
@@ -508,6 +506,7 @@ export default function PrepMaster() {
   const [currentQuestions, setCurrentQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [selectedAnswers, setSelectedAnswers] = useState([]); // For multiple choice
   const [userAnswers, setUserAnswers] = useState([]);
   const [score, setScore] = useState(0);
   const [showExplanation, setShowExplanation] = useState(false);
@@ -567,6 +566,7 @@ export default function PrepMaster() {
     setCurrentQuestions(shuffledQuestions);
     setCurrentQuestionIndex(0);
     setSelectedAnswer(null);
+    setSelectedAnswers([]);
     setUserAnswers([]);
     setScore(0);
     setShowExplanation(false);
@@ -582,33 +582,86 @@ export default function PrepMaster() {
     return shuffled;
   };
 
+  // Handle single choice questions
   const selectAnswer = (answerIndex) => {
-    if (selectedAnswer !== null) return;
-
-    setSelectedAnswer(answerIndex);
-    setShowExplanation(true);
-
     const currentQuestion = currentQuestions[currentQuestionIndex];
-    const isCorrect = answerIndex === currentQuestion.correct;
 
-    if (isCorrect) {
-      setScore(score + 1);
+    if (currentQuestion.type === "single") {
+      if (selectedAnswer !== null) return;
+
+      setSelectedAnswer(answerIndex);
+      setShowExplanation(true);
+
+      const isCorrect = answerIndex === currentQuestion.correct;
+
+      if (isCorrect) {
+        setScore(score + 1);
+      }
+
+      const newAnswer = {
+        questionIndex: currentQuestionIndex,
+        selectedAnswer: answerIndex,
+        correct: currentQuestion.correct,
+        isCorrect,
+      };
+
+      setUserAnswers([...userAnswers, newAnswer]);
     }
+  };
 
-    const newAnswer = {
-      questionIndex: currentQuestionIndex,
-      selectedAnswer: answerIndex,
-      correct: currentQuestion.correct,
-      isCorrect,
-    };
+  // Handle multiple choice questions
+  const toggleMultipleAnswer = (answerIndex) => {
+    const currentQuestion = currentQuestions[currentQuestionIndex];
 
-    setUserAnswers([...userAnswers, newAnswer]);
+    if (currentQuestion.type === "multiple" && !showExplanation) {
+      setSelectedAnswers((prev) => {
+        if (prev.includes(answerIndex)) {
+          return prev.filter((idx) => idx !== answerIndex);
+        } else {
+          return [...prev, answerIndex];
+        }
+      });
+    }
+  };
+
+  // Submit multiple choice answer
+  const submitMultipleAnswer = () => {
+    const currentQuestion = currentQuestions[currentQuestionIndex];
+
+    if (currentQuestion.type === "multiple") {
+      setShowExplanation(true);
+
+      const correctAnswers = Array.isArray(currentQuestion.correct)
+        ? currentQuestion.correct
+        : [currentQuestion.correct];
+
+      const sortedSelected = [...selectedAnswers].sort();
+      const sortedCorrect = [...correctAnswers].sort();
+
+      const isCorrect =
+        sortedSelected.length === sortedCorrect.length &&
+        sortedSelected.every((val, idx) => val === sortedCorrect[idx]);
+
+      if (isCorrect) {
+        setScore(score + 1);
+      }
+
+      const newAnswer = {
+        questionIndex: currentQuestionIndex,
+        selectedAnswer: selectedAnswers,
+        correct: currentQuestion.correct,
+        isCorrect,
+      };
+
+      setUserAnswers([...userAnswers, newAnswer]);
+    }
   };
 
   const nextQuestion = () => {
     if (currentQuestionIndex < currentQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswer(null);
+      setSelectedAnswers([]);
       setShowExplanation(false);
     } else {
       setCurrentScreen("results");
@@ -634,8 +687,17 @@ export default function PrepMaster() {
 
   if (currentScreen === "start") {
     return (
-      <div className="min-h-screen bg-[#9ed3fe] relative">
-        {/* Interactive Background */}
+      <div className="min-h-screen relative bg-gradient-to-r from-blue-600 via-blue-300 to-orange-400">
+        {/* Noise texture overlay */}
+        <div
+          className="absolute inset-0 opacity-20 mix-blend-soft-light"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+          }}
+        />
+        {/* Additional subtle texture */}
+        <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-transparent via-white/20 to-transparent mix-blend-overlay" />
+        {/* Interactive Background - Commented out for modern gradient */}
         {/* <DitherBackground
           waveSpeed={0.03}
           waveFrequency={2.5}
@@ -649,7 +711,7 @@ export default function PrepMaster() {
 
         <Header />
 
-        <div className="container mx-auto px-4 py-6 relative z-10 pt-28 pb-28">
+        <div className="container mx-auto px-4 py-6 relative z-10 pt-32 pb-32">
           {/* BIGGER Hero Section */}
           <div className="text-center mb-8">
             <div className="mb-6">
@@ -659,14 +721,14 @@ export default function PrepMaster() {
               <div className="text-xl md:text-2xl text-orange-600 font-semibold mb-4">
                 Certification Exam Preparation
               </div>
-              <p className="text-sm md:text-base text-gray-800 mb-5 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-base md:text-lg text-gray-800 mb-6 max-w-3xl mx-auto leading-relaxed">
                 Master the fundamentals of AWS Cloud with comprehensive practice
                 questions. Prepare for the AWS Certified Cloud Practitioner
                 certification with confidence.
               </p>
             </div>
 
-            <div className="flex justify-center items-center space-x-4 md:space-x-6 text-gray-800 flex-wrap text-sm md:text-base">
+            <div className="flex justify-center items-center space-x-6 md:space-x-8 text-gray-800 flex-wrap text-sm md:text-base">
               <div className="flex items-center space-x-2">
                 <Cloud className="w-5 h-5 text-blue-500" />
                 <span className="font-medium">Core AWS Services</span>
@@ -683,8 +745,8 @@ export default function PrepMaster() {
           </div>
 
           {/* BIGGER Category Selection */}
-          <Card className="p-5 md:p-6 mb-8">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-3 sm:space-y-0">
+          <Card className="p-6 md:p-8 mb-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
               <div className="flex items-center space-x-3">
                 <Target className="w-6 h-6 text-orange-600" />
                 <h2 className="text-xl md:text-2xl font-bold text-gray-800">
@@ -727,10 +789,10 @@ export default function PrepMaster() {
                       <div
                         className={`w-10 h-10 rounded-lg bg-gradient-to-r ${category.color} flex items-center justify-center shadow-md`}
                       >
-                        <IconComponent className="w-6 h-6 text-white" />
+                        <IconComponent className="w-5 h-5 text-white" />
                       </div>
                       {isSelected && (
-                        <CheckCircle className="w-6 h-6 text-orange-600" />
+                        <CheckCircle className="w-5 h-5 text-orange-600" />
                       )}
                     </div>
 
@@ -766,7 +828,7 @@ export default function PrepMaster() {
           </Card>
 
           {/* BIGGER Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {[
               {
                 icon: Brain,
@@ -786,7 +848,7 @@ export default function PrepMaster() {
             ].map((feature, i) => {
               const IconComponent = feature.icon;
               return (
-                <Card key={i} className="p-5 text-center">
+                <Card key={i} className="p-6 text-center">
                   <IconComponent className="w-8 h-8 text-orange-600 mx-auto mb-3" />
                   <h3 className="text-sm font-bold mb-2 text-gray-900">
                     {feature.title}
@@ -804,11 +866,11 @@ export default function PrepMaster() {
             <Button
               onClick={startQuiz}
               disabled={selectedCategories.length === 0}
-              className="px-8 py-4 text-lg font-bold"
+              className="px-8 py-3 text-lg font-bold"
               variant="primary"
             >
               <div className="flex items-center space-x-3">
-                <Play className="w-6 h-6" />
+                <Play className="w-5 h-5" />
                 <span>
                   {selectedCategories.length === 0
                     ? "Select Categories to Start"
@@ -818,7 +880,7 @@ export default function PrepMaster() {
             </Button>
 
             {selectedCategories.length > 0 && (
-              <p className="mt-3 text-gray-800 text-sm">
+              <p className="mt-4 text-gray-800 text-sm">
                 Ready to ace your AWS Cloud Practitioner certification? 🚀
               </p>
             )}
@@ -840,7 +902,8 @@ export default function PrepMaster() {
     );
 
     return (
-      <div className="min-h-screen bg-[#9ed3fe] relative">
+      <div className="min-h-screen relative bg-gradient-to-br from-blue-800 via-blue-300 to-orange-400">
+        {/* Background Animation - Commented out for modern gradient */}
         {/* <DitherBackground
           waveSpeed={0.02}
           waveFrequency={3}
@@ -853,9 +916,9 @@ export default function PrepMaster() {
 
         <Header />
 
-        <div className="container  mx-auto px-3 py-3 relative z-10 pt-28 pb-28 max-h-screen overflow-y-auto">
+        <div className="container mx-auto px-3 py-3 relative z-10 pt-32 pb-32 max-h-screen overflow-y-auto">
           {/* Progress Header */}
-          <Card className="p-3 md:p-4 mb-3 md:mb-4 ">
+          <Card className="p-3 md:p-4 mb-3 md:mb-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 space-y-3 sm:space-y-0">
               <div className="flex flex-wrap items-center gap-3 md:gap-6">
                 {[
@@ -894,9 +957,9 @@ export default function PrepMaster() {
               <Button
                 onClick={endQuiz}
                 variant="danger"
-                className="px-6 py-3 text-base font-bold w-full sm:w-auto"
+                className="px-4 py-2 text-sm w-full sm:w-auto"
               >
-                <div className="flex items-center justify-center space-x-2">
+                <div className="flex items-center justify-center space-x-1">
                   <span>End Exam</span>
                 </div>
               </Button>
@@ -918,7 +981,10 @@ export default function PrepMaster() {
                 <span className="text-xs">{currentCategory?.name}</span>
               </div>
               <div className="text-gray-600 font-medium text-xs">
-                AWS Cloud Practitioner
+                AWS Cloud Practitioner •{" "}
+                {currentQuestion.type === "multiple"
+                  ? "Multiple Choice"
+                  : "Single Choice"}
               </div>
             </div>
 
@@ -927,6 +993,11 @@ export default function PrepMaster() {
               <h2 className="text-sm md:text-base lg:text-lg font-semibold text-gray-900 mb-3 md:mb-4 leading-relaxed">
                 {currentQuestion.question}
               </h2>
+              {currentQuestion.type === "multiple" && (
+                <p className="text-xs text-orange-600 font-medium mb-2">
+                  Select all correct answers, then click Submit Answer
+                </p>
+              )}
             </div>
 
             {/* Answer Options */}
@@ -934,48 +1005,135 @@ export default function PrepMaster() {
               {currentQuestion.options.map((option, index) => {
                 let optionClass =
                   "w-full p-3 md:p-4 rounded-lg text-left transition-all duration-200 cursor-pointer border-2 text-xs md:text-sm ";
+                let isSelected = false;
 
-                if (selectedAnswer === null) {
-                  optionClass +=
-                    "border-gray-300 bg-white/70 hover:border-orange-400 hover:bg-white/90 text-gray-900";
-                } else if (index === currentQuestion.correct) {
-                  optionClass += "border-green-400 bg-green-50 text-green-800";
-                } else if (
-                  index === selectedAnswer &&
-                  selectedAnswer !== currentQuestion.correct
-                ) {
-                  optionClass += "border-red-400 bg-red-50 text-red-800";
+                if (currentQuestion.type === "single") {
+                  // Single choice logic
+                  if (selectedAnswer === null) {
+                    optionClass +=
+                      "border-gray-300 bg-white/70 hover:border-orange-400 hover:bg-white/90 text-gray-900";
+                  } else if (index === currentQuestion.correct) {
+                    optionClass +=
+                      "border-green-400 bg-green-50 text-green-800";
+                  } else if (
+                    index === selectedAnswer &&
+                    selectedAnswer !== currentQuestion.correct
+                  ) {
+                    optionClass += "border-red-400 bg-red-50 text-red-800";
+                  } else {
+                    optionClass +=
+                      "border-gray-300 bg-gray-50 opacity-60 text-gray-700";
+                  }
                 } else {
-                  optionClass +=
-                    "border-gray-300 bg-gray-50 opacity-60 text-gray-700";
+                  // Multiple choice logic
+                  isSelected = selectedAnswers.includes(index);
+                  const correctAnswers = Array.isArray(currentQuestion.correct)
+                    ? currentQuestion.correct
+                    : [currentQuestion.correct];
+
+                  if (!showExplanation) {
+                    if (isSelected) {
+                      optionClass +=
+                        "border-orange-400 bg-orange-50 text-orange-800";
+                    } else {
+                      optionClass +=
+                        "border-gray-300 bg-white/70 hover:border-orange-400 hover:bg-white/90 text-gray-900";
+                    }
+                  } else {
+                    if (correctAnswers.includes(index)) {
+                      optionClass +=
+                        "border-green-400 bg-green-50 text-green-800";
+                    } else if (isSelected) {
+                      optionClass += "border-red-400 bg-red-50 text-red-800";
+                    } else {
+                      optionClass +=
+                        "border-gray-300 bg-gray-50 opacity-60 text-gray-700";
+                    }
+                  }
                 }
+
+                const handleClick = () => {
+                  if (currentQuestion.type === "single") {
+                    selectAnswer(index);
+                  } else {
+                    toggleMultipleAnswer(index);
+                  }
+                };
 
                 return (
                   <button
                     key={index}
-                    onClick={() => selectAnswer(index)}
-                    disabled={selectedAnswer !== null}
+                    onClick={handleClick}
+                    disabled={showExplanation}
                     className={optionClass}
                   >
                     <div className="flex items-start space-x-2 md:space-x-3">
-                      <div className="w-5 md:w-6 h-5 md:h-6 rounded-full bg-orange-500 text-white font-bold flex items-center justify-center text-[10px] md:text-xs flex-shrink-0 mt-0.5">
-                        {String.fromCharCode(65 + index)}
-                      </div>
+                      {currentQuestion.type === "single" ? (
+                        <div className="w-5 md:w-6 h-5 md:h-6 rounded-full bg-orange-500 text-white font-bold flex items-center justify-center text-[10px] md:text-xs flex-shrink-0 mt-0.5">
+                          {String.fromCharCode(65 + index)}
+                        </div>
+                      ) : (
+                        <div
+                          className={`w-5 md:w-6 h-5 md:h-6 rounded border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                            isSelected
+                              ? "bg-orange-500 border-orange-500"
+                              : "border-gray-400 bg-white"
+                          }`}
+                        >
+                          {isSelected && (
+                            <CheckCircle className="w-3 md:w-4 h-3 md:h-4 text-white" />
+                          )}
+                        </div>
+                      )}
                       <span className="flex-1 leading-relaxed">{option}</span>
-                      {selectedAnswer !== null &&
-                        index === currentQuestion.correct && (
-                          <CheckCircle className="w-4 md:w-5 h-4 md:h-5 text-green-600 flex-shrink-0" />
-                        )}
-                      {selectedAnswer !== null &&
-                        index === selectedAnswer &&
-                        selectedAnswer !== currentQuestion.correct && (
-                          <XCircle className="w-4 md:w-5 h-4 md:h-5 text-red-600 flex-shrink-0" />
-                        )}
+
+                      {/* Show correct/incorrect indicators after submission */}
+                      {showExplanation && (
+                        <>
+                          {(currentQuestion.type === "single" &&
+                            index === currentQuestion.correct) ||
+                          (currentQuestion.type === "multiple" &&
+                            (Array.isArray(currentQuestion.correct)
+                              ? currentQuestion.correct
+                              : [currentQuestion.correct]
+                            ).includes(index)) ? (
+                            <CheckCircle className="w-4 md:w-5 h-4 md:h-5 text-green-600 flex-shrink-0" />
+                          ) : (
+                            ((currentQuestion.type === "single" &&
+                              index === selectedAnswer &&
+                              selectedAnswer !== currentQuestion.correct) ||
+                              (currentQuestion.type === "multiple" &&
+                                selectedAnswers.includes(index) &&
+                                !(
+                                  Array.isArray(currentQuestion.correct)
+                                    ? currentQuestion.correct
+                                    : [currentQuestion.correct]
+                                ).includes(index))) && (
+                              <XCircle className="w-4 md:w-5 h-4 md:h-5 text-red-600 flex-shrink-0" />
+                            )
+                          )}
+                        </>
+                      )}
                     </div>
                   </button>
                 );
               })}
             </div>
+
+            {/* Submit Answer Button for Multiple Choice */}
+            {currentQuestion.type === "multiple" &&
+              !showExplanation &&
+              selectedAnswers.length > 0 && (
+                <div className="flex justify-center mb-4">
+                  <Button
+                    onClick={submitMultipleAnswer}
+                    variant="secondary"
+                    className="px-4 md:px-6 py-2 text-sm md:text-base font-bold"
+                  >
+                    Submit Answer
+                  </Button>
+                </div>
+              )}
 
             {/* Explanation */}
             {showExplanation && (
@@ -992,7 +1150,7 @@ export default function PrepMaster() {
 
             {/* Navigation */}
             <div className="flex justify-center">
-              {selectedAnswer !== null && (
+              {showExplanation && (
                 <Button
                   onClick={nextQuestion}
                   variant="primary"
@@ -1035,7 +1193,7 @@ export default function PrepMaster() {
 
         <Header />
 
-        <div className="container mx-auto px-3 py-6 relative z-10 pt-28 pb-28">
+        <div className="container mx-auto px-3 py-6 relative z-10 pt-32 pb-32">
           {/* Results Header */}
           <div className="text-center mb-6">
             <div className="inline-flex items-center space-x-2 mb-4">
