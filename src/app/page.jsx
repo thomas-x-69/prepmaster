@@ -29,6 +29,265 @@ import {
 import { questionDatabase } from "../../lib/questions";
 import "./globals.css";
 
+// Updated Iridescence Component with Blue-Orange Theme
+const Iridescence = ({
+  color = [1, 1, 1],
+  speed = 1.0,
+  amplitude = 0.1,
+  mouseReact = true,
+  className = "",
+  style = {},
+  ...rest
+}) => {
+  const canvasRef = useRef(null);
+  const animationRef = useRef(null);
+  const mousePos = useRef({ x: 0.5, y: 0.5 });
+  const uniformsRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const gl =
+      canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    if (!gl) {
+      console.warn("WebGL not supported");
+      return;
+    }
+
+    // Vertex shader
+    const vertexShaderSource = `
+      attribute vec2 position;
+      attribute vec2 uv;
+      varying vec2 vUv;
+      
+      void main() {
+        vUv = uv;
+        gl_Position = vec4(position, 0.0, 1.0);
+      }
+    `;
+
+    // Fragment shader with Blue-Orange theme
+    const fragmentShaderSource = `
+      precision highp float;
+      
+      uniform float uTime;
+      uniform vec3 uColor;
+      uniform vec3 uResolution;
+      uniform vec2 uMouse;
+      uniform float uAmplitude;
+      uniform float uSpeed;
+      
+      varying vec2 vUv;
+      
+      void main() {
+        float mr = min(uResolution.x, uResolution.y);
+        vec2 uv = (vUv.xy * 2.0 - 1.0) * uResolution.xy / mr;
+        
+        uv += (uMouse - vec2(0.5)) * uAmplitude;
+        
+        float d = -uTime * 0.5 * uSpeed;
+        float a = 0.0;
+        for (float i = 0.0; i < 7.0; ++i) {
+          a += cos(i - d - a * uv.x);
+          d += sin(uv.y * i + a);
+        }
+        d += uTime * 0.5 * uSpeed;
+        float pattern = cos(uv.x * d + a) + sin(uv.y * a + d);
+        
+        // Blue and Orange color palette
+        vec3 deepBlue = vec3(0.1, 0.3, 0.8);      // Rich blue
+        vec3 lightBlue = vec3(0.4, 0.7, 1.0);     // Light blue
+        vec3 orange = vec3(1.0, 0.6, 0.1);        // Vibrant orange
+        vec3 lightOrange = vec3(1.0, 0.8, 0.4);   // Light orange
+        vec3 white = vec3(0.95, 0.98, 1.0);       // Slightly blue-tinted white
+        
+        // Interpolate between colors based on pattern
+        vec3 col;
+        float normalizedPattern = (pattern + 2.0) / 7.0; // Normalize to 0-1
+        
+        if (normalizedPattern < 0.2) {
+          col = mix(deepBlue, lightBlue, normalizedPattern * 5.0);
+        } else if (normalizedPattern < 0.4) {
+          col = mix(lightBlue, white, (normalizedPattern - 0.2) * 5.0);
+        } else if (normalizedPattern < 0.6) {
+          col = mix(white, lightOrange, (normalizedPattern - 0.4) * 5.0);
+        } else if (normalizedPattern < 0.8) {
+          col = mix(lightOrange, orange, (normalizedPattern - 0.6) * 7.0);
+        } else {
+          col = mix(orange, deepBlue, (normalizedPattern - 0.8) * 5.0);
+        }
+        
+        col *= uColor;
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `;
+
+    // Create shader
+    function createShader(gl, type, source) {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        console.error("Error compiling shader:", gl.getShaderInfoLog(shader));
+        gl.deleteShader(shader);
+        return null;
+      }
+
+      return shader;
+    }
+
+    // Create program
+    function createProgram(gl, vertexShader, fragmentShader) {
+      const program = gl.createProgram();
+      gl.attachShader(program, vertexShader);
+      gl.attachShader(program, fragmentShader);
+      gl.linkProgram(program);
+
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        console.error("Error linking program:", gl.getProgramInfoLog(program));
+        gl.deleteProgram(program);
+        return null;
+      }
+
+      return program;
+    }
+
+    const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+    const fragmentShader = createShader(
+      gl,
+      gl.FRAGMENT_SHADER,
+      fragmentShaderSource
+    );
+    const program = createProgram(gl, vertexShader, fragmentShader);
+
+    if (!program) return;
+
+    // Create geometry (full screen quad)
+    const positions = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
+
+    const uvs = new Float32Array([0, 0, 1, 0, 0, 1, 1, 1]);
+
+    const indices = new Uint16Array([0, 1, 2, 2, 1, 3]);
+
+    // Create buffers
+    const positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+
+    const uvBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, uvs, gl.STATIC_DRAW);
+
+    const indexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+
+    // Get attribute and uniform locations
+    const positionLocation = gl.getAttribLocation(program, "position");
+    const uvLocation = gl.getAttribLocation(program, "uv");
+
+    const uniforms = {
+      uTime: gl.getUniformLocation(program, "uTime"),
+      uColor: gl.getUniformLocation(program, "uColor"),
+      uResolution: gl.getUniformLocation(program, "uResolution"),
+      uMouse: gl.getUniformLocation(program, "uMouse"),
+      uAmplitude: gl.getUniformLocation(program, "uAmplitude"),
+      uSpeed: gl.getUniformLocation(program, "uSpeed"),
+    };
+
+    uniformsRef.current = uniforms;
+
+    // Resize function
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = rect.width + "px";
+      canvas.style.height = rect.height + "px";
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    };
+
+    // Mouse move handler
+    const handleMouseMove = (e) => {
+      if (!mouseReact) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = 1.0 - (e.clientY - rect.top) / rect.height;
+      mousePos.current = { x, y };
+    };
+
+    // Animation loop
+    const animate = (time) => {
+      gl.useProgram(program);
+
+      // Set uniforms
+      gl.uniform1f(uniforms.uTime, time * 0.001);
+      gl.uniform3f(uniforms.uColor, color[0], color[1], color[2]);
+      gl.uniform3f(
+        uniforms.uResolution,
+        canvas.width,
+        canvas.height,
+        canvas.width / canvas.height
+      );
+      gl.uniform2f(uniforms.uMouse, mousePos.current.x, mousePos.current.y);
+      gl.uniform1f(uniforms.uAmplitude, amplitude);
+      gl.uniform1f(uniforms.uSpeed, speed);
+
+      // Set attributes
+      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+      gl.enableVertexAttribArray(positionLocation);
+      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
+      gl.enableVertexAttribArray(uvLocation);
+      gl.vertexAttribPointer(uvLocation, 2, gl.FLOAT, false, 0, 0);
+
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+
+      // Clear and draw
+      gl.clearColor(1, 1, 1, 1);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    // Initialize
+    resize();
+    canvas.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("resize", resize);
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      canvas.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("resize", resize);
+
+      // Cleanup WebGL resources
+      gl.deleteBuffer(positionBuffer);
+      gl.deleteBuffer(uvBuffer);
+      gl.deleteBuffer(indexBuffer);
+      gl.deleteShader(vertexShader);
+      gl.deleteShader(fragmentShader);
+      gl.deleteProgram(program);
+    };
+  }, [color, speed, amplitude, mouseReact]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className={`w-full h-full ${className}`}
+      style={style}
+      {...rest}
+    />
+  );
+};
+
 // Original Three.js Dithered Waves with White Background
 const waveVertexShader = `
 precision highp float;
@@ -687,20 +946,17 @@ export default function PrepMaster() {
 
   if (currentScreen === "start") {
     return (
-      <div className="min-h-screen relative bg-gradient-to-r from-blue-600 via-blue-300 to-orange-400">
-        {/* Additional subtle texture */}
-        <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-transparent via-white/20 to-transparent mix-blend-overlay" />
-        {/* Interactive Background - Commented out for modern gradient */}
-        {/* <DitherBackground
-          waveSpeed={0.03}
-          waveFrequency={2.5}
-          waveAmplitude={0.4}
-          waveColor={[0.3, 0.7, 1.0]}
-          colorNum={6}
-          pixelSize={3}
-          enableMouseInteraction={true}
-          mouseRadius={0.6}
-        /> */}
+      <div className="min-h-screen relative">
+        {/* Iridescence Background */}
+        <div className="fixed inset-0 z-0">
+          <Iridescence
+            color={[1.0, 0.9, 0.8]}
+            speed={0.8}
+            amplitude={0.15}
+            mouseReact={true}
+            className="w-full h-full"
+          />
+        </div>
 
         <Header />
 
@@ -895,17 +1151,17 @@ export default function PrepMaster() {
     );
 
     return (
-      <div className="min-h-screen relative bg-gradient-to-br from-blue-800 via-blue-300 to-orange-400">
-        {/* Background Animation - Commented out for modern gradient */}
-        {/* <DitherBackground
-          waveSpeed={0.02}
-          waveFrequency={3}
-          waveAmplitude={0.3}
-          waveColor={[0.4, 0.6, 0.9]}
-          colorNum={5}
-          pixelSize={2}
-          enableMouseInteraction={false}
-        /> */}
+      <div className="min-h-screen relative">
+        {/* Iridescence Background for Quiz */}
+        <div className="fixed inset-0 z-0">
+          <Iridescence
+            color={[0.8, 0.9, 1.0]}
+            speed={0.5}
+            amplitude={0.08}
+            mouseReact={false}
+            className="w-full h-full"
+          />
+        </div>
 
         <Header />
 
